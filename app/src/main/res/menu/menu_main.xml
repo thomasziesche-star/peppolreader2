@@ -1,0 +1,26 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.peppolreaderfree.MainActivity">
+    <item
+        android:id="@+id/action_lang_en"
+        android:icon="@drawable/ic_flag_en"
+        android:title="English"
+        app:showAsAction="always" />
+        
+    <item
+        android:id="@+id/action_lang_de"
+        android:icon="@drawable/ic_flag_de"
+        android:title="Deutsch"
+        app:showAsAction="always" />
+    <item
+        android:id="@+id/action_theme_toggle"
+        android:icon="@drawable/ic_mode_night"
+        android:title="Toggle Theme"
+        app:showAsAction="always" />
+        
+    <item
+        android:id="@+id/action_dashboard"
+        android:title="Dashboard"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,93 @@
+<resources>
+    <string name="app_name">Peppol Reader</string>
+    <string name="app_title">Peppol Reader</string>
+    <string name="title_activity_main">Peppol Reader</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="cd_upload_button">XML-Rechnung hochladen</string>
+    <string name="no_invoices">Keine Rechnungen vorhanden.</string>
+    <string name="tap_to_upload">Tippen Sie auf +, um eine XML-Datei zu importieren.</string>
+    
+    <!-- Invoice List -->
+    <string name="invoice_item_cd">Rechnung %1$s</string>
+    <string name="search_hint">Suchen...</string>
+    
+    <!-- Invoice Detail -->
+    <string name="invoice_detail">Rechnungsdetails</string>
+    <string name="download_pdf">PDF Herunterladen</string>
+    <string name="share">Teilen</string>
+    <string name="loading">Lade Rechnung...</string>
+    <string name="attachment_label">Anhang: %1$s</string>
+    
+    <!-- Navigation -->
+    <string name="previous">Zurück</string>
+    <string name="next">Weiter</string>
+    
+    <!-- Messages -->
+    <string name="error_parsing">Fehler beim Lesen der Datei</string>
+    <string name="error_pdf">Fehler beim Erstellen der PDF</string>
+    <string name="confirm_delete">Möchten Sie diese Rechnung wirklich löschen?</string>
+    <string name="delete">Löschen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="invoice_deleted">Rechnung gelöscht</string>
+    <string name="error_not_found">Rechnung nicht gefunden</string>
+    <string name="error_general">Fehler: %1$s</string>
+    <string name="invoice_saved">Rechnung gespeichert</string>
+    <string name="invoice_exists">Rechnung ist bereits vorhanden. Öffne Details...</string>
+    <string name="error_xml_read">Fehler beim Lesen der XML-Datei: %1$s</string>
+    <string name="error_share">Fehler beim Teilen: %1$s</string>
+
+    <!-- PDF/HTML Labels -->
+    <string name="html_lang_code">de</string>
+    <string name="label_invoice">RECHNUNG</string>
+    <string name="label_no">Nr.:</string>
+    <string name="label_date">Datum:</string>
+    <string name="label_due_date">Fällig:</string>
+    <string name="label_order_id">Bestellung:</string>
+    <string name="label_supplier">Lieferant</string>
+    <string name="label_customer">Empfänger</string>
+    <string name="label_tax_id">Steuer-ID: %1$s</string>
+    <string name="table_article_no">Art.-Nr.</string>
+    <string name="table_description">Beschreibung</string>
+    <string name="table_quantity">Menge</string>
+    <string name="table_price">Preis</string>
+    <string name="table_total">Gesamt</string>
+    <string name="total_net">Nettobetrag</string>
+    <string name="total_surcharges">Zuschläge</string>
+    <string name="total_allowances">Nachlässe</string>
+    <string name="total_taxable">Steuerpflichtig</string>
+    <string name="total_vat">MwSt.</string>
+    <string name="total_gross">Gesamtbetrag</string>
+    <string name="total_payable">Zu zahlen</string>
+    <string name="footer_thanks">Vielen Dank für Ihren Auftrag!</string>
+    <string name="footer_generated">Generiert aus Peppol Billing 3.0 Daten%1$s</string>
+    <string name="footer_file_hint"> (Datei: %1$s)</string>
+    <string name="footer_disclaimer">Die lesbare Variante ersetzt nicht die Original XML</string>
+    <string name="payment_info_title">Zahlungsinformationen</string>
+    <string name="label_iban">IBAN:</string>
+    <string name="label_bic">BIC:</string>
+    <string name="label_account">Konto:</string>
+
+    <!-- Parser Mappings -->
+    <string name="shipping_cost">Versandkosten</string>
+    <string name="surcharge_label">Zuschlag: %1$s</string>
+    <string name="discount_label">Nachlass: %1$s</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Einstellungen</string>
+    <string name="pref_language">Sprache</string>
+    <string name="pref_language_summary">Wählen Sie die Anzeigesprache</string>
+    
+    <!-- Dashboard -->
+    <string name="title_dashboard">Dashboard</string>
+    <string name="filter_last_6_months">Letzte 6 Monate</string>
+    <string name="filter_last_12_months">Letzte 12 Monate</string>
+    <string name="filter_current_month">Aktueller Monat</string>
+    <string name="filter_last_month">Letzter Monat</string>
+    <string name="filter_all">Alles</string>
+    <string name="chart_monthly_title">Ausgaben pro Monat</string>
+    <string name="chart_suppliers_title">Top Lieferanten</string>
+    <string name="chart_label_expenses">Ausgaben (€)</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+</resources>

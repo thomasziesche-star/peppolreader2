@@ -1,0 +1,65 @@
+> Task :app:preBuild UP-TO-DATE
+> Task :app:preReleaseBuild UP-TO-DATE
+> Task :app:generateReleaseResValues
+> Task :app:mapReleaseSourceSetPaths
+> Task :app:generateReleaseResources
+> Task :app:createReleaseCompatibleScreenManifests
+> Task :app:extractDeepLinksRelease
+> Task :app:processReleaseMainManifest
+> Task :app:processReleaseManifest
+> Task :app:processApplicationManifestReleaseForBundle
+> Task :app:checkReleaseAarMetadata
+> Task :app:packageReleaseResources
+> Task :app:parseReleaseLocalResources
+> Task :app:checkReleaseDuplicateClasses
+> Task :app:buildKotlinToolingMetadata
+> Task :app:checkKotlinGradlePluginConfigurationErrors
+> Task :app:dataBindingMergeDependencyArtifactsRelease
+> Task :app:desugarReleaseFileDependencies
+> Task :app:javaPreCompileRelease
+> Task :app:mergeReleaseResources
+> Task :app:dataBindingGenBaseClassesRelease
+> Task :app:mergeReleaseShaders
+> Task :app:compileReleaseShaders NO-SOURCE
+> Task :app:generateReleaseAssets UP-TO-DATE
+> Task :app:mergeReleaseAssets
+> Task :app:mergeReleaseJniLibFolders
+> Task :app:mergeReleaseNativeLibs NO-SOURCE
+> Task :app:stripReleaseDebugSymbols NO-SOURCE
+> Task :app:writeReleaseAppMetadata
+> Task :app:mergeReleaseArtProfile
+> Task :app:collectReleaseDependencies
+> Task :app:configureReleaseDependencies
+> Task :app:extractReleaseNativeSymbolTables NO-SOURCE
+> Task :app:validateSigningRelease
+> Task :app:processReleaseManifestForPackage
+> Task :app:parseReleaseIntegrityConfig
+> Task :app:processReleaseResources
+> Task :app:mergeExtDexRelease
+> Task :app:bundleReleaseResources
+> Task :app:kspReleaseKotlin
+
+> Task :app:compileReleaseKotlin
+w: file:///C:/Users/thoma/Desktop/peppolreader2/app/src/main/java/com/example/peppolreaderfree/parser/PeppolParser.kt:58:48 Unchecked cast: Any? to Map<String, Any>
+w: file:///C:/Users/thoma/Desktop/peppolreader2/app/src/main/java/com/example/peppolreaderfree/parser/PeppolParser.kt:59:80 Unchecked cast: Any? to Map<String, Any>
+w: file:///C:/Users/thoma/Desktop/peppolreader2/app/src/main/java/com/example/peppolreaderfree/parser/PeppolParser.kt:108:13 Variable 'children' is never used
+w: file:///C:/Users/thoma/Desktop/peppolreader2/app/src/main/java/com/example/peppolreaderfree/parser/PeppolParser.kt:228:55 Unchecked cast: Any? to Map<String, Any>
+w: file:///C:/Users/thoma/Desktop/peppolreader2/app/src/main/java/com/example/peppolreaderfree/ui/InvoiceDetailFragment.kt:175:17 Variable 'printIntent' is never used
+w: file:///C:/Users/thoma/Desktop/peppolreader2/app/src/main/java/com/example/peppolreaderfree/ui/InvoiceListFragment.kt:118:61 Parameter 'invoice' is never used, could be renamed to _
+
+> Task :app:compileReleaseJavaWithJavac
+> Task :app:dexBuilderRelease
+> Task :app:mergeReleaseGlobalSynthetics
+> Task :app:processReleaseJavaRes
+> Task :app:mergeReleaseJavaResource
+> Task :app:mergeDexRelease
+> Task :app:buildReleasePreBundle
+> Task :app:compileReleaseArtProfile
+> Task :app:packageReleaseBundle
+> Task :app:signReleaseBundle
+> Task :app:produceReleaseBundleIdeListingFile
+> Task :app:createReleaseBundleListingFileRedirect
+> Task :app:bundleRelease
+
+BUILD SUCCESSFUL in 25s
+45 actionable tasks: 45 executed
