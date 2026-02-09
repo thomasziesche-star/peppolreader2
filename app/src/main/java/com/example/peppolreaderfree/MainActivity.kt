@@ -13,6 +13,8 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import com.example.peppolreaderfree.databinding.ActivityMainBinding
 import com.example.peppolreaderfree.ui.InvoiceListFragment
 import com.example.peppolreaderfree.ui.InvoiceViewModel
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import android.text.Html
 
 class MainActivity : AppCompatActivity() {
 
@@ -158,6 +160,14 @@ class MainActivity : AppCompatActivity() {
                 navController.navigate(R.id.dashboardFragment)
                 true
             }
+            R.id.action_info -> {
+                showInfoDialog()
+                true
+            }
+            R.id.action_help -> {
+                showHelpDialog()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
@@ -166,5 +176,21 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration)
                 || super.onSupportNavigateUp()
+    }
+
+    private fun showHelpDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.help_title)
+            .setMessage(getText(R.string.help_message))
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
+    }
+
+    private fun showInfoDialog() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.info_title)
+            .setMessage(getText(R.string.info_message))
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
     }
 }

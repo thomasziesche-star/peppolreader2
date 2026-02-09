@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Peppol Reader</string>
-    <string name="import_file">Datei importieren</string>
+    <string name="import_file">Import File</string>
     <string name="app_title">Peppol Reader</string>
     <string name="title_activity_main">Peppol Reader</string>
     <string name="action_settings">Settings</string>
@@ -11,7 +11,7 @@
     
     <!-- Invoice List -->
     <string name="invoice_item_cd">Invoice %1$s</string>
-    <string name="search_hint">Search...</string>
+    <string name="search_hint">Search (Company, No.)...</string>
     
     <!-- Invoice Detail -->
     <string name="invoice_detail">Invoice Details</string>
@@ -60,7 +60,7 @@
     <string name="total_vat">VAT</string>
     <string name="total_gross">Total Amount</string>
     <string name="total_payable">To Pay</string>
-    <string name="footer_thanks">Thank you for your business!</string>
+    <string name="footer_thanks">Information without warranty</string>
     <string name="footer_generated">Generated from Peppol Billing 3.0 Data%1$s</string>
     <string name="footer_file_hint"> (File: %1$s)</string>
     <string name="footer_disclaimer">The readable version does not replace the original XML</string>
@@ -91,4 +91,12 @@
     <string name="chart_label_expenses">Expenses (€)</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+
+    <!-- Help Manual -->
+    <string name="help_title">Help &amp; Usage</string>
+    <string name="help_message">Jo hello, just some infos...\n\n<b>Import Invoices:</b>\nTap the + button to open the file picker. You can select multiple XML files at once by long-pressing them.\n\n<b>View Details:</b>\nTap on an invoice in the list to view its details and generate a PDF.\n\n<b>Delete Invoice:</b>\nLong-press an invoice in the list to delete it.</string>
+    
+    <!-- Info Menu -->
+    <string name="info_title">Info &amp; Disclaimer</string>
+    <string name="info_message">This is a hobby project and NOT an official PEPPOL app.\n\nThe information provided is without warranty.\n\n<b>Accountant with beard</b></string>
 </resources>

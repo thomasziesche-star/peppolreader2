@@ -18,9 +18,21 @@
         android:icon="@drawable/ic_mode_night"
         android:title="Toggle Theme"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_help"
+        android:icon="@drawable/ic_help"
+        android:title="@string/help_title"
+        app:showAsAction="never" />
         
     <item
         android:id="@+id/action_dashboard"
         android:title="Dashboard"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_info"
+        android:icon="@drawable/ic_info"
+        android:title="@string/info_title"
         app:showAsAction="never" />
 </menu>

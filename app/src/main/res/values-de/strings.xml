@@ -4,13 +4,14 @@
     <string name="title_activity_main">Peppol Reader</string>
     <string name="action_settings">Einstellungen</string>
     <string name="menu_settings">Einstellungen</string>
+    <string name="import_file">Datei importieren</string>
     <string name="cd_upload_button">XML-Rechnung hochladen</string>
     <string name="no_invoices">Keine Rechnungen vorhanden.</string>
     <string name="tap_to_upload">Tippen Sie auf +, um eine XML-Datei zu importieren.</string>
     
     <!-- Invoice List -->
     <string name="invoice_item_cd">Rechnung %1$s</string>
-    <string name="search_hint">Suchen...</string>
+    <string name="search_hint">Suche (Firma, Nr.)...</string>
     
     <!-- Invoice Detail -->
     <string name="invoice_detail">Rechnungsdetails</string>
@@ -59,7 +60,7 @@
     <string name="total_vat">MwSt.</string>
     <string name="total_gross">Gesamtbetrag</string>
     <string name="total_payable">Zu zahlen</string>
-    <string name="footer_thanks">Vielen Dank für Ihren Auftrag!</string>
+    <string name="footer_thanks">Angaben ohne Gewähr</string>
     <string name="footer_generated">Generiert aus Peppol Billing 3.0 Daten%1$s</string>
     <string name="footer_file_hint"> (Datei: %1$s)</string>
     <string name="footer_disclaimer">Die lesbare Variante ersetzt nicht die Original XML</string>
@@ -90,4 +91,12 @@
     <string name="chart_label_expenses">Ausgaben (€)</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+
+    <!-- Help Manual -->
+    <string name="help_title">Hilfe &amp; Bedienung</string>
+    <string name="help_message">Jo hallo, kurz ein paar Hinweise...\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf den + Button, um die Dateiauswahl zu öffnen. Sie können mehrere XML-Dateien gleichzeitig auswählen, indem Sie diese gedrückt halten.\n\n<b>Details ansehen:</b>\nTippen Sie auf eine Rechnung in der Liste, um Details anzusehen und ein PDF zu erstellen.\n\n<b>Rechnung löschen:</b>\nHalten Sie eine Rechnung in der Liste gedrückt, um sie zu löschen.</string>
+    
+    <!-- Info Menu -->
+    <string name="info_title">Info &amp; Impressum</string>
+    <string name="info_message">Dies ist ein Hobbyprojekt und KEINE offizielle PEPPOL App.\n\nDie Angaben sind ohne Gewähr.\n\n<b>Accountant with beard</b></string>
 </resources>
