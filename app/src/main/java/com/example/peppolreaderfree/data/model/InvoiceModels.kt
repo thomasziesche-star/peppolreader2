@@ -33,7 +33,10 @@ data class Party(
     val city: String? = null,
     val zip: String? = null,
     val country: String? = null,
-    val taxId: String? = null
+    val taxId: String? = null,
+    val contactName: String? = null,
+    val email: String? = null,
+    val phone: String? = null
 )
 
 /**

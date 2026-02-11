@@ -116,6 +116,7 @@ class InvoiceListFragment : Fragment() {
         viewModel.allInvoices.observe(viewLifecycleOwner) { invoices ->
             adapter.submitList(invoices)
             updateEmptyState(invoices.isEmpty())
+            binding.invoiceCounter.text = invoices.size.toString()
         }
         
         viewModel.error.observe(viewLifecycleOwner) { error ->
@@ -138,13 +139,9 @@ class InvoiceListFragment : Fragment() {
                 // navigateToDetail pushes to backstack. 
                 // Let's add a one-shot event or just check if the message implies navigation.
                 
-                if (it.contains("Rechnung")) { // "Rechnung gespeichert" or "Rechnung ist bereits vorhanden"
-                    // Find the invoice in the list? 
-                    // Or since viewModel.selectedInvoice is set, we can just navigate?
-                    // But we need to be sure it was triggered by import, not just back navigation.
-                    // Let's use a SingleLiveEvent approach or similar if possible, 
-                    // but for now, let's rely on the message and the fact that selectedInvoice is set.
-                    
+                if (it.contains("Rechnung gespeichert") || it.contains("Rechnung ist bereits vorhanden")) { 
+                    // Only navigate if it's a save/import action.
+                    // "Rechnung gelöscht" should NOT trigger navigation.
                      viewModel.selectedInvoice.value?.let { invoice ->
                          // Prevent double navigation if already there? 
                          // We are in ListFragment.

@@ -36,6 +36,17 @@ class MainActivity : AppCompatActivity() {
             androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO)
         }
 
+        // Set default locale to DE on first run
+        val KEY_LOCALE_INITIALIZED = "locale_initialized"
+        if (!sharedPref.contains(KEY_LOCALE_INITIALIZED)) {
+            val appLocale = androidx.core.os.LocaleListCompat.forLanguageTags("de")
+            androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(appLocale)
+            with(sharedPref.edit()) {
+                putBoolean(KEY_LOCALE_INITIALIZED, true)
+                apply()
+            }
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 

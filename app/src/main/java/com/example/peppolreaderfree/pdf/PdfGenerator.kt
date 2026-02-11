@@ -266,6 +266,12 @@ class PdfGenerator(private val context: Context) {
                     ${invoice.supplier.country ?: ""}
                 </div>
                 ${invoice.supplier.taxId?.let { "<div class='party-tax'>${context.getString(R.string.label_tax_id, escapeHtml(it))}</div>" } ?: ""}
+                
+                <div style="margin-top: 8px; font-size: 13px;">
+                    ${invoice.supplier.contactName?.let { "<div style='color: var(--panel-text);'>${escapeHtml(it)}</div>" } ?: ""}
+                    ${invoice.supplier.email?.let { "<div><a href='mailto:${escapeHtml(it)}' style='color: var(--accent-color); text-decoration: none;'>${escapeHtml(it)}</a></div>" } ?: ""}
+                    ${invoice.supplier.phone?.let { "<div><a href='tel:${escapeHtml(it)}' style='color: var(--accent-color); text-decoration: none;'>${escapeHtml(it)}</a></div>" } ?: ""}
+                </div>
             </div>
             <div class="party">
                 <h3>${context.getString(R.string.label_customer)}</h3>

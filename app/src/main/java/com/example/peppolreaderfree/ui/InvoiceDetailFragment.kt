@@ -67,6 +67,18 @@ class InvoiceDetailFragment : Fragment() {
             
             webViewClient = object : WebViewClient() {
                 override fun shouldOverrideUrlLoading(view: WebView?, request: WebResourceRequest?): Boolean {
+                    val url = request?.url?.toString() ?: return true
+                    
+                    if (url.startsWith("mailto:") || url.startsWith("tel:")) {
+                        try {
+                            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
+                            startActivity(intent)
+                        } catch (e: Exception) {
+                            // Ignore if no app found
+                        }
+                        return true
+                    }
+                    
                     return true // Don't allow navigation
                 }
                 

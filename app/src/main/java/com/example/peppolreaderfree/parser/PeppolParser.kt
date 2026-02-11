@@ -237,7 +237,10 @@ class PeppolParser(private val xmlContent: String, private val context: android.
             city = getText(postalAddress, "CityName").takeIf { it.isNotEmpty() },
             zip = getText(postalAddress, "PostalZone").takeIf { it.isNotEmpty() },
             country = getText(postalAddress, "Country/IdentificationCode").takeIf { it.isNotEmpty() },
-            taxId = getText(partyMap, "PartyTaxScheme/CompanyID").takeIf { it.isNotEmpty() }
+            taxId = getText(partyMap, "PartyTaxScheme/CompanyID").takeIf { it.isNotEmpty() },
+            contactName = getText(partyMap, "Contact/Name").takeIf { it.isNotEmpty() },
+            email = getText(partyMap, "Contact/ElectronicMail").takeIf { it.isNotEmpty() },
+            phone = getText(partyMap, "Contact/Telephone").takeIf { it.isNotEmpty() }
         )
     }
     
