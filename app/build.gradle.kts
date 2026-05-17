@@ -15,8 +15,8 @@ android {
         applicationId = "com.example.peppolreaderfree"
         minSdk = 28
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.0.${System.currentTimeMillis()}"
+        versionCode = 3
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,7 +38,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
@@ -64,8 +65,7 @@ android {
         variant.outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                val outputFileName = "app-debug-${variant.versionName}.apk"
-                output.outputFileName = outputFileName
+                output.outputFileName = "app-${variant.buildType.name}-${variant.versionName}.apk"
             }
     }
 }
