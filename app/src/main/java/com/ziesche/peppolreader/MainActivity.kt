@@ -199,12 +199,21 @@ class MainActivity : AppCompatActivity() {
     override fun onPrepareOptionsMenu(menu: Menu): Boolean {
         val currentLocales = androidx.appcompat.app.AppCompatDelegate.getApplicationLocales()
         val currentLang = if (!currentLocales.isEmpty) currentLocales.get(0)?.language ?: "en" else "en"
-        
-        val alphaActive = 255
-        val alphaInactive = 100 // Semi-transparent for inactive
 
-        menu.findItem(R.id.action_lang_en)?.icon?.alpha = if (currentLang == "en") alphaActive else alphaInactive
-        menu.findItem(R.id.action_lang_de)?.icon?.alpha = if (currentLang == "de") alphaActive else alphaInactive
+        // Show the currently active flag as the toolbar icon
+        val flagIcon = when (currentLang) {
+            "de" -> R.drawable.ic_flag_de
+            "nl" -> R.drawable.ic_flag_nl
+            "fr" -> R.drawable.ic_flag_fr
+            else -> R.drawable.ic_flag_en
+        }
+        menu.findItem(R.id.action_language)?.setIcon(flagIcon)
+
+        // Mark the active language inside the sub-menu (checkableBehavior="single")
+        menu.findItem(R.id.action_lang_en)?.isChecked = currentLang == "en"
+        menu.findItem(R.id.action_lang_de)?.isChecked = currentLang == "de"
+        menu.findItem(R.id.action_lang_nl)?.isChecked = currentLang == "nl"
+        menu.findItem(R.id.action_lang_fr)?.isChecked = currentLang == "fr"
         
         // Update theme toggle icon based on current mode
         val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
@@ -231,6 +240,16 @@ class MainActivity : AppCompatActivity() {
             }
             R.id.action_lang_de -> {
                 val appLocale = androidx.core.os.LocaleListCompat.forLanguageTags("de")
+                androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(appLocale)
+                true
+            }
+            R.id.action_lang_nl -> {
+                val appLocale = androidx.core.os.LocaleListCompat.forLanguageTags("nl")
+                androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(appLocale)
+                true
+            }
+            R.id.action_lang_fr -> {
+                val appLocale = androidx.core.os.LocaleListCompat.forLanguageTags("fr")
                 androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(appLocale)
                 true
             }

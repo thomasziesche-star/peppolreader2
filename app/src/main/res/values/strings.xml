@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Peppol Reader</string>
+    <string name="app_name">E-Invoice &amp; Peppol Reader</string>
     <string name="import_file">Import File</string>
-    <string name="app_title">Peppol Reader</string>
-    <string name="title_activity_main">Peppol Reader</string>
+    <string name="app_title">E-Invoice &amp; Peppol Reader</string>
+    <string name="title_activity_main">E-Invoice &amp; Peppol Reader</string>
     <string name="action_settings">Settings</string>
     <string name="menu_settings">Settings</string>
     <string name="cd_upload_button">Upload XML Invoice</string>
@@ -101,7 +101,7 @@
 
     <!-- Help Manual -->
     <string name="help_title">Help &amp; Usage</string>
-    <string name="help_message">Hi there, a few quick pointers...\n\n<b>Import invoices:</b>\nTap the + button and pick XML or PDF files (long-press for multi-select). You can also share files from your mail app to Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded invoice XML is extracted for you.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes are flagged with a chip and shown with a negative amount.\n\n<b>View details:</b>\nTap a row to see the full invoice and generate a PDF.\n\n<b>Delete:</b>\nLong-press a row in the list.</string>
+    <string name="help_message">Hi there, a few quick pointers...\n\n<b>Import invoices:</b>\nTap the + button and pick XML or PDF files (long-press for multi-select). You can also share files from your mail app to E-Invoice &amp; Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded invoice XML is extracted for you.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes are flagged with a chip and shown with a negative amount.\n\n<b>View details:</b>\nTap a row to see the full invoice and generate a PDF.\n\n<b>Delete:</b>\nLong-press a row in the list.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Disclaimer</string>
@@ -109,6 +109,9 @@
 
     <!-- Version footer for help/info dialogs -->
     <string name="version_label">Version %1$s</string>
+
+    <!-- Language switcher in toolbar -->
+    <string name="menu_language">Language</string>
 
     <!-- Detail view tabs and raw-XML search -->
     <string name="tab_rendered">Invoice</string>

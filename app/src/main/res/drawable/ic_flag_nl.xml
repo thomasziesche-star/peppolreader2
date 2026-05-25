@@ -6,17 +6,17 @@
     <!-- Round clip across the entire 24x24 area -->
     <group>
         <clip-path android:pathData="M12,0 A12,12 0 1,1 12,24 A12,12 0 1,1 12,0 Z" />
-        <!-- Black (top) -->
+        <!-- Red (top) -->
         <path
-            android:fillColor="#000000"
+            android:fillColor="#AE1C28"
             android:pathData="M0,0H24V8H0V0Z" />
-        <!-- Red (middle) -->
+        <!-- White (middle) -->
         <path
-            android:fillColor="#DD0000"
+            android:fillColor="#FFFFFF"
             android:pathData="M0,8H24V16H0V8Z" />
-        <!-- Gold (bottom) -->
+        <!-- Blue (bottom) -->
         <path
-            android:fillColor="#FFCE00"
+            android:fillColor="#21468B"
             android:pathData="M0,16H24V24H0V16Z" />
     </group>
 </vector>
