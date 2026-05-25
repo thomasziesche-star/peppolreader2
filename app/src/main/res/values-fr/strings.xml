@@ -41,6 +41,13 @@
     <string name="error_pdf_encrypted">Le PDF est chiffré et ne peut pas être lu.</string>
     <string name="error_pdf_read">Erreur lors de la lecture du PDF : %1$s</string>
     <string name="error_pdf_cii">Le PDF contient une facture au format CII (UN/CEFACT). Seul UBL/XRechnung est pris en charge dans cette version.</string>
+    <string name="error_unknown_format">Format de facture inconnu</string>
+    <string name="error_import_general">Échec de l\'importation</string>
+    <string name="import_batch_summary">%1$d factures importées sur %2$d</string>
+    <string name="import_batch_duplicates">, %1$d doublons</string>
+    <string name="import_batch_errors">, %1$d erreurs</string>
+    <string name="parse_error">Erreur d\'analyse : %1$s</string>
+    <string name="subtitle_attribution">(by accountant with beard)</string>
 
     <!-- PDF/HTML Labels -->
     <string name="html_lang_code">fr</string>
@@ -112,6 +119,64 @@
 
     <!-- Language switcher in toolbar -->
     <string name="menu_language">Langue</string>
+
+    <!-- Export -->
+    <string name="action_export">Exporter…</string>
+    <string name="export_title">Exporter les factures</string>
+    <string name="export_date_from">Du</string>
+    <string name="export_date_to">Au</string>
+    <string name="export_quick_all">Tout</string>
+    <string name="export_quick_year">Année en cours</string>
+    <string name="export_quick_quarter">Trimestre en cours</string>
+    <string name="export_quick_month">Mois précédent</string>
+    <string name="export_include_xml">Inclure les fichiers XML/PDF originaux (ZIP)</string>
+    <string name="export_cancel">Annuler</string>
+    <string name="export_confirm">Exporter</string>
+    <string name="export_no_invoices">Aucune facture dans la période choisie</string>
+    <plurals name="export_success">
+        <item quantity="one">%d facture exportée</item>
+        <item quantity="other">%d factures exportées</item>
+    </plurals>
+    <string name="export_share">Partager</string>
+    <string name="export_error">Export échoué : %1$s</string>
+    <!-- En-têtes de colonnes CSV (français) -->
+    <string name="csv_invoice_id">Numéro de facture</string>
+    <string name="csv_issue_date">Date de facture</string>
+    <string name="csv_due_date">Échéance</string>
+    <string name="csv_supplier">Fournisseur</string>
+    <string name="csv_supplier_taxid">N° TVA fournisseur</string>
+    <string name="csv_customer">Client</string>
+    <string name="csv_net">Net</string>
+    <string name="csv_tax">TVA</string>
+    <string name="csv_gross">Brut</string>
+    <string name="csv_payable">À payer</string>
+    <string name="csv_currency">Devise</string>
+    <string name="csv_format">Format</string>
+    <string name="csv_doc_type">Type</string>
+    <string name="csv_file_name">Nom du fichier</string>
+    <string name="csv_doc_type_invoice">Facture</string>
+    <string name="csv_doc_type_credit_note">Avoir</string>
+    <string name="csv_doc_type_corrected">Facture rectifiée</string>
+
+    <!-- Rappels d'échéance -->
+    <string name="action_reminders">Rappels…</string>
+    <string name="reminders_title">Rappels d\'échéance</string>
+    <string name="reminders_enabled">Rappels activés</string>
+    <string name="reminders_days_before">Notifier avant l\'échéance</string>
+    <string name="reminders_days_0">Le jour même</string>
+    <string name="reminders_days_3">3 jours</string>
+    <string name="reminders_days_7">7 jours</string>
+    <string name="reminders_days_14">14 jours</string>
+    <string name="reminders_test">Vérifier maintenant</string>
+    <string name="reminders_permission_required">Autorisation de notification requise pour vous rappeler les échéances.</string>
+    <string name="reminders_close">Fermer</string>
+    <string name="notif_channel_name">Factures à échéance</string>
+    <string name="notif_channel_desc">Rappels concernant les échéances de paiement à venir.</string>
+    <string name="notif_due_title">Facture bientôt due</string>
+    <string name="notif_due_text">%1$s — échéance %2$s (à payer : %3$s)</string>
+    <string name="mark_paid">Marquer comme payée</string>
+    <string name="mark_unpaid">Marquer comme non payée</string>
+    <string name="paid_on">Payée le %1$s</string>
 
     <!-- Detail view tabs and raw-XML search -->
     <string name="tab_rendered">Facture</string>

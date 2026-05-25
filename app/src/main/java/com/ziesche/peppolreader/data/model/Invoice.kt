@@ -49,5 +49,9 @@ data class Invoice(
     /** UN/EDIFACT 1001 type code: "380"=invoice, "381"=credit note, "384"=corrected, … */
     val documentTypeCode: String? = null,
     /** Human-readable source-format profile, e.g. "Peppol BIS 3.0", "XRechnung (UBL)", "ZUGFeRD". */
-    val formatLabel: String? = null
+    val formatLabel: String? = null,
+    /** Epoch millis when the user marked the invoice as paid. Null = still open. */
+    val paidAt: Long? = null,
+    /** Epoch millis of the most recent due-date reminder shown – prevents notification spam. */
+    val lastReminderShownAt: Long? = null
 )

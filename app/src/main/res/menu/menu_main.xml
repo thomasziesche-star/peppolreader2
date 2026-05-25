@@ -49,6 +49,16 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_export"
+        android:title="@string/action_export"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reminders"
+        android:title="@string/action_reminders"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_info"
         android:icon="@drawable/ic_info"
         android:title="@string/info_title"
