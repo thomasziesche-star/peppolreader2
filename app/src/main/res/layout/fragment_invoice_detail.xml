@@ -27,6 +27,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/tab_raw_xml" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_original_pdf" />
     </com.google.android.material.tabs.TabLayout>
 
     <!-- Attachment Label (only visible on the Rechnung tab) -->
@@ -96,6 +101,34 @@
                 android:layout_height="0dp"
                 android:layout_weight="1" />
         </LinearLayout>
+
+        <!-- Tab 3: Original PDF rendered page-by-page -->
+        <FrameLayout
+            android:id="@+id/pdf_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?attr/colorSurfaceVariant"
+            android:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/pdf_recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:padding="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+            <TextView
+                android:id="@+id/pdf_empty_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textColor="?attr/colorOnSurfaceVariant"
+                android:textSize="16sp"
+                android:visibility="gone"
+                tools:text="No PDF attached"
+                tools:visibility="visible" />
+        </FrameLayout>
     </FrameLayout>
 
     <!-- Loading indicator -->
@@ -124,12 +157,13 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_mark_paid"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginEnd="8dp"
-            android:text="@string/mark_paid" />
+            android:text="@string/status_open"
+            app:iconGravity="textStart" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_download_pdf"

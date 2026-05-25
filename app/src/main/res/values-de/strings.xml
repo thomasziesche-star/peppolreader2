@@ -12,6 +12,11 @@
     <!-- Invoice List -->
     <string name="invoice_item_cd">Rechnung %1$s</string>
     <string name="search_hint">Suche (Firma, Nr.)...</string>
+    <string name="list_filter_all">Alle</string>
+    <string name="list_filter_unpaid">Unbezahlt</string>
+    <string name="list_filter_overdue">Überfällig</string>
+    <string name="list_filter_daterange">Zeitraum</string>
+    <string name="list_filter_daterange_title">Zeitraum wählen</string>
     
     <!-- Invoice Detail -->
     <string name="invoice_detail">Rechnungsdetails</string>
@@ -174,15 +179,19 @@
     <string name="notif_channel_desc">Erinnerungen an bevorstehende Zahlungsfristen.</string>
     <string name="notif_due_title">Rechnung wird fällig</string>
     <string name="notif_due_text">%1$s — fällig am %2$s (zu zahlen: %3$s)</string>
-    <string name="mark_paid">Als bezahlt markieren</string>
-    <string name="mark_unpaid">Als unbezahlt markieren</string>
+    <string name="status_open">Offen</string>
+    <string name="status_paid">Bezahlt</string>
+    <string name="list_badge_paid">Bezahlt</string>
     <string name="paid_on">Bezahlt am %1$s</string>
 
     <!-- Detail view tabs and raw-XML search -->
     <string name="tab_rendered">Rechnung</string>
     <string name="tab_raw_xml">Rohdaten</string>
+    <string name="tab_original_pdf">PDF</string>
     <string name="search_xml_hint">XML durchsuchen…</string>
     <string name="search_no_matches">Keine Treffer</string>
+    <string name="pdf_none_attached">Kein PDF angehängt</string>
+    <string name="pdf_render_error">PDF konnte nicht geöffnet werden</string>
 
     <!-- File picker post-filter feedback -->
     <plurals name="import_skipped_files">

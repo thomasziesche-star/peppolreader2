@@ -12,6 +12,11 @@
     <!-- Invoice List -->
     <string name="invoice_item_cd">Factuur %1$s</string>
     <string name="search_hint">Zoeken (bedrijf, nr.)…</string>
+    <string name="list_filter_all">Alle</string>
+    <string name="list_filter_unpaid">Onbetaald</string>
+    <string name="list_filter_overdue">Vervallen</string>
+    <string name="list_filter_daterange">Periode</string>
+    <string name="list_filter_daterange_title">Periode selecteren</string>
 
     <!-- Invoice Detail -->
     <string name="invoice_detail">Factuurgegevens</string>
@@ -174,15 +179,19 @@
     <string name="notif_channel_desc">Herinneringen aan komende betalingsdata.</string>
     <string name="notif_due_title">Factuur vervalt binnenkort</string>
     <string name="notif_due_text">%1$s — vervalt %2$s (te betalen: %3$s)</string>
-    <string name="mark_paid">Markeer als betaald</string>
-    <string name="mark_unpaid">Markeer als onbetaald</string>
+    <string name="status_open">Open</string>
+    <string name="status_paid">Betaald</string>
+    <string name="list_badge_paid">Betaald</string>
     <string name="paid_on">Betaald op %1$s</string>
 
     <!-- Detail view tabs and raw-XML search -->
     <string name="tab_rendered">Factuur</string>
     <string name="tab_raw_xml">Brongegevens</string>
+    <string name="tab_original_pdf">PDF</string>
     <string name="search_xml_hint">XML doorzoeken…</string>
     <string name="search_no_matches">Geen resultaten</string>
+    <string name="pdf_none_attached">Geen PDF bijgevoegd</string>
+    <string name="pdf_render_error">PDF kon niet worden geopend</string>
 
     <!-- File picker post-filter feedback -->
     <plurals name="import_skipped_files">
