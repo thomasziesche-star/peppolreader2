@@ -3,33 +3,35 @@
     android:height="24dp"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <!-- Centered 3:2 rectangle (24x16), Y starts at 4, ends at 20 -->
-    <!-- Blue Background -->
-    <path
-        android:fillColor="#00247D"
-        android:pathData="M0,4H24V20H0Z" />
-    
-    <!-- White Diagonal -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M0,4L24,20M24,4L0,20"
-        android:strokeWidth="3"
-        android:strokeColor="#FFFFFF"/>
-    
-    <!-- Red Diagonal -->
-    <path
-        android:fillColor="#CF142B"
-        android:pathData="M0,4L24,20M24,4L0,20"
-        android:strokeWidth="1.5"
-        android:strokeColor="#CF142B"/>
-    
-    <!-- White Cross (St George) Background -->
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M10,4H14V20H10Z M0,10.5H24V13.5H0Z" />
-    
-    <!-- Red Cross (St George) -->
-    <path
-        android:fillColor="#CF142B"
-        android:pathData="M11,4H13V20H11Z M0,11.3H24V12.7H0Z" />
+    <!-- Round clip across the entire 24x24 area -->
+    <group>
+        <clip-path android:pathData="M12,0 A12,12 0 1,1 12,24 A12,12 0 1,1 12,0 Z" />
+
+        <!-- Blue Background -->
+        <path
+            android:fillColor="#00247D"
+            android:pathData="M0,0H24V24H0Z" />
+
+        <!-- White diagonals (St. Andrew + St. Patrick base) -->
+        <path
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="4.5"
+            android:pathData="M0,0L24,24 M24,0L0,24" />
+
+        <!-- Red diagonals (St. Patrick) -->
+        <path
+            android:strokeColor="#CF142B"
+            android:strokeWidth="2"
+            android:pathData="M0,0L24,24 M24,0L0,24" />
+
+        <!-- White cross (St. George background) -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M9.5,0H14.5V24H9.5Z M0,9.5H24V14.5H0Z" />
+
+        <!-- Red cross (St. George) -->
+        <path
+            android:fillColor="#CF142B"
+            android:pathData="M10.5,0H13.5V24H10.5Z M0,10.5H24V13.5H0Z" />
+    </group>
 </vector>

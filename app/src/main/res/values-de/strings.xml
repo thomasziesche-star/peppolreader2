@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Peppol Reader</string>
-    <string name="app_title">Peppol Reader</string>
-    <string name="title_activity_main">Peppol Reader</string>
+    <string name="app_name">E-Invoice &amp; Peppol Reader</string>
+    <string name="app_title">E-Invoice &amp; Peppol Reader</string>
+    <string name="title_activity_main">E-Invoice &amp; Peppol Reader</string>
     <string name="action_settings">Einstellungen</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="import_file">Datei importieren</string>
@@ -101,7 +101,7 @@
 
     <!-- Help Manual -->
     <string name="help_title">Hilfe &amp; Bedienung</string>
-    <string name="help_message">Hallo, hier kurz die wichtigsten Hinweise...\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf den + Button und wählen Sie XML- oder PDF-Dateien (mehrere gleichzeitig durch langes Drücken). Sie können Dateien auch direkt aus Ihrem E-Mail-Programm an Peppol Reader teilen.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid-PDFs werden automatisch erkannt — die eingebettete Rechnungs-XML wird ausgelesen.\n\n<b>Unterstützte Formate:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL und CII), ZUGFeRD 1.x und 2.x, Factur-X.\n\n<b>Rechnungen &amp; Gutschriften:</b>\nWerden automatisch unterschieden — Gutschriften erhalten einen Chip und werden mit negativem Betrag angezeigt.\n\n<b>Details ansehen:</b>\nTippen Sie auf einen Eintrag, um die Rechnung zu sehen und ein PDF zu erzeugen.\n\n<b>Löschen:</b>\nHalten Sie einen Eintrag in der Liste gedrückt.</string>
+    <string name="help_message">Hallo, hier kurz die wichtigsten Hinweise...\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf den + Button und wählen Sie XML- oder PDF-Dateien (mehrere gleichzeitig durch langes Drücken). Sie können Dateien auch direkt aus Ihrem E-Mail-Programm an E-Invoice &amp; Peppol Reader teilen.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid-PDFs werden automatisch erkannt — die eingebettete Rechnungs-XML wird ausgelesen.\n\n<b>Unterstützte Formate:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL und CII), ZUGFeRD 1.x und 2.x, Factur-X.\n\n<b>Rechnungen &amp; Gutschriften:</b>\nWerden automatisch unterschieden — Gutschriften erhalten einen Chip und werden mit negativem Betrag angezeigt.\n\n<b>Details ansehen:</b>\nTippen Sie auf einen Eintrag, um die Rechnung zu sehen und ein PDF zu erzeugen.\n\n<b>Löschen:</b>\nHalten Sie einen Eintrag in der Liste gedrückt.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Impressum</string>
@@ -109,6 +109,9 @@
 
     <!-- Version footer for help/info dialogs -->
     <string name="version_label">Version %1$s</string>
+
+    <!-- Language switcher in toolbar -->
+    <string name="menu_language">Sprache</string>
 
     <!-- Detail view tabs and raw-XML search -->
     <string name="tab_rendered">Rechnung</string>

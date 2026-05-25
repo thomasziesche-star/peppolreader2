@@ -1,0 +1,127 @@
+<resources>
+    <string name="app_name">E-Invoice &amp; Peppol Reader</string>
+    <string name="import_file">Importer un fichier</string>
+    <string name="app_title">E-Invoice &amp; Peppol Reader</string>
+    <string name="title_activity_main">E-Invoice &amp; Peppol Reader</string>
+    <string name="action_settings">Paramètres</string>
+    <string name="menu_settings">Paramètres</string>
+    <string name="cd_upload_button">Téléverser une facture XML</string>
+    <string name="no_invoices">Aucune facture disponible.</string>
+    <string name="tap_to_upload">Appuyez sur + pour importer un fichier XML.</string>
+
+    <!-- Invoice List -->
+    <string name="invoice_item_cd">Facture %1$s</string>
+    <string name="search_hint">Rechercher (société, n°)…</string>
+
+    <!-- Invoice Detail -->
+    <string name="invoice_detail">Détails de la facture</string>
+    <string name="download_pdf">Télécharger en PDF</string>
+    <string name="share">Partager</string>
+    <string name="loading">Chargement de la facture…</string>
+    <string name="attachment_label">Pièce jointe : %1$s</string>
+
+    <!-- Navigation -->
+    <string name="previous">Retour</string>
+    <string name="next">Suivant</string>
+
+    <!-- Messages -->
+    <string name="error_parsing">Erreur lors de la lecture du fichier</string>
+    <string name="error_pdf">Erreur lors de la création du PDF</string>
+    <string name="confirm_delete">Voulez-vous vraiment supprimer cette facture ?</string>
+    <string name="delete">Supprimer</string>
+    <string name="cancel">Annuler</string>
+    <string name="invoice_deleted">Facture supprimée</string>
+    <string name="error_not_found">Facture introuvable</string>
+    <string name="error_general">Erreur : %1$s</string>
+    <string name="invoice_saved">Facture enregistrée</string>
+    <string name="invoice_exists">La facture existe déjà. Ouverture des détails…</string>
+    <string name="error_xml_read">Erreur lors de la lecture du fichier XML : %1$s</string>
+    <string name="error_share">Erreur lors du partage : %1$s</string>
+    <string name="error_pdf_no_xml">Aucun XML de facture trouvé dans le PDF. Ce fichier n\'est pas un PDF hybride ZUGFeRD/Factur-X.</string>
+    <string name="error_pdf_encrypted">Le PDF est chiffré et ne peut pas être lu.</string>
+    <string name="error_pdf_read">Erreur lors de la lecture du PDF : %1$s</string>
+    <string name="error_pdf_cii">Le PDF contient une facture au format CII (UN/CEFACT). Seul UBL/XRechnung est pris en charge dans cette version.</string>
+
+    <!-- PDF/HTML Labels -->
+    <string name="html_lang_code">fr</string>
+    <string name="label_invoice">FACTURE</string>
+    <string name="label_credit_note">AVOIR</string>
+    <string name="label_corrected_invoice">FACTURE RECTIFIÉE</string>
+    <string name="chip_credit_note">Avoir</string>
+    <string name="label_no">N° :</string>
+    <string name="label_date">Date :</string>
+    <string name="label_due_date">Échéance :</string>
+    <string name="label_order_id">Commande :</string>
+    <string name="label_supplier">Fournisseur</string>
+    <string name="label_customer">Destinataire</string>
+    <string name="label_tax_id">N° TVA : %1$s</string>
+    <string name="table_article_no">Réf.</string>
+    <string name="table_description">Description</string>
+    <string name="table_quantity">Qté</string>
+    <string name="table_price">Prix</string>
+    <string name="table_total">Total</string>
+    <string name="total_net">Montant net</string>
+    <string name="total_surcharges">Majorations</string>
+    <string name="total_allowances">Remises</string>
+    <string name="total_taxable">Base imposable</string>
+    <string name="total_vat">TVA</string>
+    <string name="total_gross">Montant total</string>
+    <string name="total_payable">À payer</string>
+    <string name="footer_thanks">Informations sans garantie</string>
+    <string name="footer_generated">Généré à partir de données %1$s%2$s</string>
+    <string name="footer_file_hint"> (Fichier : %1$s)</string>
+    <string name="footer_disclaimer">La version lisible ne remplace pas le document XML original</string>
+    <string name="payment_info_title">Informations de paiement</string>
+    <string name="label_iban">IBAN :</string>
+    <string name="label_bic">BIC :</string>
+    <string name="label_account">Compte :</string>
+
+    <!-- Parser Mappings -->
+    <string name="shipping_cost">Frais d\'expédition</string>
+    <string name="surcharge_label">Majoration : %1$s</string>
+    <string name="discount_label">Remise : %1$s</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Paramètres</string>
+    <string name="pref_language">Langue</string>
+    <string name="pref_language_summary">Choisissez la langue d\'affichage</string>
+
+    <!-- Dashboard -->
+    <string name="title_dashboard">Tableau de bord</string>
+    <string name="filter_last_6_months">6 derniers mois</string>
+    <string name="filter_last_12_months">12 derniers mois</string>
+    <string name="filter_current_month">Mois en cours</string>
+    <string name="filter_last_month">Mois précédent</string>
+    <string name="filter_all">Tout</string>
+    <string name="chart_monthly_title">Dépenses par mois</string>
+    <string name="chart_suppliers_title">Principaux fournisseurs</string>
+    <string name="chart_label_expenses">Dépenses (€)</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+
+    <!-- Help Manual -->
+    <string name="help_title">Aide &amp; utilisation</string>
+    <string name="help_message">Bonjour, voici quelques conseils rapides…\n\n<b>Importer des factures :</b>\nAppuyez sur le bouton + et choisissez des fichiers XML ou PDF (appui long pour la sélection multiple). Vous pouvez aussi partager des fichiers depuis votre application de messagerie vers E-Invoice &amp; Peppol Reader.\n\n<b>PDF ZUGFeRD &amp; Factur-X :</b>\nLes PDF hybrides sont détectés automatiquement — le XML de facture intégré est extrait.\n\n<b>Formats pris en charge :</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL et CII), ZUGFeRD 1.x et 2.x, Factur-X.\n\n<b>Factures &amp; avoirs :</b>\nDistingués automatiquement — les avoirs sont marqués par une étiquette et affichés avec un montant négatif.\n\n<b>Voir les détails :</b>\nAppuyez sur une ligne pour afficher la facture et générer un PDF.\n\n<b>Supprimer :</b>\nAppuyez longuement sur une ligne dans la liste.</string>
+
+    <!-- Info Menu -->
+    <string name="info_title">Infos &amp; mentions légales</string>
+    <string name="info_message">Ce projet est un projet de loisir et N\'EST PAS une application PEPPOL officielle.\n\nLes informations fournies le sont sans garantie.\n\n<b>Accountant with beard</b></string>
+
+    <!-- Version footer for help/info dialogs -->
+    <string name="version_label">Version %1$s</string>
+
+    <!-- Language switcher in toolbar -->
+    <string name="menu_language">Langue</string>
+
+    <!-- Detail view tabs and raw-XML search -->
+    <string name="tab_rendered">Facture</string>
+    <string name="tab_raw_xml">Données brutes</string>
+    <string name="search_xml_hint">Rechercher dans le XML…</string>
+    <string name="search_no_matches">Aucun résultat</string>
+
+    <!-- File picker post-filter feedback -->
+    <plurals name="import_skipped_files">
+        <item quantity="one">%d fichier ignoré – seuls PDF et XML sont pris en charge</item>
+        <item quantity="other">%d fichiers ignorés – seuls PDF et XML sont pris en charge</item>
+    </plurals>
+</resources>

@@ -1,0 +1,127 @@
+<resources>
+    <string name="app_name">E-Invoice &amp; Peppol Reader</string>
+    <string name="import_file">Bestand importeren</string>
+    <string name="app_title">E-Invoice &amp; Peppol Reader</string>
+    <string name="title_activity_main">E-Invoice &amp; Peppol Reader</string>
+    <string name="action_settings">Instellingen</string>
+    <string name="menu_settings">Instellingen</string>
+    <string name="cd_upload_button">XML-factuur uploaden</string>
+    <string name="no_invoices">Geen facturen beschikbaar.</string>
+    <string name="tap_to_upload">Tik op + om een XML-bestand te importeren.</string>
+
+    <!-- Invoice List -->
+    <string name="invoice_item_cd">Factuur %1$s</string>
+    <string name="search_hint">Zoeken (bedrijf, nr.)…</string>
+
+    <!-- Invoice Detail -->
+    <string name="invoice_detail">Factuurgegevens</string>
+    <string name="download_pdf">PDF downloaden</string>
+    <string name="share">Delen</string>
+    <string name="loading">Factuur wordt geladen…</string>
+    <string name="attachment_label">Bijlage: %1$s</string>
+
+    <!-- Navigation -->
+    <string name="previous">Terug</string>
+    <string name="next">Volgende</string>
+
+    <!-- Messages -->
+    <string name="error_parsing">Fout bij het lezen van het bestand</string>
+    <string name="error_pdf">Fout bij het maken van de PDF</string>
+    <string name="confirm_delete">Wil je deze factuur echt verwijderen?</string>
+    <string name="delete">Verwijderen</string>
+    <string name="cancel">Annuleren</string>
+    <string name="invoice_deleted">Factuur verwijderd</string>
+    <string name="error_not_found">Factuur niet gevonden</string>
+    <string name="error_general">Fout: %1$s</string>
+    <string name="invoice_saved">Factuur opgeslagen</string>
+    <string name="invoice_exists">Factuur bestaat al. Details worden geopend…</string>
+    <string name="error_xml_read">Fout bij het lezen van XML-bestand: %1$s</string>
+    <string name="error_share">Fout bij het delen: %1$s</string>
+    <string name="error_pdf_no_xml">Geen factuur-XML gevonden in PDF. Dit is geen ZUGFeRD/Factur-X-hybride PDF.</string>
+    <string name="error_pdf_encrypted">PDF is versleuteld en kan niet worden gelezen.</string>
+    <string name="error_pdf_read">Fout bij het lezen van PDF: %1$s</string>
+    <string name="error_pdf_cii">PDF bevat een factuur in CII-formaat (UN/CEFACT). In deze versie wordt alleen UBL/XRechnung ondersteund.</string>
+
+    <!-- PDF/HTML Labels -->
+    <string name="html_lang_code">nl</string>
+    <string name="label_invoice">FACTUUR</string>
+    <string name="label_credit_note">CREDITNOTA</string>
+    <string name="label_corrected_invoice">GECORRIGEERDE FACTUUR</string>
+    <string name="chip_credit_note">Creditnota</string>
+    <string name="label_no">Nr.:</string>
+    <string name="label_date">Datum:</string>
+    <string name="label_due_date">Vervaldatum:</string>
+    <string name="label_order_id">Bestelling:</string>
+    <string name="label_supplier">Leverancier</string>
+    <string name="label_customer">Ontvanger</string>
+    <string name="label_tax_id">Btw-nr.: %1$s</string>
+    <string name="table_article_no">Art.-nr.</string>
+    <string name="table_description">Omschrijving</string>
+    <string name="table_quantity">Aantal</string>
+    <string name="table_price">Prijs</string>
+    <string name="table_total">Totaal</string>
+    <string name="total_net">Nettobedrag</string>
+    <string name="total_surcharges">Toeslagen</string>
+    <string name="total_allowances">Kortingen</string>
+    <string name="total_taxable">Belastbaar bedrag</string>
+    <string name="total_vat">Btw</string>
+    <string name="total_gross">Totaalbedrag</string>
+    <string name="total_payable">Te betalen</string>
+    <string name="footer_thanks">Gegevens zonder garantie</string>
+    <string name="footer_generated">Gegenereerd uit %1$s-gegevens%2$s</string>
+    <string name="footer_file_hint"> (Bestand: %1$s)</string>
+    <string name="footer_disclaimer">De leesbare versie vervangt het originele XML-document niet</string>
+    <string name="payment_info_title">Betalingsinformatie</string>
+    <string name="label_iban">IBAN:</string>
+    <string name="label_bic">BIC:</string>
+    <string name="label_account">Rekening:</string>
+
+    <!-- Parser Mappings -->
+    <string name="shipping_cost">Verzendkosten</string>
+    <string name="surcharge_label">Toeslag: %1$s</string>
+    <string name="discount_label">Korting: %1$s</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Instellingen</string>
+    <string name="pref_language">Taal</string>
+    <string name="pref_language_summary">Kies de weergavetaal</string>
+
+    <!-- Dashboard -->
+    <string name="title_dashboard">Dashboard</string>
+    <string name="filter_last_6_months">Afgelopen 6 maanden</string>
+    <string name="filter_last_12_months">Afgelopen 12 maanden</string>
+    <string name="filter_current_month">Huidige maand</string>
+    <string name="filter_last_month">Vorige maand</string>
+    <string name="filter_all">Alles</string>
+    <string name="chart_monthly_title">Uitgaven per maand</string>
+    <string name="chart_suppliers_title">Top-leveranciers</string>
+    <string name="chart_label_expenses">Uitgaven (€)</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+
+    <!-- Help Manual -->
+    <string name="help_title">Hulp &amp; bediening</string>
+    <string name="help_message">Hallo, hier de belangrijkste tips…\n\n<b>Facturen importeren:</b>\nTik op de +-knop en kies XML- of PDF-bestanden (lang ingedrukt houden voor meerdere). Je kunt bestanden ook rechtstreeks vanuit je e-mailprogramma delen met E-Invoice &amp; Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybride PDF\'s worden automatisch herkend — de ingesloten factuur-XML wordt uitgelezen.\n\n<b>Ondersteunde formaten:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL en CII), ZUGFeRD 1.x en 2.x, Factur-X.\n\n<b>Facturen &amp; creditnota\'s:</b>\nWorden automatisch onderscheiden — creditnota\'s krijgen een label en worden met een negatief bedrag weergegeven.\n\n<b>Details bekijken:</b>\nTik op een rij om de factuur te bekijken en een PDF te maken.\n\n<b>Verwijderen:</b>\nHoud een rij in de lijst ingedrukt.</string>
+
+    <!-- Info Menu -->
+    <string name="info_title">Info &amp; disclaimer</string>
+    <string name="info_message">Dit is een hobbyproject en GEEN officiële PEPPOL-app.\n\nDe getoonde informatie wordt verstrekt zonder garantie.\n\n<b>Accountant with beard</b></string>
+
+    <!-- Version footer for help/info dialogs -->
+    <string name="version_label">Versie %1$s</string>
+
+    <!-- Language switcher in toolbar -->
+    <string name="menu_language">Taal</string>
+
+    <!-- Detail view tabs and raw-XML search -->
+    <string name="tab_rendered">Factuur</string>
+    <string name="tab_raw_xml">Brongegevens</string>
+    <string name="search_xml_hint">XML doorzoeken…</string>
+    <string name="search_no_matches">Geen resultaten</string>
+
+    <!-- File picker post-filter feedback -->
+    <plurals name="import_skipped_files">
+        <item quantity="one">%d bestand overgeslagen – alleen PDF en XML worden ondersteund</item>
+        <item quantity="other">%d bestanden overgeslagen – alleen PDF en XML worden ondersteund</item>
+    </plurals>
+</resources>
