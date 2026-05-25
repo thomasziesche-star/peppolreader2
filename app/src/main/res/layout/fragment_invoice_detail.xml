@@ -123,6 +123,15 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_mark_paid"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:text="@string/mark_paid" />
+
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_download_pdf"
             style="@style/Widget.Material3.Button.TonalButton"
             android:layout_width="0dp"

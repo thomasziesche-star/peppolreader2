@@ -2,17 +2,35 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.ziesche.peppolreader.MainActivity">
+
+    <!-- Language switcher: icon is the currently active flag, sub-menu lists all four. -->
     <item
-        android:id="@+id/action_lang_en"
+        android:id="@+id/action_language"
         android:icon="@drawable/ic_flag_en"
-        android:title="English"
-        app:showAsAction="always" />
-        
-    <item
-        android:id="@+id/action_lang_de"
-        android:icon="@drawable/ic_flag_de"
-        android:title="Deutsch"
-        app:showAsAction="always" />
+        android:title="@string/menu_language"
+        app:showAsAction="always">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_lang_en"
+                    android:icon="@drawable/ic_flag_en"
+                    android:title="English" />
+                <item
+                    android:id="@+id/action_lang_de"
+                    android:icon="@drawable/ic_flag_de"
+                    android:title="Deutsch" />
+                <item
+                    android:id="@+id/action_lang_nl"
+                    android:icon="@drawable/ic_flag_nl"
+                    android:title="Nederlands" />
+                <item
+                    android:id="@+id/action_lang_fr"
+                    android:icon="@drawable/ic_flag_fr"
+                    android:title="Français" />
+            </group>
+        </menu>
+    </item>
+
     <item
         android:id="@+id/action_theme_toggle"
         android:icon="@drawable/ic_mode_night"
@@ -24,10 +42,20 @@
         android:icon="@drawable/ic_help"
         android:title="@string/help_title"
         app:showAsAction="never" />
-        
+
     <item
         android:id="@+id/action_dashboard"
         android:title="Dashboard"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_export"
+        android:title="@string/action_export"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_reminders"
+        android:title="@string/action_reminders"
         app:showAsAction="never" />
 
     <item

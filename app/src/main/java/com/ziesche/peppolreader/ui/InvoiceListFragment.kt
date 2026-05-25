@@ -12,6 +12,7 @@ import com.ziesche.peppolreader.R
 import com.ziesche.peppolreader.data.model.Invoice
 import com.ziesche.peppolreader.databinding.FragmentInvoiceListBinding
 import com.ziesche.peppolreader.parser.ZugferdExtractor
+import com.ziesche.peppolreader.util.MimeTypes
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
@@ -28,9 +29,9 @@ class InvoiceListFragment : Fragment() {
      * uses this list to filter out everything else (JPEGs, PNGs, etc.) before the user sees it.
      */
     private val acceptedMimeTypes = arrayOf(
-        "application/pdf",
-        "application/xml",
-        "text/xml"
+        MimeTypes.PDF,
+        MimeTypes.XML,
+        MimeTypes.TEXT_XML
     )
 
     /**
@@ -100,7 +101,7 @@ class InvoiceListFragment : Fragment() {
 
     private fun isPdf(uri: android.net.Uri, fileName: String): Boolean {
         val mime = requireContext().contentResolver.getType(uri)
-        if (mime == "application/pdf") return true
+        if (mime == MimeTypes.PDF) return true
         return fileName.endsWith(".pdf", ignoreCase = true)
     }
 
@@ -201,27 +202,17 @@ class InvoiceListFragment : Fragment() {
         viewModel.message.observe(viewLifecycleOwner) { message ->
             message?.let {
                 Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
-                // Check if we should navigate (hacky but simple based on message content or just add a proper event)
-                // Better: The ViewModel selects the invoice. 
-                // We can observe 'selectedInvoice' here? 
-                // But selectedInvoice is also set when clicking an item.
-                // If we observe selectedInvoice and it changes, should we navigate?
-                // The current navigateToDetail ALREADY calls selectInvoice.
-                // If we observe it here, we might loop or double navigate if we are not careful.
-                // navigateToDetail pushes to backstack. 
-                // Let's add a one-shot event or just check if the message implies navigation.
-                
-                if (it.contains("Rechnung gespeichert") || it.contains("Rechnung ist bereits vorhanden")) { 
-                    // Only navigate if it's a save/import action.
-                    // "Rechnung gelöscht" should NOT trigger navigation.
-                     viewModel.selectedInvoice.value?.let { invoice ->
-                         // Prevent double navigation if already there? 
-                         // We are in ListFragment.
-                         findNavController().navigate(R.id.action_invoiceList_to_invoiceDetail)
-                     }
-                }
-                
                 viewModel.clearMessage()
+            }
+        }
+
+        // One-shot event from the ViewModel: after a successful single import (or duplicate
+        // hit), navigate to the detail screen. Locale-safe replacement for the old string-
+        // match approach.
+        viewModel.importNavigationId.observe(viewLifecycleOwner) { id ->
+            if (id != null) {
+                findNavController().navigate(R.id.action_invoiceList_to_invoiceDetail)
+                viewModel.consumedImportNavigation()
             }
         }
     }

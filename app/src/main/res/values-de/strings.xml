@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Peppol Reader</string>
-    <string name="app_title">Peppol Reader</string>
-    <string name="title_activity_main">Peppol Reader</string>
+    <string name="app_name">E-Invoice &amp; Peppol Reader</string>
+    <string name="app_title">E-Invoice &amp; Peppol Reader</string>
+    <string name="title_activity_main">E-Invoice &amp; Peppol Reader</string>
     <string name="action_settings">Einstellungen</string>
     <string name="menu_settings">Einstellungen</string>
     <string name="import_file">Datei importieren</string>
@@ -41,6 +41,13 @@
     <string name="error_pdf_encrypted">PDF ist verschlüsselt und kann nicht gelesen werden.</string>
     <string name="error_pdf_read">Fehler beim Lesen des PDFs: %1$s</string>
     <string name="error_pdf_cii">PDF enthält eine Rechnung im CII-Format (UN/CEFACT). In dieser Version wird nur UBL/XRechnung unterstützt.</string>
+    <string name="error_unknown_format">Unbekanntes Rechnungsformat</string>
+    <string name="error_import_general">Fehler beim Import</string>
+    <string name="import_batch_summary">%1$d von %2$d Rechnungen importiert</string>
+    <string name="import_batch_duplicates">, %1$d Duplikate</string>
+    <string name="import_batch_errors">, %1$d Fehler</string>
+    <string name="parse_error">Fehler beim Parsen: %1$s</string>
+    <string name="subtitle_attribution">(by accountant with beard)</string>
 
     <!-- PDF/HTML Labels -->
     <string name="html_lang_code">de</string>
@@ -101,7 +108,7 @@
 
     <!-- Help Manual -->
     <string name="help_title">Hilfe &amp; Bedienung</string>
-    <string name="help_message">Hallo, hier kurz die wichtigsten Hinweise...\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf den + Button und wählen Sie XML- oder PDF-Dateien (mehrere gleichzeitig durch langes Drücken). Sie können Dateien auch direkt aus Ihrem E-Mail-Programm an Peppol Reader teilen.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid-PDFs werden automatisch erkannt — die eingebettete Rechnungs-XML wird ausgelesen.\n\n<b>Unterstützte Formate:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL und CII), ZUGFeRD 1.x und 2.x, Factur-X.\n\n<b>Rechnungen &amp; Gutschriften:</b>\nWerden automatisch unterschieden — Gutschriften erhalten einen Chip und werden mit negativem Betrag angezeigt.\n\n<b>Details ansehen:</b>\nTippen Sie auf einen Eintrag, um die Rechnung zu sehen und ein PDF zu erzeugen.\n\n<b>Löschen:</b>\nHalten Sie einen Eintrag in der Liste gedrückt.</string>
+    <string name="help_message">Hallo, hier kurz die wichtigsten Hinweise...\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf den + Button und wählen Sie XML- oder PDF-Dateien (mehrere gleichzeitig durch langes Drücken). Sie können Dateien auch direkt aus Ihrem E-Mail-Programm an E-Invoice &amp; Peppol Reader teilen.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid-PDFs werden automatisch erkannt — die eingebettete Rechnungs-XML wird ausgelesen.\n\n<b>Unterstützte Formate:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL und CII), ZUGFeRD 1.x und 2.x, Factur-X.\n\n<b>Rechnungen &amp; Gutschriften:</b>\nWerden automatisch unterschieden — Gutschriften erhalten einen Chip und werden mit negativem Betrag angezeigt.\n\n<b>Details ansehen:</b>\nTippen Sie auf einen Eintrag, um die Rechnung zu sehen und ein PDF zu erzeugen.\n\n<b>Löschen:</b>\nHalten Sie einen Eintrag in der Liste gedrückt.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Impressum</string>
@@ -109,6 +116,67 @@
 
     <!-- Version footer for help/info dialogs -->
     <string name="version_label">Version %1$s</string>
+
+    <!-- Language switcher in toolbar -->
+    <string name="menu_language">Sprache</string>
+
+    <!-- Export -->
+    <string name="action_export">Exportieren…</string>
+    <string name="export_title">Rechnungen exportieren</string>
+    <string name="export_date_from">Von</string>
+    <string name="export_date_to">Bis</string>
+    <string name="export_quick_all">Alle</string>
+    <string name="export_quick_year">Aktuelles Jahr</string>
+    <string name="export_quick_quarter">Aktuelles Quartal</string>
+    <string name="export_quick_month">Letzter Monat</string>
+    <string name="export_include_xml">Original-XML/PDF-Dateien beilegen (ZIP)</string>
+    <string name="export_cancel">Abbrechen</string>
+    <string name="export_confirm">Exportieren</string>
+    <string name="export_no_invoices">Keine Rechnungen im gewählten Zeitraum</string>
+    <plurals name="export_success">
+        <item quantity="one">%d Rechnung exportiert</item>
+        <item quantity="other">%d Rechnungen exportiert</item>
+    </plurals>
+    <string name="export_share">Teilen</string>
+    <string name="export_error">Export fehlgeschlagen: %1$s</string>
+    <!-- CSV-Spaltenüberschriften (Deutsch) -->
+    <string name="csv_invoice_id">Rechnungsnummer</string>
+    <string name="csv_issue_date">Belegdatum</string>
+    <string name="csv_due_date">Fälligkeit</string>
+    <string name="csv_supplier">Lieferant</string>
+    <string name="csv_supplier_taxid">USt-ID Lieferant</string>
+    <string name="csv_customer">Kunde</string>
+    <string name="csv_net">Netto</string>
+    <string name="csv_tax">USt</string>
+    <string name="csv_gross">Brutto</string>
+    <string name="csv_payable">Zahlbar</string>
+    <string name="csv_currency">Währung</string>
+    <string name="csv_format">Format</string>
+    <string name="csv_doc_type">Typ</string>
+    <string name="csv_file_name">Dateiname</string>
+    <string name="csv_doc_type_invoice">Rechnung</string>
+    <string name="csv_doc_type_credit_note">Gutschrift</string>
+    <string name="csv_doc_type_corrected">Korrektur</string>
+
+    <!-- Fälligkeits-Erinnerungen -->
+    <string name="action_reminders">Erinnerungen…</string>
+    <string name="reminders_title">Fälligkeits-Erinnerungen</string>
+    <string name="reminders_enabled">Erinnerungen aktiv</string>
+    <string name="reminders_days_before">Vor Fälligkeit benachrichtigen</string>
+    <string name="reminders_days_0">Am Fälligkeitstag</string>
+    <string name="reminders_days_3">3 Tage</string>
+    <string name="reminders_days_7">7 Tage</string>
+    <string name="reminders_days_14">14 Tage</string>
+    <string name="reminders_test">Jetzt prüfen</string>
+    <string name="reminders_permission_required">Benachrichtigungs­berechtigung wird benötigt, um an Fälligkeiten zu erinnern.</string>
+    <string name="reminders_close">Schließen</string>
+    <string name="notif_channel_name">Fällige Rechnungen</string>
+    <string name="notif_channel_desc">Erinnerungen an bevorstehende Zahlungsfristen.</string>
+    <string name="notif_due_title">Rechnung wird fällig</string>
+    <string name="notif_due_text">%1$s — fällig am %2$s (zu zahlen: %3$s)</string>
+    <string name="mark_paid">Als bezahlt markieren</string>
+    <string name="mark_unpaid">Als unbezahlt markieren</string>
+    <string name="paid_on">Bezahlt am %1$s</string>
 
     <!-- Detail view tabs and raw-XML search -->
     <string name="tab_rendered">Rechnung</string>
