@@ -37,10 +37,17 @@
     <string name="invoice_exists">Invoice already exists. Opening details...</string>
     <string name="error_xml_read">Error reading XML file: %1$s</string>
     <string name="error_share">Error sharing: %1$s</string>
+    <string name="error_pdf_no_xml">No invoice XML found in PDF. This file is not a ZUGFeRD/Factur-X hybrid PDF.</string>
+    <string name="error_pdf_encrypted">PDF is encrypted and cannot be read.</string>
+    <string name="error_pdf_read">Error reading PDF: %1$s</string>
+    <string name="error_pdf_cii">PDF contains a CII-format invoice (UN/CEFACT). Only UBL/XRechnung is supported in this version.</string>
 
     <!-- PDF/HTML Labels -->
     <string name="html_lang_code">en</string>
     <string name="label_invoice">INVOICE</string>
+    <string name="label_credit_note">CREDIT NOTE</string>
+    <string name="label_corrected_invoice">CORRECTED INVOICE</string>
+    <string name="chip_credit_note">Credit Note</string>
     <string name="label_no">No.:</string>
     <string name="label_date">Date:</string>
     <string name="label_due_date">Due:</string>
@@ -61,7 +68,7 @@
     <string name="total_gross">Total Amount</string>
     <string name="total_payable">To Pay</string>
     <string name="footer_thanks">Information without warranty</string>
-    <string name="footer_generated">Generated from Peppol Billing 3.0 Data%1$s</string>
+    <string name="footer_generated">Generated from %1$s data%2$s</string>
     <string name="footer_file_hint"> (File: %1$s)</string>
     <string name="footer_disclaimer">The readable version does not replace the original XML</string>
     <string name="payment_info_title">Payment Information</string>
@@ -94,9 +101,24 @@
 
     <!-- Help Manual -->
     <string name="help_title">Help &amp; Usage</string>
-    <string name="help_message">Jo hello, just some infos...\n\n<b>Import Invoices:</b>\nTap the + button to open the file picker. You can select multiple XML files at once by long-pressing them.\n\n<b>View Details:</b>\nTap on an invoice in the list to view its details and generate a PDF.\n\n<b>Delete Invoice:</b>\nLong-press an invoice in the list to delete it.</string>
-    
+    <string name="help_message">Hi there, a few quick pointers...\n\n<b>Import invoices:</b>\nTap the + button and pick XML or PDF files (long-press for multi-select). You can also share files from your mail app to Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded invoice XML is extracted for you.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes are flagged with a chip and shown with a negative amount.\n\n<b>View details:</b>\nTap a row to see the full invoice and generate a PDF.\n\n<b>Delete:</b>\nLong-press a row in the list.</string>
+
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Disclaimer</string>
     <string name="info_message">This is a hobby project and NOT an official PEPPOL app.\n\nThe information provided is without warranty.\n\n<b>Accountant with beard</b></string>
+
+    <!-- Version footer for help/info dialogs -->
+    <string name="version_label">Version %1$s</string>
+
+    <!-- Detail view tabs and raw-XML search -->
+    <string name="tab_rendered">Invoice</string>
+    <string name="tab_raw_xml">Raw data</string>
+    <string name="search_xml_hint">Search XML…</string>
+    <string name="search_no_matches">No matches</string>
+
+    <!-- File picker post-filter feedback -->
+    <plurals name="import_skipped_files">
+        <item quantity="one">%d file skipped — only PDF and XML are supported</item>
+        <item quantity="other">%d files skipped — only PDF and XML are supported</item>
+    </plurals>
 </resources>

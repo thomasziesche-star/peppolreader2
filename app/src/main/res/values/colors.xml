@@ -61,4 +61,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="header_text_color">#FF000000</color>
+
+    <!-- Format badges (list overview) - light mode -->
+    <color name="badge_peppol_bg">#DCE7F5</color>
+    <color name="badge_peppol_fg">#1E4E8C</color>
+    <color name="badge_xrechnung_bg">#DCEBD7</color>
+    <color name="badge_xrechnung_fg">#2F5A1F</color>
+    <color name="badge_zugferd_bg">#F5E1CC</color>
+    <color name="badge_zugferd_fg">#7A4014</color>
+    <color name="badge_neutral_bg">#E8E6DC</color>
+    <color name="badge_neutral_fg">#4A4944</color>
 </resources>

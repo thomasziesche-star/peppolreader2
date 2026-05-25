@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# PDFBox-Android (ZUGFeRD/Factur-X embedded XML extraction)
+-keep class com.tom_roush.pdfbox.** { *; }
+-dontwarn com.tom_roush.pdfbox.**
+-dontwarn org.bouncycastle.**
+-keep class org.bouncycastle.** { *; }

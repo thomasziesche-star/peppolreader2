@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="header_text_color">#E8E6DC</color> <!-- Anthropic Light Gray -->
+
+    <!-- Format badges (list overview) - dark mode: muted backgrounds, bright foregrounds -->
+    <color name="badge_peppol_bg">#2A3D55</color>
+    <color name="badge_peppol_fg">#A8D0F5</color>
+    <color name="badge_xrechnung_bg">#2F4A28</color>
+    <color name="badge_xrechnung_fg">#B4C99D</color>
+    <color name="badge_zugferd_bg">#5A3920</color>
+    <color name="badge_zugferd_fg">#F5C295</color>
+    <color name="badge_neutral_bg">#3A3934</color>
+    <color name="badge_neutral_fg">#CCC9BE</color>
 </resources>

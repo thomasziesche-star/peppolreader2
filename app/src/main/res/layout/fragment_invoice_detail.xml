@@ -7,34 +7,96 @@
     android:background="?attr/colorSurface"
     tools:context=".ui.InvoiceDetailFragment">
 
+    <!-- Tabs: Rechnung / Rohdaten -->
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/detail_tabs"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:tabMode="fixed"
+        app:tabGravity="fill"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- Attachment Label -->
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_rendered" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/tab_raw_xml" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <!-- Attachment Label (only visible on the Rechnung tab) -->
     <TextView
         android:id="@+id/detail_attachment_label"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:background="?attr/colorSurfaceVariant"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_tabs"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="attachment: document.pdf"
+        tools:text="Anhang: document.pdf"
         tools:visibility="visible" />
 
-    <!-- WebView for invoice display -->
-    <WebView
-        android:id="@+id/invoice_webview"
+    <!-- Tab content container -->
+    <FrameLayout
+        android:id="@+id/tab_content"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/button_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_attachment_label" />
+        app:layout_constraintTop_toBottomOf="@+id/detail_attachment_label">
+
+        <!-- Tab 1: rendered HTML invoice -->
+        <WebView
+            android:id="@+id/invoice_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!-- Tab 2: raw XML with live search -->
+        <LinearLayout
+            android:id="@+id/raw_xml_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/raw_search_layout"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:hint="@string/search_xml_hint"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@android:drawable/ic_menu_search">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/raw_search_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:maxLines="1" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <WebView
+                android:id="@+id/raw_xml_webview"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+        </LinearLayout>
+    </FrameLayout>
 
     <!-- Loading indicator -->
     <ProgressBar

@@ -8,15 +8,15 @@ import java.util.Properties
 import java.io.FileInputStream
 
 android {
-    namespace = "com.example.peppolreaderfree"
-    compileSdk = 34
+    namespace = "com.ziesche.peppolreader"
+    compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.peppolreaderfree"
+        applicationId = "com.ziesche.peppolreader"
         minSdk = 28
-        targetSdk = 34
-        versionCode = 2
-        versionName = "1.0.${System.currentTimeMillis()}"
+        targetSdk = 35
+        versionCode = 8
+        versionName = "3.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -61,17 +61,47 @@ android {
 
     applicationVariants.all {
         val variant = this
+        val baseName = if (variant.buildType.name == "release") "PeppolReader" else "app-debug"
         variant.outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                val outputFileName = "app-debug-${variant.versionName}.apk"
-                output.outputFileName = outputFileName
+                output.outputFileName = "$baseName-${variant.versionName}.apk"
             }
+    }
+}
+
+/**
+ * Builds APK + AAB for the release variant and archives both into
+ * release-archive/<versionName>/ so previous versions are never overwritten.
+ *
+ * Run: gradlew :app:archiveRelease
+ */
+tasks.register("archiveRelease") {
+    group = "release"
+    description = "Assembles release APK + AAB and copies them into release-archive/<versionName>/"
+    dependsOn("assembleRelease", "bundleRelease")
+    doLast {
+        val versionName = android.defaultConfig.versionName
+            ?: error("versionName is not set in android.defaultConfig")
+        val archiveDir = rootProject.file("release-archive/$versionName")
+        archiveDir.mkdirs()
+        project.copy {
+            from(layout.buildDirectory.dir("outputs/apk/release")) {
+                include("*.apk")
+            }
+            from(layout.buildDirectory.dir("outputs/bundle/release")) {
+                include("*.aab")
+                rename("app-release.aab", "PeppolReader-$versionName.aab")
+            }
+            into(archiveDir)
+        }
+        println("Archived release artifacts to: ${archiveDir.absolutePath}")
     }
 }
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
@@ -101,4 +131,7 @@ dependencies {
     
     // MPAndroidChart
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    // PDFBox (ZUGFeRD/Factur-X embedded XML extraction)
+    implementation(libs.pdfbox.android)
 }
