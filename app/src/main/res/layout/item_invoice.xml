@@ -52,6 +52,23 @@
                 tools:text="Peppol"
                 tools:visibility="visible" />
 
+            <!-- KSeF FA(3) invoice subtype (VAT/KOR/ZAL/UPR/ROZ/WDT/…). Hidden for non-KSeF. -->
+            <TextView
+                android:id="@+id/subtype_chip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="6dp"
+                android:paddingStart="6dp"
+                android:paddingEnd="6dp"
+                android:paddingTop="2dp"
+                android:paddingBottom="2dp"
+                android:background="@drawable/bg_format_badge"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:text="KOR"
+                tools:visibility="visible" />
+
             <TextView
                 android:id="@+id/paid_chip"
                 android:layout_width="wrap_content"

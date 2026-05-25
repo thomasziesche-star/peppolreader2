@@ -34,6 +34,65 @@
             android:text="@string/tab_original_pdf" />
     </com.google.android.material.tabs.TabLayout>
 
+    <!-- KSeF FA(3) correction block — only shown for KOR/KOR_ZAL/KOR_ROZ subtypes. -->
+    <LinearLayout
+        android:id="@+id/correction_info_layout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="12dp"
+        android:background="?attr/colorErrorContainer"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/detail_tabs"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/correction_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:textAllCaps="true"
+            android:textColor="?attr/colorOnErrorContainer"
+            android:text="@string/correction_section_title" />
+
+        <TextView
+            android:id="@+id/correction_original"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:textSize="13sp"
+            android:textColor="?attr/colorOnErrorContainer"
+            tools:text="Korrigiert Rechnung: FV/2025/12/0001 vom 2025-12-15" />
+
+        <TextView
+            android:id="@+id/correction_ksef_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textSize="11sp"
+            android:fontFamily="monospace"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="?attr/colorOnErrorContainer"
+            android:visibility="gone"
+            tools:text="KSeF-ID: 9999999999-20251215-A1B2C3-D4E5F6-AB"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/correction_reason"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:textSize="13sp"
+            android:textColor="?attr/colorOnErrorContainer"
+            android:visibility="gone"
+            tools:text="Grund: Rabat udzielony po dostawie"
+            tools:visibility="visible" />
+    </LinearLayout>
+
     <!-- Attachment Label (only visible on the Rechnung tab) -->
     <TextView
         android:id="@+id/detail_attachment_label"
@@ -44,7 +103,7 @@
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintTop_toBottomOf="@+id/detail_tabs"
+        app:layout_constraintTop_toBottomOf="@+id/correction_info_layout"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:text="Anhang: document.pdf"

@@ -102,6 +102,35 @@ data class PayeeFinancialAccount(
 )
 
 /**
+ * KSeF FA(3) only: reference to the invoice this one corrects, plus the textual reason.
+ * Populated by `KsefFa3Parser` for `RodzajFaktury` ∈ {KOR, KOR_ZAL, KOR_ROZ}.
+ */
+data class CorrectionInfo(
+    val reason: String?,
+    val originalInvoiceNumber: String?,
+    val originalIssueDate: String?,
+    val originalKsefId: String?
+) {
+    companion object {
+        /** Inverse of `InvoiceViewModel.serializeCorrection`. Returns null on any parse error. */
+        fun parse(json: String?): CorrectionInfo? {
+            if (json.isNullOrBlank()) return null
+            return try {
+                val obj = org.json.JSONObject(json)
+                CorrectionInfo(
+                    reason = obj.optString("reason").takeIf { it.isNotEmpty() },
+                    originalInvoiceNumber = obj.optString("originalInvoiceNumber").takeIf { it.isNotEmpty() },
+                    originalIssueDate = obj.optString("originalIssueDate").takeIf { it.isNotEmpty() },
+                    originalKsefId = obj.optString("originalKsefId").takeIf { it.isNotEmpty() }
+                )
+            } catch (e: Exception) {
+                null
+            }
+        }
+    }
+}
+
+/**
  * Complete parsed invoice data structure
  */
 data class ParsedInvoice(
@@ -125,7 +154,14 @@ data class ParsedInvoice(
      * "384" = corrected invoice, "386" = prepayment invoice, "389" = self-billed invoice.
      * See [com.ziesche.peppolreader.data.model.DocumentType].
      */
-    val documentTypeCode: String? = null
+    val documentTypeCode: String? = null,
+    /**
+     * KSeF FA(3) only: invoice subtype from `RodzajFaktury` (VAT/KOR/ZAL/UPR/ROZ/KOR_ZAL/KOR_ROZ).
+     * Null for UBL/CII invoices.
+     */
+    val invoiceSubtype: String? = null,
+    /** KSeF FA(3) only: present when this is a correction of a prior invoice. */
+    val correctionInfo: CorrectionInfo? = null
 )
 
 /** Helpers around the UN/EDIFACT 1001 document type code. */

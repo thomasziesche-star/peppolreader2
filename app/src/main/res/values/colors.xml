@@ -74,4 +74,7 @@
     <color name="badge_zugferd_fg">#7A4014</color>
     <color name="badge_neutral_bg">#E8E6DC</color>
     <color name="badge_neutral_fg">#4A4944</color>
+    <!-- KSeF FA(3) (Poland) — light mode: warm red on cream. -->
+    <color name="badge_ksef_bg">#F8D7DA</color>
+    <color name="badge_ksef_fg">#8B1F2B</color>
 </resources>

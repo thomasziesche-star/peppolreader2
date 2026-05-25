@@ -292,6 +292,41 @@ class PdfGenerator(private val context: Context) {
             </div>
         </div>
         
+""")
+
+            // KSeF FA(3) correction info — between parties and item table.
+            invoice.correctionInfo?.let { ci ->
+                append("""
+        <div style="margin-bottom: 24px; padding: 12px 16px; border-left: 4px solid var(--accent-color); background: var(--panel-bg); color: var(--panel-text); border-radius: 4px;">
+            <div style="font-size: 11px; text-transform: uppercase; color: var(--muted-text); margin-bottom: 6px; letter-spacing: 0.5px;">${context.getString(R.string.correction_section_title)}</div>
+""")
+                if (!ci.originalInvoiceNumber.isNullOrEmpty() || !ci.originalIssueDate.isNullOrEmpty()) {
+                    append("""
+            <div style="font-size: 13px;">${escapeHtml(
+                        context.getString(
+                            R.string.correction_original_invoice,
+                            ci.originalInvoiceNumber.orEmpty(),
+                            ci.originalIssueDate.orEmpty()
+                        )
+                    )}</div>
+""")
+                }
+                if (!ci.originalKsefId.isNullOrEmpty()) {
+                    append("""
+            <div style="font-size: 11px; font-family: monospace; word-break: break-all; margin-top: 2px;">${escapeHtml(context.getString(R.string.correction_ksef_id, ci.originalKsefId))}</div>
+""")
+                }
+                if (!ci.reason.isNullOrEmpty()) {
+                    append("""
+            <div style="font-size: 13px; margin-top: 4px;">${escapeHtml(context.getString(R.string.correction_reason, ci.reason))}</div>
+""")
+                }
+                append("""
+        </div>
+""")
+            }
+
+            append("""
         <table>
             <thead>
                 <tr>

@@ -53,5 +53,9 @@ data class Invoice(
     /** Epoch millis when the user marked the invoice as paid. Null = still open. */
     val paidAt: Long? = null,
     /** Epoch millis of the most recent due-date reminder shown – prevents notification spam. */
-    val lastReminderShownAt: Long? = null
+    val lastReminderShownAt: Long? = null,
+    /** KSeF FA(3) only: invoice subtype (VAT/KOR/ZAL/UPR/ROZ/KOR_ZAL/KOR_ROZ). */
+    val invoiceSubtype: String? = null,
+    /** KSeF FA(3) only: JSON-serialised [com.ziesche.peppolreader.data.model.CorrectionInfo]. */
+    val correctionInfoJson: String? = null
 )

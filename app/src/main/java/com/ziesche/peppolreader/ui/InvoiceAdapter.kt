@@ -61,6 +61,21 @@ class InvoiceAdapter(
                     formatBadge.visibility = android.view.View.GONE
                 }
 
+                // KSeF FA(3) subtype chip — only shown when invoice has a subtype other than "VAT".
+                val subtype = invoice.invoiceSubtype
+                if (!subtype.isNullOrBlank() && subtype != "VAT") {
+                    subtypeChip.text = subtype
+                    subtypeChip.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(root.context, com.ziesche.peppolreader.R.color.badge_neutral_bg)
+                    )
+                    subtypeChip.setTextColor(
+                        ContextCompat.getColor(root.context, com.ziesche.peppolreader.R.color.badge_neutral_fg)
+                    )
+                    subtypeChip.visibility = android.view.View.VISIBLE
+                } else {
+                    subtypeChip.visibility = android.view.View.GONE
+                }
+
                 // Paid badge — only shown when invoice is settled.
                 paidChip.visibility =
                     if (invoice.paidAt != null) android.view.View.VISIBLE

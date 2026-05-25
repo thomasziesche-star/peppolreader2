@@ -88,6 +88,12 @@
     <string name="label_bic">BIC:</string>
     <string name="label_account">Konto:</string>
 
+    <!-- KSeF FA(3) Korrektur-Block -->
+    <string name="correction_section_title">Korrektur-Information</string>
+    <string name="correction_original_invoice">Korrigiert Rechnung: %1$s vom %2$s</string>
+    <string name="correction_ksef_id">KSeF-ID: %1$s</string>
+    <string name="correction_reason">Grund: %1$s</string>
+
     <!-- Parser Mappings -->
     <string name="shipping_cost">Versandkosten</string>
     <string name="surcharge_label">Zuschlag: %1$s</string>
@@ -113,7 +119,7 @@
 
     <!-- Help Manual -->
     <string name="help_title">Hilfe &amp; Bedienung</string>
-    <string name="help_message">Hallo, hier kurz die wichtigsten Hinweise...\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf den + Button und wählen Sie XML- oder PDF-Dateien (mehrere gleichzeitig durch langes Drücken). Sie können Dateien auch direkt aus Ihrem E-Mail-Programm an E-Invoice &amp; Peppol Reader teilen.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid-PDFs werden automatisch erkannt — die eingebettete Rechnungs-XML wird ausgelesen.\n\n<b>Unterstützte Formate:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL und CII), ZUGFeRD 1.x und 2.x, Factur-X.\n\n<b>Rechnungen &amp; Gutschriften:</b>\nWerden automatisch unterschieden — Gutschriften erhalten einen Chip und werden mit negativem Betrag angezeigt.\n\n<b>Details ansehen:</b>\nTippen Sie auf einen Eintrag, um die Rechnung zu sehen und ein PDF zu erzeugen.\n\n<b>Löschen:</b>\nHalten Sie einen Eintrag in der Liste gedrückt.</string>
+    <string name="help_message">Hallo, hier die wichtigsten Hinweise…\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf +, wählen Sie XML- oder PDF-Dateien (mehrere gleichzeitig durch langes Drücken). Sie können Dateien auch direkt aus Ihrem E-Mail-Programm an die App teilen.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid-PDFs werden automatisch erkannt — die eingebettete XML wird ausgelesen, das Original-PDF als Anhang behalten.\n\n<b>Unterstützte Formate:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL und CII), ZUGFeRD 1.x und 2.x, Factur-X sowie polnisches <b>KSeF FA(3)</b> für Rechnungen aus Polen.\n\n<b>Rechnungen &amp; Gutschriften:</b>\nWerden automatisch unterschieden — Gutschriften (auch KSeF KOR / KOR_ZAL / KOR_ROZ) erhalten einen roten Chip und werden mit negativem Betrag angezeigt. Bei KSeF-Korrekturen werden Originalnummer und Grund eingeblendet.\n\n<b>Detail-Ansicht:</b>\nDrei Tabs: gerenderte Rechnung, Rohdaten (mit Live-Suche) und Original-PDF, falls angehängt. Mit <b>Offen / Bezahlt</b> markieren Sie eine Rechnung als beglichen.\n\n<b>Liste filtern:</b>\nDie Chips über der Liste filtern <i>Alle / Unbezahlt / Überfällig</i>, der Zeitraum-Filter grenzt auf eine Periode ein.\n\n<b>Fälligkeits-Erinnerungen:</b>\nUnter <i>Erinnerungen…</i> aktivieren Sie tägliche Benachrichtigungen mit wählbarer Vorlaufzeit.\n\n<b>Export:</b>\nUnter <i>Exportieren…</i> erzeugen Sie eine CSV (UTF-8) für den Steuerberater — wahlweise als ZIP-Bündel inklusive Original-XML/PDF.\n\n<b>Dashboard:</b>\nIm Dashboard sehen Sie Ausgaben pro Monat und Ihre Top-Lieferanten.\n\n<b>Löschen:</b>\nHalten Sie einen Eintrag in der Liste gedrückt.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Impressum</string>
