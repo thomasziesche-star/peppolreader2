@@ -1,4 +1,4 @@
-package com.example.peppolreaderfree.data.model
+package com.ziesche.peppolreader.data.model
 
 /**
  * Data class for monthly expenses query result

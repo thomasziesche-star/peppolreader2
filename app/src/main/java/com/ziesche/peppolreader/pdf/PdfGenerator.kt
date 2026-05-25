@@ -1,4 +1,4 @@
-package com.example.peppolreaderfree.pdf
+package com.ziesche.peppolreader.pdf
 
 import android.content.Context
 import android.graphics.pdf.PdfDocument
@@ -7,13 +7,14 @@ import android.print.PrintAttributes
 import android.print.pdf.PrintedPdfDocument
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.example.peppolreaderfree.data.model.ParsedInvoice
+import com.ziesche.peppolreader.data.model.DocumentType
+import com.ziesche.peppolreader.data.model.ParsedInvoice
 import java.io.File
 import java.io.FileOutputStream
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
-import com.example.peppolreaderfree.R
+import com.ziesche.peppolreader.R
 
 /**
  * Generates HTML and PDF from parsed invoice data
@@ -28,6 +29,12 @@ class PdfGenerator(private val context: Context) {
      * Generate HTML content from parsed invoice
      */
     fun generateHtml(invoice: ParsedInvoice, fileName: String = "", isDarkMode: Boolean = false): String {
+        val titleResId = when (invoice.documentTypeCode) {
+            DocumentType.CREDIT_NOTE -> R.string.label_credit_note
+            DocumentType.CORRECTED_INVOICE -> R.string.label_corrected_invoice
+            else -> R.string.label_invoice
+        }
+        val documentTitle = context.getString(titleResId)
         // Define colors based on mode
         val cssVariables = if (isDarkMode) {
             """
@@ -62,7 +69,7 @@ class PdfGenerator(private val context: Context) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${context.getString(R.string.label_invoice)} ${invoice.invoice.id}</title>
+    <title>$documentTitle ${invoice.invoice.id}</title>
     <style>
         :root {
             $cssVariables
@@ -223,7 +230,7 @@ class PdfGenerator(private val context: Context) {
         <div class="header">
             <div class="logo">${escapeHtml(invoice.supplier.name)}</div>
             <div class="invoice-meta">
-                <div class="invoice-title">${context.getString(R.string.label_invoice)}</div>
+                <div class="invoice-title">$documentTitle</div>
                 <div class="meta-row">
                     <span class="meta-label">${context.getString(R.string.label_no)}</span>
                     <span>${escapeHtml(invoice.invoice.id)}</span>
@@ -409,7 +416,11 @@ class PdfGenerator(private val context: Context) {
         
         <div class="footer">
             <p>${context.getString(R.string.footer_thanks)}</p>
-            <p>${context.getString(R.string.footer_generated, if (fileName.isNotEmpty()) context.getString(R.string.footer_file_hint, fileName) else "")}</p>
+            <p>${context.getString(
+                R.string.footer_generated,
+                invoice.formatLabel ?: "UBL",
+                if (fileName.isNotEmpty()) context.getString(R.string.footer_file_hint, fileName) else ""
+            )}</p>
             <p style="margin-top: 10px; font-style: italic;">${context.getString(R.string.footer_disclaimer)}</p>
         </div>
     </div>

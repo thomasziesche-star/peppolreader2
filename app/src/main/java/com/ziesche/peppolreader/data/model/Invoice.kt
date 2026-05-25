@@ -1,4 +1,4 @@
-package com.example.peppolreaderfree.data.model
+package com.ziesche.peppolreader.data.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -45,5 +45,7 @@ data class Invoice(
     val fileName: String,
     val embeddedDocumentFilename: String? = null,
     val embeddedDocumentPath: String? = null,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    /** UN/EDIFACT 1001 type code: "380"=invoice, "381"=credit note, "384"=corrected, … */
+    val documentTypeCode: String? = null
 )

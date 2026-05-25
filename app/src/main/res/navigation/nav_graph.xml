@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/invoiceListFragment"
-        android:name="com.example.peppolreaderfree.ui.InvoiceListFragment"
+        android:name="com.ziesche.peppolreader.ui.InvoiceListFragment"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_invoice_list">
         
@@ -22,13 +22,13 @@
     
     <fragment
         android:id="@+id/invoiceDetailFragment"
-        android:name="com.example.peppolreaderfree.ui.InvoiceDetailFragment"
+        android:name="com.ziesche.peppolreader.ui.InvoiceDetailFragment"
         android:label="@string/invoice_detail"
         tools:layout="@layout/fragment_invoice_detail" />
 
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.example.peppolreaderfree.ui.DashboardFragment"
+        android:name="com.ziesche.peppolreader.ui.DashboardFragment"
         android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard" />
 

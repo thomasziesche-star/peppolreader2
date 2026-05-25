@@ -37,10 +37,17 @@
     <string name="invoice_exists">Rechnung ist bereits vorhanden. Öffne Details...</string>
     <string name="error_xml_read">Fehler beim Lesen der XML-Datei: %1$s</string>
     <string name="error_share">Fehler beim Teilen: %1$s</string>
+    <string name="error_pdf_no_xml">Keine Rechnungs-XML im PDF gefunden. Dies ist kein ZUGFeRD/Factur-X-Hybrid-PDF.</string>
+    <string name="error_pdf_encrypted">PDF ist verschlüsselt und kann nicht gelesen werden.</string>
+    <string name="error_pdf_read">Fehler beim Lesen des PDFs: %1$s</string>
+    <string name="error_pdf_cii">PDF enthält eine Rechnung im CII-Format (UN/CEFACT). In dieser Version wird nur UBL/XRechnung unterstützt.</string>
 
     <!-- PDF/HTML Labels -->
     <string name="html_lang_code">de</string>
     <string name="label_invoice">RECHNUNG</string>
+    <string name="label_credit_note">GUTSCHRIFT</string>
+    <string name="label_corrected_invoice">RECHNUNGSKORREKTUR</string>
+    <string name="chip_credit_note">Gutschrift</string>
     <string name="label_no">Nr.:</string>
     <string name="label_date">Datum:</string>
     <string name="label_due_date">Fällig:</string>
@@ -61,7 +68,7 @@
     <string name="total_gross">Gesamtbetrag</string>
     <string name="total_payable">Zu zahlen</string>
     <string name="footer_thanks">Angaben ohne Gewähr</string>
-    <string name="footer_generated">Generiert aus Peppol Billing 3.0 Daten%1$s</string>
+    <string name="footer_generated">Generiert aus %1$s-Daten%2$s</string>
     <string name="footer_file_hint"> (Datei: %1$s)</string>
     <string name="footer_disclaimer">Die lesbare Variante ersetzt nicht die Original XML</string>
     <string name="payment_info_title">Zahlungsinformationen</string>
@@ -94,9 +101,12 @@
 
     <!-- Help Manual -->
     <string name="help_title">Hilfe &amp; Bedienung</string>
-    <string name="help_message">Jo hallo, kurz ein paar Hinweise...\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf den + Button, um die Dateiauswahl zu öffnen. Sie können mehrere XML-Dateien gleichzeitig auswählen, indem Sie diese gedrückt halten.\n\n<b>Details ansehen:</b>\nTippen Sie auf eine Rechnung in der Liste, um Details anzusehen und ein PDF zu erstellen.\n\n<b>Rechnung löschen:</b>\nHalten Sie eine Rechnung in der Liste gedrückt, um sie zu löschen.</string>
-    
+    <string name="help_message">Hallo, hier kurz die wichtigsten Hinweise...\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf den + Button und wählen Sie XML- oder PDF-Dateien (mehrere gleichzeitig durch langes Drücken). Sie können Dateien auch direkt aus Ihrem E-Mail-Programm an Peppol Reader teilen.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid-PDFs werden automatisch erkannt — die eingebettete Rechnungs-XML wird ausgelesen.\n\n<b>Unterstützte Formate:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL und CII), ZUGFeRD 1.x und 2.x, Factur-X.\n\n<b>Rechnungen &amp; Gutschriften:</b>\nWerden automatisch unterschieden — Gutschriften erhalten einen Chip und werden mit negativem Betrag angezeigt.\n\n<b>Details ansehen:</b>\nTippen Sie auf einen Eintrag, um die Rechnung zu sehen und ein PDF zu erzeugen.\n\n<b>Löschen:</b>\nHalten Sie einen Eintrag in der Liste gedrückt.</string>
+
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Impressum</string>
     <string name="info_message">Dies ist ein Hobbyprojekt und KEINE offizielle PEPPOL App.\n\nDie Angaben sind ohne Gewähr.\n\n<b>Accountant with beard</b></string>
+
+    <!-- Version footer for help/info dialogs -->
+    <string name="version_label">Version %1$s</string>
 </resources>

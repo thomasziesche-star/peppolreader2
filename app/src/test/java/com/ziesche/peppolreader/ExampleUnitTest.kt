@@ -1,4 +1,4 @@
-package com.example.peppolreaderfree
+package com.ziesche.peppolreader
 
 import org.junit.Test
 

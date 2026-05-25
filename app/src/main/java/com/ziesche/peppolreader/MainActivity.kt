@@ -1,18 +1,28 @@
-package com.example.peppolreaderfree
+package com.ziesche.peppolreader
 
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.text.SpannableStringBuilder
 import android.view.Menu
 import android.view.MenuItem
+import android.view.ViewGroup
+import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
-import com.example.peppolreaderfree.databinding.ActivityMainBinding
-import com.example.peppolreaderfree.ui.InvoiceListFragment
-import com.example.peppolreaderfree.ui.InvoiceViewModel
+import com.ziesche.peppolreader.databinding.ActivityMainBinding
+import com.ziesche.peppolreader.ui.InvoiceListFragment
+import com.ziesche.peppolreader.ui.InvoiceViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import android.text.Html
 
@@ -24,8 +34,16 @@ class MainActivity : AppCompatActivity() {
     private val PREF_NAME = "app_preferences"
     private val KEY_THEME_MODE = "theme_mode"
 
+    /**
+     * URI handed in via ACTION_VIEW / ACTION_SEND before the list fragment is ready.
+     * Consumed by InvoiceListFragment.onViewCreated, then cleared.
+     */
+    var pendingImportUri: Uri? = null
+        private set
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         // Load saved theme preference
         val sharedPref = getSharedPreferences(PREF_NAME, MODE_PRIVATE)
@@ -49,6 +67,14 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.fab) { view, insets ->
+            val navInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                bottomMargin = (16 * resources.displayMetrics.density).toInt() + navInsets.bottom
+            }
+            insets
+        }
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
@@ -77,22 +103,84 @@ class MainActivity : AppCompatActivity() {
             }
         }
         
-        // Adjust logo color for Dark Mode (Invert colors)
+        // Adjust logo color and remove background (make white transparent)
         val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
         val isNight = currentNightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
+        
         if (isNight) {
+            // Dark Mode: White lines, Transparent background
+            // Source: Black on White.
+            // Target: White lines (from black Source), Transparent (from white Source).
+            // A = 255 - average(RGB)
             val matrix = floatArrayOf(
-                -1f, 0f, 0f, 0f, 255f,
-                0f, -1f, 0f, 0f, 255f,
-                0f, 0f, -1f, 0f, 255f,
-                0f, 0f, 0f, 1f, 0f
+                0f, 0f, 0f, 0f, 255f, // R = 255 (White)
+                0f, 0f, 0f, 0f, 255f, // G = 255
+                0f, 0f, 0f, 0f, 255f, // B = 255
+                -0.33f, -0.33f, -0.33f, 0f, 255f // Alpha = Inverse of brightness
             )
             binding.logo.colorFilter = android.graphics.ColorMatrixColorFilter(matrix)
         } else {
-            binding.logo.colorFilter = null
+            // Light Mode: Black lines, Transparent background
+            // Source: Black on White.
+            // Target: Black lines, Transparent background.
+            // A = 255 - average(RGB)
+            val matrix = floatArrayOf(
+                0f, 0f, 0f, 0f, 0f,   // R = 0 (Black)
+                0f, 0f, 0f, 0f, 0f,   // G = 0
+                0f, 0f, 0f, 0f, 0f,   // B = 0
+                -0.33f, -0.33f, -0.33f, 0f, 255f // Alpha = Inverse of brightness
+            )
+            binding.logo.colorFilter = android.graphics.ColorMatrixColorFilter(matrix)
+        }
+
+        handleIncomingIntent(intent)
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIncomingIntent(intent)
+    }
+
+    private fun handleIncomingIntent(intent: Intent?) {
+        if (intent == null) return
+        val uri: Uri = when (intent.action) {
+            Intent.ACTION_VIEW -> intent.data ?: return
+            Intent.ACTION_SEND -> intent.extraStreamCompat() ?: return
+            else -> return
+        }
+
+        val current = currentListFragment()
+        if (current != null) {
+            current.importExternalUri(uri)
+        } else {
+            pendingImportUri = uri
         }
     }
-    
+
+    /**
+     * Called by InvoiceListFragment after it is ready, to drain any pending import URI.
+     */
+    fun consumePendingImportUri(): Uri? {
+        val uri = pendingImportUri
+        pendingImportUri = null
+        return uri
+    }
+
+    private fun currentListFragment(): InvoiceListFragment? {
+        val navHost = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment_content_main) as? NavHostFragment ?: return null
+        return navHost.childFragmentManager.fragments.firstOrNull() as? InvoiceListFragment
+    }
+
+    @Suppress("DEPRECATION")
+    private fun Intent.extraStreamCompat(): Uri? =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            getParcelableExtra(Intent.EXTRA_STREAM, Uri::class.java)
+        } else {
+            getParcelableExtra(Intent.EXTRA_STREAM) as? Uri
+        }
+
     private fun openFilePicker() {
         val navHostFragment = supportFragmentManager
             .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
@@ -192,7 +280,7 @@ class MainActivity : AppCompatActivity() {
     private fun showHelpDialog() {
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.help_title)
-            .setMessage(getText(R.string.help_message))
+            .setMessage(withVersionFooter(getText(R.string.help_message)))
             .setPositiveButton(android.R.string.ok, null)
             .show()
     }
@@ -200,8 +288,24 @@ class MainActivity : AppCompatActivity() {
     private fun showInfoDialog() {
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.info_title)
-            .setMessage(getText(R.string.info_message))
+            .setMessage(withVersionFooter(getText(R.string.info_message)))
             .setPositiveButton(android.R.string.ok, null)
             .show()
+    }
+
+    /**
+     * Appends "Version <name>" to a dialog body, preserving any HTML styling
+     * already present in the resource string (which is why we use getText + Spannable).
+     */
+    private fun withVersionFooter(body: CharSequence): CharSequence {
+        val versionName = try {
+            @Suppress("DEPRECATION")
+            packageManager.getPackageInfo(packageName, 0).versionName ?: ""
+        } catch (e: PackageManager.NameNotFoundException) {
+            ""
+        }
+        return SpannableStringBuilder(body)
+            .append("\n\n")
+            .append(getString(R.string.version_label, versionName))
     }
 }

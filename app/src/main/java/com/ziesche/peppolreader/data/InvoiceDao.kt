@@ -1,10 +1,10 @@
-package com.example.peppolreaderfree.data
+package com.ziesche.peppolreader.data
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
-import com.example.peppolreaderfree.data.model.Invoice
-import com.example.peppolreaderfree.data.model.MonthlyExpense
-import com.example.peppolreaderfree.data.model.SupplierExpense
+import com.ziesche.peppolreader.data.model.Invoice
+import com.ziesche.peppolreader.data.model.MonthlyExpense
+import com.ziesche.peppolreader.data.model.SupplierExpense
 import kotlinx.coroutines.flow.Flow
 
 @Dao

@@ -1,4 +1,4 @@
-package com.example.peppolreaderfree.parser
+package com.ziesche.peppolreader.parser
 
 import org.junit.Assert.*
 import org.junit.Test

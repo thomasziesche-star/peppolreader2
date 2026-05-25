@@ -1,4 +1,4 @@
-package com.example.peppolreaderfree.ui
+package com.ziesche.peppolreader.ui
 
 import android.app.Activity
 import android.content.Intent
@@ -10,9 +10,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.example.peppolreaderfree.R
-import com.example.peppolreaderfree.data.model.Invoice
-import com.example.peppolreaderfree.databinding.FragmentInvoiceListBinding
+import com.ziesche.peppolreader.R
+import com.ziesche.peppolreader.data.model.Invoice
+import com.ziesche.peppolreader.databinding.FragmentInvoiceListBinding
+import com.ziesche.peppolreader.parser.ZugferdExtractor
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 
@@ -57,17 +58,54 @@ class InvoiceListFragment : Fragment() {
     private fun processUri(uri: android.net.Uri): Pair<String, String>? {
         return try {
             val fileName = getFileName(uri)
-            val inputStream = requireContext().contentResolver.openInputStream(uri)
-            val xmlContent = inputStream?.bufferedReader()?.use { it.readText() } ?: ""
-            
-            if (xmlContent.isNotEmpty()) {
-                Pair(fileName, xmlContent)
+            if (isPdf(uri, fileName)) {
+                processPdfUri(uri, fileName)
             } else {
-                null
+                val inputStream = requireContext().contentResolver.openInputStream(uri)
+                val xmlContent = inputStream?.bufferedReader()?.use { it.readText() } ?: ""
+                if (xmlContent.isNotEmpty()) Pair(fileName, xmlContent) else null
             }
         } catch (e: Exception) {
             null
         }
+    }
+
+    private fun isPdf(uri: android.net.Uri, fileName: String): Boolean {
+        val mime = requireContext().contentResolver.getType(uri)
+        if (mime == "application/pdf") return true
+        return fileName.endsWith(".pdf", ignoreCase = true)
+    }
+
+    private fun processPdfUri(uri: android.net.Uri, fileName: String): Pair<String, String>? {
+        val stream = requireContext().contentResolver.openInputStream(uri) ?: return null
+        return stream.use { input ->
+            when (val result = ZugferdExtractor().extract(input)) {
+                is ZugferdExtractor.Result.Success -> Pair(fileName, result.xml)
+                ZugferdExtractor.Result.Encrypted -> {
+                    showSnackbar(getString(R.string.error_pdf_encrypted))
+                    null
+                }
+                ZugferdExtractor.Result.NoEmbeddedXml -> {
+                    showSnackbar(getString(R.string.error_pdf_no_xml))
+                    null
+                }
+                is ZugferdExtractor.Result.Error -> {
+                    showSnackbar(getString(R.string.error_pdf_read, result.message))
+                    null
+                }
+            }
+        }
+    }
+
+    private fun showSnackbar(text: String) {
+        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
+    }
+
+    /**
+     * Entry point for URIs delivered via external Intents (ACTION_VIEW / ACTION_SEND).
+     */
+    fun importExternalUri(uri: android.net.Uri) {
+        processUri(uri)?.let { viewModel.importInvoices(listOf(it)) }
     }
 
     override fun onCreateView(
@@ -81,13 +119,18 @@ class InvoiceListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         setupRecyclerView()
         observeViewModel()
-        
+
         // Import button in empty state
         binding.btnImportEmpty.setOnClickListener {
             openFilePicker()
+        }
+
+        // Drain any URI that arrived via ACTION_VIEW / ACTION_SEND before this fragment was ready
+        (activity as? com.ziesche.peppolreader.MainActivity)?.consumePendingImportUri()?.let { uri ->
+            importExternalUri(uri)
         }
     }
     
@@ -181,8 +224,8 @@ class InvoiceListFragment : Fragment() {
     fun openFilePicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
-            type = "*/*"  // Accept any file type, we'll check for XML
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("text/xml", "application/xml"))
+            type = "*/*"  // Accept any file type, we'll check for XML/PDF
+            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("text/xml", "application/xml", "application/pdf"))
             putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
         }
         filePickerLauncher.launch(intent)

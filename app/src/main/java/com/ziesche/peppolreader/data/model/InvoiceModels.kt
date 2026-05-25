@@ -1,4 +1,4 @@
-package com.example.peppolreaderfree.data.model
+package com.ziesche.peppolreader.data.model
 
 /**
  * Data class for invoice line items
@@ -114,5 +114,28 @@ data class ParsedInvoice(
     val totals: InvoiceTotals,
     val paymentMeans: PaymentMeans? = null,
     val paymentTermsNote: String? = null,
-    val embeddedDocument: EmbeddedDocument? = null
+    val embeddedDocument: EmbeddedDocument? = null,
+    /**
+     * Human-readable name of the source schema/profile, e.g. "Peppol BIS 3.0",
+     * "XRechnung (UBL)", "ZUGFeRD / Factur-X". Set by the responsible parser.
+     */
+    val formatLabel: String? = null,
+    /**
+     * UN/EDIFACT document type code: "380" = commercial invoice, "381" = credit note,
+     * "384" = corrected invoice, "386" = prepayment invoice, "389" = self-billed invoice.
+     * See [com.ziesche.peppolreader.data.model.DocumentType].
+     */
+    val documentTypeCode: String? = null
 )
+
+/** Helpers around the UN/EDIFACT 1001 document type code. */
+object DocumentType {
+    const val INVOICE = "380"
+    const val CREDIT_NOTE = "381"
+    const val DEBIT_NOTE = "383"
+    const val CORRECTED_INVOICE = "384"
+    const val PREPAYMENT_INVOICE = "386"
+    const val SELF_BILLED_INVOICE = "389"
+
+    fun isCreditNote(code: String?): Boolean = code == CREDIT_NOTE
+}

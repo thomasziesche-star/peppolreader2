@@ -13,3 +13,9 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Tooling / IDE
+.claude/
+
+# Release archives (large binaries, kept locally per version)
+release-archive/

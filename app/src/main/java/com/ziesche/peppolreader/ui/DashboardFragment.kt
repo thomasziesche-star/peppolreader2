@@ -1,4 +1,4 @@
-package com.example.peppolreaderfree.ui
+package com.ziesche.peppolreader.ui
 
 import android.graphics.Color
 import android.os.Bundle
@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.peppolreaderfree.R
-import com.example.peppolreaderfree.databinding.FragmentDashboardBinding
+import com.ziesche.peppolreader.R
+import com.ziesche.peppolreader.databinding.FragmentDashboardBinding
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
@@ -145,7 +145,7 @@ class DashboardFragment : Fragment() {
         updateSupplierChart(filteredInvoices)
     }
 
-    private fun filterInvoicesByDate(invoices: List<com.example.peppolreaderfree.data.model.Invoice>, filterIndex: Int): List<com.example.peppolreaderfree.data.model.Invoice> {
+    private fun filterInvoicesByDate(invoices: List<com.ziesche.peppolreader.data.model.Invoice>, filterIndex: Int): List<com.ziesche.peppolreader.data.model.Invoice> {
         val calendar = java.util.Calendar.getInstance()
         val currentYear = calendar.get(java.util.Calendar.YEAR)
         val currentMonth = calendar.get(java.util.Calendar.MONTH) + 1 // 1-based
@@ -186,7 +186,7 @@ class DashboardFragment : Fragment() {
         }
     }
 
-    private fun updateMonthlyChart(invoices: List<com.example.peppolreaderfree.data.model.Invoice>) {
+    private fun updateMonthlyChart(invoices: List<com.ziesche.peppolreader.data.model.Invoice>) {
         // Aggregate by month
         // Map: "YYYY-MM" -> Total
         val agg = invoices.groupBy { it.issueDate.substring(0, 7) }
@@ -217,7 +217,7 @@ class DashboardFragment : Fragment() {
         binding.chartMonthly.invalidate()
     }
 
-    private fun updateSupplierChart(invoices: List<com.example.peppolreaderfree.data.model.Invoice>) {
+    private fun updateSupplierChart(invoices: List<com.ziesche.peppolreader.data.model.Invoice>) {
         // Top 5 Suppliers
         val agg = invoices.groupBy { it.supplierName }
             .mapValues { entry -> entry.value.sumOf { it.payableAmount } }

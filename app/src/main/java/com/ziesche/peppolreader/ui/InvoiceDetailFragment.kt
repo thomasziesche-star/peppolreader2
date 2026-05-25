@@ -1,4 +1,4 @@
-package com.example.peppolreaderfree.ui
+package com.ziesche.peppolreader.ui
 
 import android.content.ContentValues
 import android.content.Intent
@@ -20,9 +20,9 @@ import android.webkit.WebViewClient
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import com.example.peppolreaderfree.R
-import com.example.peppolreaderfree.databinding.FragmentInvoiceDetailBinding
-import com.example.peppolreaderfree.pdf.PdfGenerator
+import com.ziesche.peppolreader.R
+import com.ziesche.peppolreader.databinding.FragmentInvoiceDetailBinding
+import com.ziesche.peppolreader.pdf.PdfGenerator
 import com.google.android.material.snackbar.Snackbar
 import java.io.File
 import java.io.FileOutputStream

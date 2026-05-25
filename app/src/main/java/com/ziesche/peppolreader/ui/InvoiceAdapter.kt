@@ -1,12 +1,13 @@
-package com.example.peppolreaderfree.ui
+package com.ziesche.peppolreader.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.example.peppolreaderfree.data.model.Invoice
-import com.example.peppolreaderfree.databinding.ItemInvoiceBinding
+import com.ziesche.peppolreader.data.model.DocumentType
+import com.ziesche.peppolreader.data.model.Invoice
+import com.ziesche.peppolreader.databinding.ItemInvoiceBinding
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -42,9 +43,21 @@ class InvoiceAdapter(
                 invoiceId.text = invoice.invoiceId
                 supplierName.text = invoice.supplierName
                 customerName.text = "→ ${invoice.customerName}"
-                
-                // Format amount
-                invoiceAmount.text = currencyFormat.format(invoice.payableAmount)
+
+                // Credit-note chip + amount sign
+                val isCreditNote = DocumentType.isCreditNote(invoice.documentTypeCode)
+                creditNoteChip.visibility =
+                    if (isCreditNote) android.view.View.VISIBLE else android.view.View.GONE
+                val signedAmount = if (isCreditNote) -invoice.payableAmount else invoice.payableAmount
+                invoiceAmount.text = currencyFormat.format(signedAmount)
+                val colorAttr =
+                    if (isCreditNote) com.google.android.material.R.attr.colorError
+                    else com.google.android.material.R.attr.colorPrimary
+                invoiceAmount.setTextColor(
+                    com.google.android.material.color.MaterialColors.getColor(
+                        invoiceAmount, colorAttr
+                    )
+                )
                 
                 // Format date
                 try {

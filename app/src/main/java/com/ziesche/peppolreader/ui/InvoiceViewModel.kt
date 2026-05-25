@@ -1,20 +1,22 @@
-package com.example.peppolreaderfree.ui
+package com.ziesche.peppolreader.ui
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.peppolreaderfree.data.AppDatabase
+import com.ziesche.peppolreader.data.AppDatabase
 import java.io.File
 import java.io.FileOutputStream
 import android.util.Base64
 import androidx.core.content.FileProvider
 import android.content.Intent
 import android.content.Context
-import com.example.peppolreaderfree.data.model.Invoice
-import com.example.peppolreaderfree.data.model.ParsedInvoice
-import com.example.peppolreaderfree.parser.PeppolParser
+import com.ziesche.peppolreader.data.model.Invoice
+import com.ziesche.peppolreader.data.model.ParsedInvoice
+import com.ziesche.peppolreader.parser.CiiParser
+import com.ziesche.peppolreader.parser.InvoiceFormat
+import com.ziesche.peppolreader.parser.PeppolParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -166,9 +168,9 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
 
     private suspend fun processSingleInvoice(xmlContent: String, fileName: String): ImportResult {
         return try {
-            val parser = PeppolParser(xmlContent, getApplication())
-            val parsed = parser.parse()
-            
+            val parsed = parseByFormat(xmlContent)
+                ?: return ImportResult.Error("Unknown invoice format")
+
             // Check for duplicate
             val existing = invoiceDao.getInvoiceByNumberAndSupplier(parsed.invoice.id, parsed.supplier.name)
             if (existing != null) {
@@ -200,7 +202,8 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 xmlContent = xmlContent,
                 fileName = fileName,
                 embeddedDocumentFilename = parsed.embeddedDocument?.filename,
-                embeddedDocumentPath = saveEmbeddedDocument(parsed, getApplication())
+                embeddedDocumentPath = saveEmbeddedDocument(parsed, getApplication()),
+                documentTypeCode = parsed.documentTypeCode
             )
             
             invoiceDao.insertInvoice(invoice)
@@ -224,14 +227,18 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
      */
     fun selectInvoice(invoice: Invoice) {
         _selectedInvoice.value = invoice
-        
+
         viewModelScope.launch {
             _isLoading.value = true
             try {
                 val parsed = withContext(Dispatchers.IO) {
-                    PeppolParser(invoice.xmlContent, getApplication()).parse()
+                    parseByFormat(invoice.xmlContent)
                 }
-                _parsedInvoice.value = parsed
+                if (parsed != null) {
+                    _parsedInvoice.value = parsed
+                } else {
+                    _error.value = "Unbekanntes Rechnungsformat"
+                }
             } catch (e: Exception) {
                 _error.value = "Fehler beim Parsen: ${e.message}"
             } finally {
@@ -239,6 +246,17 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
             }
         }
     }
+
+    /**
+     * Routes XML content to either [PeppolParser] (UBL) or [CiiParser] (UN/CEFACT CII)
+     * based on detected namespaces. Returns null if neither format is recognized.
+     */
+    private fun parseByFormat(xmlContent: String): ParsedInvoice? =
+        when (InvoiceFormat.detect(xmlContent)) {
+            InvoiceFormat.UBL -> PeppolParser(xmlContent, getApplication()).parse()
+            InvoiceFormat.CII -> CiiParser(xmlContent, getApplication()).parse()
+            InvoiceFormat.UNKNOWN -> null
+        }
     
     /**
      * Select an invoice by database ID

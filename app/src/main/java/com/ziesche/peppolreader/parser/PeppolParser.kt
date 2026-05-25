@@ -1,6 +1,6 @@
-package com.example.peppolreaderfree.parser
+package com.ziesche.peppolreader.parser
 
-import com.example.peppolreaderfree.data.model.*
+import com.ziesche.peppolreader.data.model.*
 import org.xmlpull.v1.XmlPullParser
 import org.xmlpull.v1.XmlPullParserFactory
 import java.io.StringReader
@@ -18,7 +18,9 @@ class PeppolParser(private val xmlContent: String, private val context: android.
     }
     
     private var invoiceElement: Map<String, Any> = emptyMap()
-    
+    /** "Invoice" or "CreditNote" — captured after unwrapping any StandardBusinessDocument. */
+    private var rootElementName: String = "Invoice"
+
     /**
      * Parse the XML content and return a complete ParsedInvoice
      */
@@ -26,17 +28,19 @@ class PeppolParser(private val xmlContent: String, private val context: android.
         val parser = XmlPullParserFactory.newInstance().newPullParser()
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
         parser.setInput(StringReader(xmlContent))
-        
+
         // Parse the entire document into a map structure
         invoiceElement = parseDocument(parser)
-        
+
         // Handle StandardBusinessDocument wrapper
         if (invoiceElement.containsKey("Invoice")) {
             @Suppress("UNCHECKED_CAST")
             invoiceElement = invoiceElement["Invoice"] as Map<String, Any>
+            rootElementName = "Invoice"
         } else if (invoiceElement.containsKey("CreditNote")) {
             @Suppress("UNCHECKED_CAST")
             invoiceElement = invoiceElement["CreditNote"] as Map<String, Any>
+            rootElementName = "CreditNote"
         }
         
         return ParsedInvoice(
@@ -50,8 +54,30 @@ class PeppolParser(private val xmlContent: String, private val context: android.
             totals = parseTotals(),
             paymentMeans = parsePaymentMeans(),
             paymentTermsNote = parsePaymentTerms(),
-            embeddedDocument = parseEmbeddedDocument()
+            embeddedDocument = parseEmbeddedDocument(),
+            formatLabel = detectFormatLabel(),
+            documentTypeCode = detectDocumentTypeCode()
         )
+    }
+
+    private fun detectDocumentTypeCode(): String {
+        // Explicit element wins if present (UBL Invoice uses InvoiceTypeCode, CreditNote uses CreditNoteTypeCode).
+        val explicit = getText(invoiceElement, "InvoiceTypeCode")
+            .ifEmpty { getText(invoiceElement, "CreditNoteTypeCode") }
+        if (explicit.isNotEmpty()) return explicit
+        return if (rootElementName == "CreditNote") "381" else "380"
+    }
+
+    private fun detectFormatLabel(): String {
+        val customization = getText(invoiceElement, "CustomizationID").lowercase()
+        val profile = getText(invoiceElement, "ProfileID").lowercase()
+        val combined = "$customization $profile"
+        return when {
+            "xrechnung" in combined -> "XRechnung (UBL)"
+            "peppol" in combined -> "Peppol BIS 3.0"
+            "en16931" in combined -> "EN 16931 (UBL)"
+            else -> "UBL"
+        }
     }
 
     private fun parseEmbeddedDocument(): EmbeddedDocument? {
@@ -294,13 +320,13 @@ class PeppolParser(private val xmlContent: String, private val context: android.
                 
                 // Map "Vracht" to localized string
                 if (reason.trim() == "Vracht") {
-                    reason = context.getString(com.example.peppolreaderfree.R.string.shipping_cost)
+                    reason = context.getString(com.ziesche.peppolreader.R.string.shipping_cost)
                 }
                 
                 val description = if (isCharge) 
-                    context.getString(com.example.peppolreaderfree.R.string.surcharge_label, reason)
+                    context.getString(com.ziesche.peppolreader.R.string.surcharge_label, reason)
                 else 
-                    context.getString(com.example.peppolreaderfree.R.string.discount_label, reason)
+                    context.getString(com.ziesche.peppolreader.R.string.discount_label, reason)
                 
                 lines.add(InvoiceLineItem(
                     id = "",
