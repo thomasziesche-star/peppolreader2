@@ -167,9 +167,21 @@ class InvoiceDetailFragment : Fragment() {
         binding.btnDownloadPdf.setOnClickListener {
             savePdf()
         }
-        
+
         binding.btnShare.setOnClickListener {
             sharePdf()
+        }
+
+        binding.btnMarkPaid.setOnClickListener {
+            viewModel.selectedInvoice.value?.let { viewModel.togglePaid(it) }
+        }
+
+        viewModel.selectedInvoice.observe(viewLifecycleOwner) { invoice ->
+            binding.btnMarkPaid.text = if (invoice?.paidAt != null) {
+                getString(R.string.mark_unpaid)
+            } else {
+                getString(R.string.mark_paid)
+            }
         }
     }
     
@@ -214,9 +226,11 @@ class InvoiceDetailFragment : Fragment() {
     }
 
     /**
-     * Renders the attachment label. Two sources, in priority order:
-     *   1) XML-embedded PDF (UBL AdditionalDocumentReference) -> parsed.embeddedDocument
-     *   2) Original ZUGFeRD/Factur-X PDF -> stored on the Invoice entity
+     * Renders the attachment label. Source of truth is the [Invoice] entity stored in the
+     * DB — the ViewModel populates `embeddedDocumentFilename` / `embeddedDocumentPath`
+     * for both XML-embedded PDFs (UBL AdditionalDocumentReference) and original
+     * ZUGFeRD/Factur-X PDFs at import time. The list adapter reads the same fields, so
+     * what the user sees in the overview and detail view stays consistent.
      * The label only shows on the rendered-invoice tab.
      */
     private fun updateAttachmentLabel() {
@@ -224,16 +238,14 @@ class InvoiceDetailFragment : Fragment() {
             binding.detailAttachmentLabel.visibility = View.GONE
             return
         }
-        val parsed = viewModel.parsedInvoice.value
         val selected = viewModel.selectedInvoice.value
         val attachmentName = selected?.embeddedDocumentFilename
-            ?: parsed?.embeddedDocument?.filename
         if (!attachmentName.isNullOrEmpty()) {
             binding.detailAttachmentLabel.text =
                 getString(R.string.attachment_label, attachmentName)
             binding.detailAttachmentLabel.visibility = View.VISIBLE
             binding.detailAttachmentLabel.setOnClickListener {
-                selected?.let { viewModel.openAttachment(it, requireContext()) }
+                viewModel.openAttachment(selected, requireContext())
             }
         } else {
             binding.detailAttachmentLabel.visibility = View.GONE
@@ -281,19 +293,12 @@ class InvoiceDetailFragment : Fragment() {
             
             // Create share intent
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/html"
+                type = com.ziesche.peppolreader.util.MimeTypes.TEXT_HTML
                 putExtra(Intent.EXTRA_STREAM, contentUri)
                 putExtra(Intent.EXTRA_SUBJECT, "Rechnung $invoiceId")
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
-            
-            // Alternatively, use Print for PDF sharing
-            val printIntent = Intent(Intent.ACTION_SEND).apply {
-                type = "text/plain"
-                putExtra(Intent.EXTRA_SUBJECT, "Rechnung $invoiceId")
-                putExtra(Intent.EXTRA_TEXT, "Rechnung $invoiceId von ${invoice.supplier.name}")
-            }
-            
+
             val chooserIntent = Intent.createChooser(shareIntent, getString(R.string.share))
             startActivity(chooserIntent)
             

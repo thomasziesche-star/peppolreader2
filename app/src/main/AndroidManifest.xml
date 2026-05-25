@@ -4,6 +4,8 @@
 
     <!-- Permissions -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <!-- Required on Android 13+ to post due-date reminder notifications -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     
     <application
         android:name=".PeppolReaderApplication"

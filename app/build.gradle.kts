@@ -15,8 +15,8 @@ android {
         applicationId = "com.ziesche.peppolreader"
         minSdk = 28
         targetSdk = 35
-        versionCode = 9
-        versionName = "3.1"
+        versionCode = 10
+        versionName = "3.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -134,4 +134,7 @@ dependencies {
 
     // PDFBox (ZUGFeRD/Factur-X embedded XML extraction)
     implementation(libs.pdfbox.android)
+
+    // WorkManager (due-date reminder periodic worker)
+    implementation(libs.androidx.work.runtime.ktx)
 }

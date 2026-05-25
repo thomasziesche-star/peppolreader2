@@ -41,6 +41,13 @@
     <string name="error_pdf_encrypted">PDF is versleuteld en kan niet worden gelezen.</string>
     <string name="error_pdf_read">Fout bij het lezen van PDF: %1$s</string>
     <string name="error_pdf_cii">PDF bevat een factuur in CII-formaat (UN/CEFACT). In deze versie wordt alleen UBL/XRechnung ondersteund.</string>
+    <string name="error_unknown_format">Onbekend factuurformaat</string>
+    <string name="error_import_general">Importeren mislukt</string>
+    <string name="import_batch_summary">%1$d van %2$d facturen geïmporteerd</string>
+    <string name="import_batch_duplicates">, %1$d duplicaten</string>
+    <string name="import_batch_errors">, %1$d fouten</string>
+    <string name="parse_error">Parseerfout: %1$s</string>
+    <string name="subtitle_attribution">(by accountant with beard)</string>
 
     <!-- PDF/HTML Labels -->
     <string name="html_lang_code">nl</string>
@@ -112,6 +119,64 @@
 
     <!-- Language switcher in toolbar -->
     <string name="menu_language">Taal</string>
+
+    <!-- Export -->
+    <string name="action_export">Exporteren…</string>
+    <string name="export_title">Facturen exporteren</string>
+    <string name="export_date_from">Van</string>
+    <string name="export_date_to">Tot</string>
+    <string name="export_quick_all">Alle</string>
+    <string name="export_quick_year">Lopend jaar</string>
+    <string name="export_quick_quarter">Lopend kwartaal</string>
+    <string name="export_quick_month">Vorige maand</string>
+    <string name="export_include_xml">Originele XML/PDF-bestanden bijvoegen (ZIP)</string>
+    <string name="export_cancel">Annuleren</string>
+    <string name="export_confirm">Exporteren</string>
+    <string name="export_no_invoices">Geen facturen in het gekozen tijdvak</string>
+    <plurals name="export_success">
+        <item quantity="one">%d factuur geëxporteerd</item>
+        <item quantity="other">%d facturen geëxporteerd</item>
+    </plurals>
+    <string name="export_share">Delen</string>
+    <string name="export_error">Export mislukt: %1$s</string>
+    <!-- CSV-kolomkoppen (Nederlands) -->
+    <string name="csv_invoice_id">Factuurnummer</string>
+    <string name="csv_issue_date">Factuurdatum</string>
+    <string name="csv_due_date">Vervaldatum</string>
+    <string name="csv_supplier">Leverancier</string>
+    <string name="csv_supplier_taxid">Btw-nr. leverancier</string>
+    <string name="csv_customer">Klant</string>
+    <string name="csv_net">Netto</string>
+    <string name="csv_tax">Btw</string>
+    <string name="csv_gross">Bruto</string>
+    <string name="csv_payable">Te betalen</string>
+    <string name="csv_currency">Valuta</string>
+    <string name="csv_format">Formaat</string>
+    <string name="csv_doc_type">Type</string>
+    <string name="csv_file_name">Bestandsnaam</string>
+    <string name="csv_doc_type_invoice">Factuur</string>
+    <string name="csv_doc_type_credit_note">Creditnota</string>
+    <string name="csv_doc_type_corrected">Correctie</string>
+
+    <!-- Vervalherinneringen -->
+    <string name="action_reminders">Herinneringen…</string>
+    <string name="reminders_title">Vervalherinneringen</string>
+    <string name="reminders_enabled">Herinneringen actief</string>
+    <string name="reminders_days_before">Waarschuwen vóór vervaldag</string>
+    <string name="reminders_days_0">Op de dag</string>
+    <string name="reminders_days_3">3 dagen</string>
+    <string name="reminders_days_7">7 dagen</string>
+    <string name="reminders_days_14">14 dagen</string>
+    <string name="reminders_test">Nu controleren</string>
+    <string name="reminders_permission_required">Meldingstoestemming nodig om u aan vervaldata te herinneren.</string>
+    <string name="reminders_close">Sluiten</string>
+    <string name="notif_channel_name">Vervallen facturen</string>
+    <string name="notif_channel_desc">Herinneringen aan komende betalingsdata.</string>
+    <string name="notif_due_title">Factuur vervalt binnenkort</string>
+    <string name="notif_due_text">%1$s — vervalt %2$s (te betalen: %3$s)</string>
+    <string name="mark_paid">Markeer als betaald</string>
+    <string name="mark_unpaid">Markeer als onbetaald</string>
+    <string name="paid_on">Betaald op %1$s</string>
 
     <!-- Detail view tabs and raw-XML search -->
     <string name="tab_rendered">Factuur</string>

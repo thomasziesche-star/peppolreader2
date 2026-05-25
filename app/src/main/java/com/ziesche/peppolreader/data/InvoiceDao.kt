@@ -43,6 +43,41 @@ interface InvoiceDao {
     @Query("SELECT COUNT(*) FROM invoices")
     suspend fun getInvoiceCount(): Int
 
+    /** Snapshot of all invoices ordered by issueDate ASC – used by the CSV/ZIP exporter. */
+    @Query("SELECT * FROM invoices ORDER BY issueDate ASC")
+    suspend fun getAllInvoicesList(): List<Invoice>
+
+    /**
+     * Invoices whose issueDate falls into [from, to] (inclusive, ISO yyyy-MM-dd lexical compare).
+     * Used by the export bottom sheet when the user picks a date range.
+     */
+    @Query("SELECT * FROM invoices WHERE issueDate >= :from AND issueDate <= :to ORDER BY issueDate ASC")
+    suspend fun getInvoicesInDateRange(from: String, to: String): List<Invoice>
+
+    /** Sets/clears [Invoice.paidAt]. */
+    @Query("UPDATE invoices SET paidAt = :paidAtMs WHERE id = :id")
+    suspend fun setPaid(id: Long, paidAtMs: Long?)
+
+    /** Stamps an invoice as just-reminded so the worker doesn't notify twice on the same day. */
+    @Query("UPDATE invoices SET lastReminderShownAt = :timestamp WHERE id = :id")
+    suspend fun touchReminderShown(id: Long, timestamp: Long)
+
+    /**
+     * Invoices that are still unpaid, have a non-empty dueDate, will fall due on or before
+     * [thresholdDate] (ISO yyyy-MM-dd lexical compare) and haven't been reminded since
+     * [startOfTodayMs]. Result drives the daily due-date worker.
+     */
+    @Query("""
+        SELECT * FROM invoices
+        WHERE dueDate IS NOT NULL
+          AND dueDate != ''
+          AND dueDate <= :thresholdDate
+          AND paidAt IS NULL
+          AND (lastReminderShownAt IS NULL OR lastReminderShownAt < :startOfTodayMs)
+        ORDER BY dueDate ASC
+    """)
+    suspend fun getDueSoon(thresholdDate: String, startOfTodayMs: Long): List<Invoice>
+
     // Charts
     @Query("SELECT strftime('%Y-%m', issueDate) as month, SUM(payableAmount) as total FROM invoices GROUP BY month ORDER BY month DESC LIMIT 12")
     fun getMonthlyExpenses(): LiveData<List<MonthlyExpense>>

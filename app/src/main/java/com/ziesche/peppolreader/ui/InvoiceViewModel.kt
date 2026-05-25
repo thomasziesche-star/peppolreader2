@@ -1,10 +1,12 @@
 package com.ziesche.peppolreader.ui
 
 import android.app.Application
+import androidx.annotation.StringRes
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.ziesche.peppolreader.R
 import com.ziesche.peppolreader.data.AppDatabase
 import java.io.File
 import java.io.FileOutputStream
@@ -14,6 +16,8 @@ import android.content.Intent
 import android.content.Context
 import com.ziesche.peppolreader.data.model.Invoice
 import com.ziesche.peppolreader.data.model.ParsedInvoice
+import com.ziesche.peppolreader.export.CsvExporter
+import com.ziesche.peppolreader.export.ZipBundler
 import com.ziesche.peppolreader.parser.CiiParser
 import com.ziesche.peppolreader.parser.InvoiceFormat
 import com.ziesche.peppolreader.parser.PeppolParser
@@ -83,6 +87,18 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     // Success message
     private val _message = MutableLiveData<String?>()
     val message: LiveData<String?> = _message
+
+    /**
+     * One-shot signal: after a successful single-file import or duplicate hit, the list
+     * fragment should navigate to the detail view. Cleared by [consumedImportNavigation].
+     * Replaces the previous fragile string-match approach which broke once the messages
+     * were localized.
+     */
+    private val _importNavigationId = MutableLiveData<Long?>()
+    val importNavigationId: LiveData<Long?> = _importNavigationId
+    fun consumedImportNavigation() {
+        _importNavigationId.value = null
+    }
     
     /**
      * One file selected for import. [originalPdfBytes] is set when the file was a
@@ -141,30 +157,32 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 // Single file behavior
                 if (successCount == 1) {
                     selectInvoice(lastSuccessInvoice!!)
-                    _message.value = "Rechnung gespeichert"
+                    _message.value = str(R.string.invoice_saved)
+                    _importNavigationId.value = lastSuccessInvoice!!.id
                 } else if (duplicateCount == 1) {
                     selectInvoice(lastDuplicateInvoice!!)
-                    _message.value = "Rechnung ist bereits vorhanden. Öffne Details..."
+                    _message.value = str(R.string.invoice_exists)
+                    _importNavigationId.value = lastDuplicateInvoice!!.id
                 } else {
-                    _error.value = "Fehler beim Import"
+                    _error.value = str(R.string.error_import_general)
                 }
             } else {
-                // Batch summary
-                val sb = StringBuilder()
-                sb.append("$successCount von $total Rechnungen importiert.")
-                if (duplicateCount > 0) {
-                    sb.append(" $duplicateCount Duplikate.")
-                }
-                if (errorCount > 0) {
-                    sb.append(" $errorCount Fehler.")
-                }
+                // Batch summary – pieced together so each language only has to translate
+                // 3 short strings (main + duplicates suffix + errors suffix).
+                val sb = StringBuilder(str(R.string.import_batch_summary, successCount, total))
+                if (duplicateCount > 0) sb.append(str(R.string.import_batch_duplicates, duplicateCount))
+                if (errorCount > 0) sb.append(str(R.string.import_batch_errors, errorCount))
                 _message.value = sb.toString()
-                
-                // If we imported at least one, maybe we don't select anything or just stay on list?
                 // Staying on list is better for batch.
             }
         }
     }
+
+    private fun str(@StringRes id: Int): String =
+        getApplication<Application>().getString(id)
+
+    private fun str(@StringRes id: Int, vararg args: Any): String =
+        getApplication<Application>().getString(id, *args)
 
     private sealed class ImportResult {
         data class Success(val invoice: Invoice) : ImportResult()
@@ -278,14 +296,6 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     }
 
     /**
-     * Legacy wrapper for single file if needed, but importInvoices handles it.
-     * Keeping API specifically for single file calls if any, but mapping to new logic.
-     */
-    fun parseAndSaveInvoice(xmlContent: String, fileName: String) {
-        importInvoices(listOf(ImportItem(fileName, xmlContent)))
-    }
-    
-    /**
      * Select an invoice and parse its XML content
      */
     fun selectInvoice(invoice: Invoice) {
@@ -300,10 +310,10 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 if (parsed != null) {
                     _parsedInvoice.value = parsed
                 } else {
-                    _error.value = "Unbekanntes Rechnungsformat"
+                    _error.value = str(R.string.error_unknown_format)
                 }
             } catch (e: Exception) {
-                _error.value = "Fehler beim Parsen: ${e.message}"
+                _error.value = str(R.string.parse_error, e.message ?: "")
             } finally {
                 _isLoading.value = false
             }
@@ -334,16 +344,31 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 if (invoice != null) {
                     selectInvoice(invoice)
                 } else {
-                    _error.value = "Rechnung nicht gefunden"
+                    _error.value = str(R.string.error_not_found)
                 }
             } catch (e: Exception) {
-                _error.value = "Fehler: ${e.message}"
+                _error.value = str(R.string.error_general, e.message ?: "")
             } finally {
                 _isLoading.value = false
             }
         }
     }
     
+    /**
+     * Toggles the paid/unpaid state of the currently selected invoice and refreshes the
+     * cached `selectedInvoice` so the UI re-renders.
+     */
+    fun togglePaid(invoice: Invoice) {
+        viewModelScope.launch {
+            val newPaidAt = if (invoice.paidAt == null) System.currentTimeMillis() else null
+            withContext(Dispatchers.IO) { invoiceDao.setPaid(invoice.id, newPaidAt) }
+            val refreshed = withContext(Dispatchers.IO) { invoiceDao.getInvoiceById(invoice.id) }
+            if (refreshed != null) {
+                _selectedInvoice.value = refreshed
+            }
+        }
+    }
+
     /**
      * Delete an invoice
      */
@@ -352,7 +377,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
             withContext(Dispatchers.IO) {
                 invoiceDao.deleteInvoice(invoice)
             }
-            _message.value = "Rechnung gelöscht"
+            _message.value = str(R.string.invoice_deleted)
         }
     }
     
@@ -401,6 +426,59 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
         }
     }
     
+    /** Result of an export request; the host then writes the bytes to a user-picked URI. */
+    sealed class ExportPayload {
+        data class Success(
+            val bytes: ByteArray,
+            val mimeType: String,
+            val suggestedFileName: String,
+            val invoiceCount: Int
+        ) : ExportPayload()
+        data object Empty : ExportPayload()
+        data class Error(val message: String) : ExportPayload()
+    }
+
+    /**
+     * Fetches invoices in the given date range and builds either a plain CSV or a ZIP
+     * bundle (CSV + original XML/PDFs). All heavy work runs on Dispatchers.IO.
+     */
+    suspend fun buildExportPayload(
+        fromIso: String,
+        toIso: String,
+        includeXmlBundle: Boolean,
+        headers: CsvExporter.Headers
+    ): ExportPayload = withContext(Dispatchers.IO) {
+        try {
+            val invoices = invoiceDao.getInvoicesInDateRange(fromIso, toIso)
+            if (invoices.isEmpty()) return@withContext ExportPayload.Empty
+
+            val baseName = "PeppolReader-Export-${fromIso}_${toIso}"
+            val csvBytes = CsvExporter(headers = headers).toCsvBytes(invoices)
+
+            if (includeXmlBundle) {
+                val zipBytes = ZipBundler().bundle(csvBytes, "$baseName.csv", invoices)
+                ExportPayload.Success(
+                    bytes = zipBytes,
+                    mimeType = "application/zip",
+                    suggestedFileName = "$baseName.zip",
+                    invoiceCount = invoices.size
+                )
+            } else {
+                ExportPayload.Success(
+                    bytes = csvBytes,
+                    mimeType = "text/csv",
+                    suggestedFileName = "$baseName.csv",
+                    invoiceCount = invoices.size
+                )
+            }
+        } catch (e: Exception) {
+            ExportPayload.Error(e.message ?: e.javaClass.simpleName)
+        }
+    }
+
+    /** Cached payload waiting to be written to the user-picked URI. Cleared after writing. */
+    var pendingExportPayload: ExportPayload.Success? = null
+
     fun openAttachment(invoice: Invoice, context: Context) {
         val path = invoice.embeddedDocumentPath ?: return
         val file = File(path)

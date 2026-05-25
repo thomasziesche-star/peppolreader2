@@ -41,6 +41,13 @@
     <string name="error_pdf_encrypted">PDF is encrypted and cannot be read.</string>
     <string name="error_pdf_read">Error reading PDF: %1$s</string>
     <string name="error_pdf_cii">PDF contains a CII-format invoice (UN/CEFACT). Only UBL/XRechnung is supported in this version.</string>
+    <string name="error_unknown_format">Unknown invoice format</string>
+    <string name="error_import_general">Import failed</string>
+    <string name="import_batch_summary">%1$d of %2$d invoices imported</string>
+    <string name="import_batch_duplicates">, %1$d duplicates</string>
+    <string name="import_batch_errors">, %1$d errors</string>
+    <string name="parse_error">Parse error: %1$s</string>
+    <string name="subtitle_attribution">(by accountant with beard)</string>
 
     <!-- PDF/HTML Labels -->
     <string name="html_lang_code">en</string>
@@ -112,6 +119,64 @@
 
     <!-- Language switcher in toolbar -->
     <string name="menu_language">Language</string>
+
+    <!-- Export -->
+    <string name="action_export">Export…</string>
+    <string name="export_title">Export invoices</string>
+    <string name="export_date_from">From</string>
+    <string name="export_date_to">To</string>
+    <string name="export_quick_all">All</string>
+    <string name="export_quick_year">This year</string>
+    <string name="export_quick_quarter">This quarter</string>
+    <string name="export_quick_month">Last month</string>
+    <string name="export_include_xml">Include original XML/PDF files (ZIP)</string>
+    <string name="export_cancel">Cancel</string>
+    <string name="export_confirm">Export</string>
+    <string name="export_no_invoices">No invoices in the selected range</string>
+    <plurals name="export_success">
+        <item quantity="one">%d invoice exported</item>
+        <item quantity="other">%d invoices exported</item>
+    </plurals>
+    <string name="export_share">Share</string>
+    <string name="export_error">Export failed: %1$s</string>
+    <!-- CSV column headers (English) -->
+    <string name="csv_invoice_id">Invoice number</string>
+    <string name="csv_issue_date">Issue date</string>
+    <string name="csv_due_date">Due date</string>
+    <string name="csv_supplier">Supplier</string>
+    <string name="csv_supplier_taxid">Supplier VAT ID</string>
+    <string name="csv_customer">Customer</string>
+    <string name="csv_net">Net</string>
+    <string name="csv_tax">VAT</string>
+    <string name="csv_gross">Gross</string>
+    <string name="csv_payable">Payable</string>
+    <string name="csv_currency">Currency</string>
+    <string name="csv_format">Format</string>
+    <string name="csv_doc_type">Type</string>
+    <string name="csv_file_name">File name</string>
+    <string name="csv_doc_type_invoice">Invoice</string>
+    <string name="csv_doc_type_credit_note">Credit note</string>
+    <string name="csv_doc_type_corrected">Corrected invoice</string>
+
+    <!-- Due-date reminders -->
+    <string name="action_reminders">Reminders…</string>
+    <string name="reminders_title">Due-date reminders</string>
+    <string name="reminders_enabled">Reminders enabled</string>
+    <string name="reminders_days_before">Notify before due date</string>
+    <string name="reminders_days_0">On the day</string>
+    <string name="reminders_days_3">3 days</string>
+    <string name="reminders_days_7">7 days</string>
+    <string name="reminders_days_14">14 days</string>
+    <string name="reminders_test">Check now</string>
+    <string name="reminders_permission_required">Notification permission needed to remind you about due dates.</string>
+    <string name="reminders_close">Close</string>
+    <string name="notif_channel_name">Due invoices</string>
+    <string name="notif_channel_desc">Reminders about upcoming payment due dates.</string>
+    <string name="notif_due_title">Invoice due soon</string>
+    <string name="notif_due_text">%1$s — due %2$s (payable: %3$s)</string>
+    <string name="mark_paid">Mark as paid</string>
+    <string name="mark_unpaid">Mark as unpaid</string>
+    <string name="paid_on">Paid on %1$s</string>
 
     <!-- Detail view tabs and raw-XML search -->
     <string name="tab_rendered">Invoice</string>
