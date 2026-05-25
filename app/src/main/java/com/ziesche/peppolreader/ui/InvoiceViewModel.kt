@@ -14,12 +14,15 @@ import android.util.Base64
 import androidx.core.content.FileProvider
 import android.content.Intent
 import android.content.Context
+import com.ziesche.peppolreader.data.model.CorrectionInfo
 import com.ziesche.peppolreader.data.model.Invoice
 import com.ziesche.peppolreader.data.model.ParsedInvoice
+import org.json.JSONObject
 import com.ziesche.peppolreader.export.CsvExporter
 import com.ziesche.peppolreader.export.ZipBundler
 import com.ziesche.peppolreader.parser.CiiParser
 import com.ziesche.peppolreader.parser.InvoiceFormat
+import com.ziesche.peppolreader.parser.KsefFa3Parser
 import com.ziesche.peppolreader.parser.PeppolParser
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.SharingStarted
@@ -309,7 +312,9 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 embeddedDocumentFilename = attachmentFilename,
                 embeddedDocumentPath = attachmentPath,
                 documentTypeCode = parsed.documentTypeCode,
-                formatLabel = parsed.formatLabel
+                formatLabel = parsed.formatLabel,
+                invoiceSubtype = parsed.invoiceSubtype,
+                correctionInfoJson = parsed.correctionInfo?.let { serializeCorrection(it) }
             )
 
             invoiceDao.insertInvoice(invoice)
@@ -384,6 +389,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
         when (InvoiceFormat.detect(xmlContent)) {
             InvoiceFormat.UBL -> PeppolParser(xmlContent, getApplication()).parse()
             InvoiceFormat.CII -> CiiParser(xmlContent, getApplication()).parse()
+            InvoiceFormat.KSEF_FA3 -> KsefFa3Parser(xmlContent, getApplication()).parse()
             InvoiceFormat.UNKNOWN -> null
         }
     
@@ -457,6 +463,19 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     fun clearSelection() {
         _selectedInvoice.value = null
         _parsedInvoice.value = null
+    }
+
+    /**
+     * Tiny one-off serializer to avoid pulling in Gson/Moshi just for a four-field
+     * KSeF-only struct. The deserializer is in [com.ziesche.peppolreader.data.model.CorrectionInfo.parse].
+     */
+    private fun serializeCorrection(info: CorrectionInfo): String {
+        val json = JSONObject()
+        info.reason?.let { json.put("reason", it) }
+        info.originalInvoiceNumber?.let { json.put("originalInvoiceNumber", it) }
+        info.originalIssueDate?.let { json.put("originalIssueDate", it) }
+        info.originalKsefId?.let { json.put("originalKsefId", it) }
+        return json.toString()
     }
 
     private fun saveEmbeddedDocument(parsed: ParsedInvoice, context: Context): String? {

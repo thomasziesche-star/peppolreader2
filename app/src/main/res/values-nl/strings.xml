@@ -88,6 +88,12 @@
     <string name="label_bic">BIC:</string>
     <string name="label_account">Rekening:</string>
 
+    <!-- KSeF FA(3) correctieblok -->
+    <string name="correction_section_title">Correctiegegevens</string>
+    <string name="correction_original_invoice">Corrigeert factuur: %1$s van %2$s</string>
+    <string name="correction_ksef_id">KSeF-ID: %1$s</string>
+    <string name="correction_reason">Reden: %1$s</string>
+
     <!-- Parser Mappings -->
     <string name="shipping_cost">Verzendkosten</string>
     <string name="surcharge_label">Toeslag: %1$s</string>
@@ -113,7 +119,7 @@
 
     <!-- Help Manual -->
     <string name="help_title">Hulp &amp; bediening</string>
-    <string name="help_message">Hallo, hier de belangrijkste tips…\n\n<b>Facturen importeren:</b>\nTik op de +-knop en kies XML- of PDF-bestanden (lang ingedrukt houden voor meerdere). Je kunt bestanden ook rechtstreeks vanuit je e-mailprogramma delen met E-Invoice &amp; Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybride PDF\'s worden automatisch herkend — de ingesloten factuur-XML wordt uitgelezen.\n\n<b>Ondersteunde formaten:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL en CII), ZUGFeRD 1.x en 2.x, Factur-X.\n\n<b>Facturen &amp; creditnota\'s:</b>\nWorden automatisch onderscheiden — creditnota\'s krijgen een label en worden met een negatief bedrag weergegeven.\n\n<b>Details bekijken:</b>\nTik op een rij om de factuur te bekijken en een PDF te maken.\n\n<b>Verwijderen:</b>\nHoud een rij in de lijst ingedrukt.</string>
+    <string name="help_message">Hallo, hier de belangrijkste tips…\n\n<b>Facturen importeren:</b>\nTik op + en kies XML- of PDF-bestanden (lang ingedrukt houden voor meerdere). Je kunt bestanden ook rechtstreeks vanuit je e-mailprogramma delen met de app.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybride PDF\'s worden automatisch herkend — de ingesloten XML wordt uitgelezen, de originele PDF blijft als bijlage bewaard.\n\n<b>Ondersteunde formaten:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL en CII), ZUGFeRD 1.x en 2.x, Factur-X en Pools <b>KSeF FA(3)</b> voor facturen uit Polen.\n\n<b>Facturen &amp; creditnota\'s:</b>\nWorden automatisch onderscheiden — creditnota\'s (ook KSeF KOR / KOR_ZAL / KOR_ROZ) krijgen een rood label en worden met een negatief bedrag weergegeven. Bij KSeF-correcties worden het originele factuurnummer en de reden getoond.\n\n<b>Detailweergave:</b>\nDrie tabbladen: gerenderde factuur, ruwe XML (met live-zoeken) en de originele PDF indien bijgevoegd. Met <b>Open / Betaald</b> markeer je een factuur als afgehandeld.\n\n<b>Lijst filteren:</b>\nDe chips boven de lijst filteren <i>Alle / Onbetaald / Verlopen</i>, en de datumfilter beperkt tot een periode.\n\n<b>Vervaldatum-herinneringen:</b>\nVia <i>Herinneringen…</i> activeer je dagelijkse meldingen met een instelbare aanlooptijd.\n\n<b>Export:</b>\nVia <i>Exporteren…</i> maak je een CSV (UTF-8) voor je accountant — optioneel als ZIP-bundel met originele XML/PDF.\n\n<b>Dashboard:</b>\nHet Dashboard toont uitgaven per maand en je belangrijkste leveranciers.\n\n<b>Verwijderen:</b>\nHoud een rij in de lijst ingedrukt.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; disclaimer</string>

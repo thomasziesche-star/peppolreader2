@@ -1,0 +1,211 @@
+<resources>
+    <string name="app_name">E-Invoice &amp; Peppol Reader</string>
+    <string name="app_title">E-Invoice &amp; Peppol Reader</string>
+    <string name="title_activity_main">E-Invoice &amp; Peppol Reader</string>
+    <string name="action_settings">Ustawienia</string>
+    <string name="menu_settings">Ustawienia</string>
+    <string name="import_file">Importuj plik</string>
+    <string name="cd_upload_button">Prześlij fakturę XML</string>
+    <string name="no_invoices">Brak faktur.</string>
+    <string name="tap_to_upload">Dotknij +, aby zaimportować plik XML.</string>
+
+    <!-- Invoice List -->
+    <string name="invoice_item_cd">Faktura %1$s</string>
+    <string name="search_hint">Szukaj (firma, nr)…</string>
+    <string name="list_filter_all">Wszystkie</string>
+    <string name="list_filter_unpaid">Nieopłacone</string>
+    <string name="list_filter_overdue">Przeterminowane</string>
+    <string name="list_filter_daterange">Zakres dat</string>
+    <string name="list_filter_daterange_title">Wybierz zakres dat</string>
+
+    <!-- Invoice Detail -->
+    <string name="invoice_detail">Szczegóły faktury</string>
+    <string name="download_pdf">Pobierz PDF</string>
+    <string name="share">Udostępnij</string>
+    <string name="loading">Wczytywanie faktury…</string>
+    <string name="attachment_label">Załącznik: %1$s</string>
+
+    <!-- Navigation -->
+    <string name="previous">Wstecz</string>
+    <string name="next">Dalej</string>
+
+    <!-- Messages -->
+    <string name="error_parsing">Błąd odczytu pliku</string>
+    <string name="error_pdf">Błąd tworzenia PDF</string>
+    <string name="confirm_delete">Czy na pewno usunąć tę fakturę?</string>
+    <string name="delete">Usuń</string>
+    <string name="cancel">Anuluj</string>
+    <string name="invoice_deleted">Faktura usunięta</string>
+    <string name="error_not_found">Nie znaleziono faktury</string>
+    <string name="error_general">Błąd: %1$s</string>
+    <string name="invoice_saved">Faktura zapisana</string>
+    <string name="invoice_exists">Faktura już istnieje. Otwieram szczegóły…</string>
+    <string name="error_xml_read">Błąd odczytu pliku XML: %1$s</string>
+    <string name="error_share">Błąd udostępniania: %1$s</string>
+    <string name="error_pdf_no_xml">Nie znaleziono XML faktury w PDF. To nie jest hybrydowy PDF ZUGFeRD/Factur-X.</string>
+    <string name="error_pdf_encrypted">PDF jest zaszyfrowany i nie może zostać odczytany.</string>
+    <string name="error_pdf_read">Błąd odczytu PDF: %1$s</string>
+    <string name="error_pdf_cii">PDF zawiera fakturę w formacie CII (UN/CEFACT). W tej wersji obsługiwany jest tylko UBL/XRechnung.</string>
+    <string name="error_unknown_format">Nieznany format faktury</string>
+    <string name="error_import_general">Błąd importu</string>
+    <string name="import_batch_summary">Zaimportowano %1$d z %2$d faktur</string>
+    <string name="import_batch_duplicates">, %1$d duplikatów</string>
+    <string name="import_batch_errors">, %1$d błędów</string>
+    <string name="parse_error">Błąd parsowania: %1$s</string>
+    <string name="subtitle_attribution">(by accountant with beard)</string>
+
+    <!-- PDF/HTML Labels -->
+    <string name="html_lang_code">pl</string>
+    <string name="label_invoice">FAKTURA</string>
+    <string name="label_credit_note">FAKTURA KORYGUJĄCA</string>
+    <string name="label_corrected_invoice">FAKTURA SKORYGOWANA</string>
+    <string name="chip_credit_note">Korekta</string>
+    <string name="label_no">Nr:</string>
+    <string name="label_date">Data:</string>
+    <string name="label_due_date">Termin:</string>
+    <string name="label_order_id">Zamówienie:</string>
+    <string name="label_supplier">Sprzedawca</string>
+    <string name="label_customer">Nabywca</string>
+    <string name="label_tax_id">NIP: %1$s</string>
+    <string name="table_article_no">Nr art.</string>
+    <string name="table_description">Opis</string>
+    <string name="table_quantity">Ilość</string>
+    <string name="table_price">Cena</string>
+    <string name="table_total">Suma</string>
+    <string name="total_net">Wartość netto</string>
+    <string name="total_surcharges">Dopłaty</string>
+    <string name="total_allowances">Rabaty</string>
+    <string name="total_taxable">Podstawa opodatk.</string>
+    <string name="total_vat">VAT</string>
+    <string name="total_gross">Wartość brutto</string>
+    <string name="total_payable">Do zapłaty</string>
+    <string name="footer_thanks">Informacje bez gwarancji</string>
+    <string name="footer_generated">Wygenerowano z danych %1$s%2$s</string>
+    <string name="footer_file_hint"> (Plik: %1$s)</string>
+    <string name="footer_disclaimer">Wersja czytelna nie zastępuje oryginalnego XML</string>
+    <string name="payment_info_title">Informacje o płatności</string>
+    <string name="label_iban">IBAN:</string>
+    <string name="label_bic">BIC:</string>
+    <string name="label_account">Konto:</string>
+
+    <!-- KSeF FA(3) blok korekty -->
+    <string name="correction_section_title">Dane korekty</string>
+    <string name="correction_original_invoice">Koryguje fakturę: %1$s z dnia %2$s</string>
+    <string name="correction_ksef_id">Numer KSeF: %1$s</string>
+    <string name="correction_reason">Powód: %1$s</string>
+
+    <!-- Mapowanie parsera -->
+    <string name="shipping_cost">Koszt wysyłki</string>
+    <string name="surcharge_label">Dopłata: %1$s</string>
+    <string name="discount_label">Rabat: %1$s</string>
+
+    <!-- Ustawienia -->
+    <string name="settings_title">Ustawienia</string>
+    <string name="pref_language">Język</string>
+    <string name="pref_language_summary">Wybierz język wyświetlania</string>
+
+    <!-- Dashboard -->
+    <string name="title_dashboard">Pulpit</string>
+    <string name="filter_last_6_months">Ostatnie 6 miesięcy</string>
+    <string name="filter_last_12_months">Ostatnie 12 miesięcy</string>
+    <string name="filter_current_month">Bieżący miesiąc</string>
+    <string name="filter_last_month">Poprzedni miesiąc</string>
+    <string name="filter_all">Wszystko</string>
+    <string name="chart_monthly_title">Wydatki miesięcznie</string>
+    <string name="chart_suppliers_title">Najwięksi dostawcy</string>
+    <string name="chart_label_expenses">Wydatki (€)</string>
+
+    <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
+
+    <!-- Pomoc -->
+    <string name="help_title">Pomoc i obsługa</string>
+    <string name="help_message">Witaj, oto najważniejsze wskazówki…\n\n<b>Importowanie faktur:</b>\nDotknij + i wybierz pliki XML lub PDF (przytrzymaj, aby zaznaczyć kilka). Możesz też udostępnić pliki bezpośrednio z programu pocztowego do aplikacji.\n\n<b>PDF ZUGFeRD i Factur-X:</b>\nPDF hybrydowe są wykrywane automatycznie — osadzony XML jest wyodrębniany, a oryginalny PDF zachowywany jako załącznik.\n\n<b>Obsługiwane formaty:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL i CII), ZUGFeRD 1.x i 2.x, Factur-X oraz polski <b>KSeF FA(3)</b> dla faktur wystawianych w Polsce.\n\n<b>Faktury i korekty:</b>\nRozróżniane automatycznie — korekty (w tym KSeF KOR / KOR_ZAL / KOR_ROZ) są oznaczone czerwonym znacznikiem i wyświetlane z ujemną kwotą. Przy korektach KSeF widoczny jest oryginalny numer i powód.\n\n<b>Widok szczegółów:</b>\nTrzy zakładki: wyrenderowana faktura, surowy XML (z wyszukiwaniem na żywo) oraz oryginalny PDF, jeśli jest załączony. Przyciskiem <b>Otwarte / Opłacone</b> oznaczasz fakturę jako rozliczoną.\n\n<b>Filtrowanie listy:</b>\nZnaczniki nad listą filtrują <i>Wszystkie / Nieopłacone / Przeterminowane</i>, a filtr zakresu dat ogranicza widok do okresu.\n\n<b>Przypomnienia o terminach:</b>\nW <i>Przypomnienia…</i> włącz codzienne powiadomienia z konfigurowalnym wyprzedzeniem.\n\n<b>Eksport:</b>\nW <i>Eksportuj…</i> utworzysz plik CSV (UTF-8) dla księgowego — opcjonalnie jako paczkę ZIP z oryginalnymi XML/PDF.\n\n<b>Pulpit:</b>\nPulpit pokazuje wydatki miesięczne i największych dostawców.\n\n<b>Usuwanie:</b>\nPrzytrzymaj wpis na liście.</string>
+
+    <!-- Informacje -->
+    <string name="info_title">Informacje i zastrzeżenia</string>
+    <string name="info_message">To jest projekt hobbystyczny i NIE jest oficjalną aplikacją PEPPOL.\n\nDane są udostępniane bez gwarancji.\n\n<b>Accountant with beard</b></string>
+
+    <!-- Wersja w stopce -->
+    <string name="version_label">Wersja %1$s</string>
+
+    <!-- Przełącznik języka w pasku -->
+    <string name="menu_language">Język</string>
+
+    <!-- Eksport -->
+    <string name="action_export">Eksportuj…</string>
+    <string name="export_title">Eksportuj faktury</string>
+    <string name="export_date_from">Od</string>
+    <string name="export_date_to">Do</string>
+    <string name="export_quick_all">Wszystkie</string>
+    <string name="export_quick_year">Bieżący rok</string>
+    <string name="export_quick_quarter">Bieżący kwartał</string>
+    <string name="export_quick_month">Poprzedni miesiąc</string>
+    <string name="export_include_xml">Dołącz oryginalne XML/PDF (ZIP)</string>
+    <string name="export_cancel">Anuluj</string>
+    <string name="export_confirm">Eksportuj</string>
+    <string name="export_no_invoices">Brak faktur w wybranym zakresie</string>
+    <plurals name="export_success">
+        <item quantity="one">Wyeksportowano %d fakturę</item>
+        <item quantity="few">Wyeksportowano %d faktury</item>
+        <item quantity="many">Wyeksportowano %d faktur</item>
+        <item quantity="other">Wyeksportowano %d faktur</item>
+    </plurals>
+    <string name="export_share">Udostępnij</string>
+    <string name="export_error">Eksport nie powiódł się: %1$s</string>
+    <!-- Nagłówki kolumn CSV (polski) -->
+    <string name="csv_invoice_id">Numer faktury</string>
+    <string name="csv_issue_date">Data wystawienia</string>
+    <string name="csv_due_date">Termin płatności</string>
+    <string name="csv_supplier">Sprzedawca</string>
+    <string name="csv_supplier_taxid">NIP sprzedawcy</string>
+    <string name="csv_customer">Nabywca</string>
+    <string name="csv_net">Netto</string>
+    <string name="csv_tax">VAT</string>
+    <string name="csv_gross">Brutto</string>
+    <string name="csv_payable">Do zapłaty</string>
+    <string name="csv_currency">Waluta</string>
+    <string name="csv_format">Format</string>
+    <string name="csv_doc_type">Typ</string>
+    <string name="csv_file_name">Nazwa pliku</string>
+    <string name="csv_doc_type_invoice">Faktura</string>
+    <string name="csv_doc_type_credit_note">Korekta</string>
+    <string name="csv_doc_type_corrected">Faktura skorygowana</string>
+
+    <!-- Przypomnienia o terminach płatności -->
+    <string name="action_reminders">Przypomnienia…</string>
+    <string name="reminders_title">Przypomnienia o terminach</string>
+    <string name="reminders_enabled">Przypomnienia aktywne</string>
+    <string name="reminders_days_before">Powiadom przed terminem</string>
+    <string name="reminders_days_0">W dniu terminu</string>
+    <string name="reminders_days_3">3 dni</string>
+    <string name="reminders_days_7">7 dni</string>
+    <string name="reminders_days_14">14 dni</string>
+    <string name="reminders_test">Sprawdź teraz</string>
+    <string name="reminders_permission_required">Aby przypominać o terminach, potrzebne jest pozwolenie na powiadomienia.</string>
+    <string name="reminders_close">Zamknij</string>
+    <string name="notif_channel_name">Faktury z terminem</string>
+    <string name="notif_channel_desc">Przypomnienia o nadchodzących terminach płatności.</string>
+    <string name="notif_due_title">Zbliża się termin płatności</string>
+    <string name="notif_due_text">%1$s — termin %2$s (do zapłaty: %3$s)</string>
+    <string name="status_open">Otwarte</string>
+    <string name="status_paid">Opłacone</string>
+    <string name="list_badge_paid">Opłacone</string>
+    <string name="paid_on">Opłacono dnia %1$s</string>
+
+    <!-- Zakładki widoku szczegółów i wyszukiwanie w surowym XML -->
+    <string name="tab_rendered">Faktura</string>
+    <string name="tab_raw_xml">Dane surowe</string>
+    <string name="tab_original_pdf">PDF</string>
+    <string name="search_xml_hint">Szukaj w XML…</string>
+    <string name="search_no_matches">Brak trafień</string>
+    <string name="pdf_none_attached">Brak załączonego PDF</string>
+    <string name="pdf_render_error">Nie można otworzyć PDF</string>
+
+    <!-- Filtr selektora plików -->
+    <plurals name="import_skipped_files">
+        <item quantity="one">Pominięto %d plik — obsługiwane są tylko PDF i XML</item>
+        <item quantity="few">Pominięto %d pliki — obsługiwane są tylko PDF i XML</item>
+        <item quantity="many">Pominięto %d plików — obsługiwane są tylko PDF i XML</item>
+        <item quantity="other">Pominięto %d plików — obsługiwane są tylko PDF i XML</item>
+    </plurals>
+</resources>

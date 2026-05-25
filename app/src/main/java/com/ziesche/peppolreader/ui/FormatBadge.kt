@@ -22,6 +22,8 @@ object FormatBadge {
         if (label.isNullOrBlank()) return null
         val l = label.lowercase()
         return when {
+            "ksef" in l || "fa(3)" in l ->
+                Style("KSeF FA(3)", R.color.badge_ksef_bg, R.color.badge_ksef_fg)
             "xrechnung" in l -> Style("XRechnung", R.color.badge_xrechnung_bg, R.color.badge_xrechnung_fg)
             "peppol" in l -> Style("Peppol", R.color.badge_peppol_bg, R.color.badge_peppol_fg)
             "factur-x" in l || "facturx" in l ->

@@ -29,6 +29,7 @@ import androidx.fragment.app.activityViewModels
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.ziesche.peppolreader.R
+import com.ziesche.peppolreader.data.model.CorrectionInfo
 import com.ziesche.peppolreader.databinding.FragmentInvoiceDetailBinding
 import com.ziesche.peppolreader.pdf.PdfGenerator
 import com.ziesche.peppolreader.pdf.XmlPrettyPrinter
@@ -250,6 +251,7 @@ class InvoiceDetailFragment : Fragment() {
         viewModel.selectedInvoice.observe(viewLifecycleOwner) { invoice ->
             updatePaidButtonStyle(invoice?.paidAt != null)
             updatePdfTabEnabledLook(invoice)
+            updateCorrectionBlock(invoice)
         }
     }
 
@@ -296,6 +298,39 @@ class InvoiceDetailFragment : Fragment() {
                     .start()
             }
             .start()
+    }
+
+    /**
+     * Shows the KSeF FA(3) correction block when the invoice is a correction (KOR / KOR_ZAL /
+     * KOR_ROZ) and has a stored `correctionInfoJson`. Hidden otherwise, so non-Polish
+     * invoices are entirely unaffected.
+     */
+    private fun updateCorrectionBlock(invoice: com.ziesche.peppolreader.data.model.Invoice?) {
+        val subtype = invoice?.invoiceSubtype
+        val isCorrection = subtype == "KOR" || subtype == "KOR_ZAL" || subtype == "KOR_ROZ"
+        val info = if (isCorrection) CorrectionInfo.parse(invoice?.correctionInfoJson) else null
+        if (info == null) {
+            binding.correctionInfoLayout.visibility = View.GONE
+            return
+        }
+        binding.correctionInfoLayout.visibility = View.VISIBLE
+        binding.correctionOriginal.text = getString(
+            R.string.correction_original_invoice,
+            info.originalInvoiceNumber.orEmpty(),
+            info.originalIssueDate.orEmpty()
+        )
+        if (info.originalKsefId != null) {
+            binding.correctionKsefId.text = getString(R.string.correction_ksef_id, info.originalKsefId)
+            binding.correctionKsefId.visibility = View.VISIBLE
+        } else {
+            binding.correctionKsefId.visibility = View.GONE
+        }
+        if (info.reason != null) {
+            binding.correctionReason.text = getString(R.string.correction_reason, info.reason)
+            binding.correctionReason.visibility = View.VISIBLE
+        } else {
+            binding.correctionReason.visibility = View.GONE
+        }
     }
 
     /**

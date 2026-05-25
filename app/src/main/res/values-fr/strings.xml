@@ -88,6 +88,12 @@
     <string name="label_bic">BIC :</string>
     <string name="label_account">Compte :</string>
 
+    <!-- KSeF FA(3) bloc de correction -->
+    <string name="correction_section_title">Informations de correction</string>
+    <string name="correction_original_invoice">Corrige la facture : %1$s du %2$s</string>
+    <string name="correction_ksef_id">ID KSeF : %1$s</string>
+    <string name="correction_reason">Motif : %1$s</string>
+
     <!-- Parser Mappings -->
     <string name="shipping_cost">Frais d\'expédition</string>
     <string name="surcharge_label">Majoration : %1$s</string>
@@ -113,7 +119,7 @@
 
     <!-- Help Manual -->
     <string name="help_title">Aide &amp; utilisation</string>
-    <string name="help_message">Bonjour, voici quelques conseils rapides…\n\n<b>Importer des factures :</b>\nAppuyez sur le bouton + et choisissez des fichiers XML ou PDF (appui long pour la sélection multiple). Vous pouvez aussi partager des fichiers depuis votre application de messagerie vers E-Invoice &amp; Peppol Reader.\n\n<b>PDF ZUGFeRD &amp; Factur-X :</b>\nLes PDF hybrides sont détectés automatiquement — le XML de facture intégré est extrait.\n\n<b>Formats pris en charge :</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL et CII), ZUGFeRD 1.x et 2.x, Factur-X.\n\n<b>Factures &amp; avoirs :</b>\nDistingués automatiquement — les avoirs sont marqués par une étiquette et affichés avec un montant négatif.\n\n<b>Voir les détails :</b>\nAppuyez sur une ligne pour afficher la facture et générer un PDF.\n\n<b>Supprimer :</b>\nAppuyez longuement sur une ligne dans la liste.</string>
+    <string name="help_message">Bonjour, voici quelques conseils rapides…\n\n<b>Importer des factures :</b>\nAppuyez sur + et choisissez des fichiers XML ou PDF (appui long pour la sélection multiple). Vous pouvez aussi partager des fichiers depuis votre application de messagerie vers l\'application.\n\n<b>PDF ZUGFeRD &amp; Factur-X :</b>\nLes PDF hybrides sont détectés automatiquement — le XML intégré est extrait et le PDF d\'origine est conservé en pièce jointe.\n\n<b>Formats pris en charge :</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL et CII), ZUGFeRD 1.x et 2.x, Factur-X et <b>KSeF FA(3)</b> polonais pour les factures émises en Pologne.\n\n<b>Factures &amp; avoirs :</b>\nDistingués automatiquement — les avoirs (y compris KSeF KOR / KOR_ZAL / KOR_ROZ) sont marqués d\'une étiquette rouge et affichés avec un montant négatif. Pour les corrections KSeF, le numéro et le motif d\'origine sont affichés.\n\n<b>Vue détaillée :</b>\nTrois onglets : facture rendue, XML brut (avec recherche en direct) et PDF d\'origine s\'il est joint. Utilisez <b>Ouvert / Payé</b> pour marquer une facture comme réglée.\n\n<b>Filtrer la liste :</b>\nLes puces au-dessus de la liste filtrent <i>Tout / Impayé / En retard</i>, et le filtre de période limite à un intervalle de dates.\n\n<b>Rappels d\'échéance :</b>\nDans <i>Rappels…</i>, activez les notifications quotidiennes avec délai au choix.\n\n<b>Export :</b>\nDans <i>Exporter…</i>, créez un CSV (UTF-8) pour votre expert-comptable — au choix sous forme de bundle ZIP avec les XML/PDF d\'origine.\n\n<b>Tableau de bord :</b>\nLe tableau de bord affiche les dépenses par mois et vos principaux fournisseurs.\n\n<b>Supprimer :</b>\nAppuyez longuement sur une ligne dans la liste.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Infos &amp; mentions légales</string>

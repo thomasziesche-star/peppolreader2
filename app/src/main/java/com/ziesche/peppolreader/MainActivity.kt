@@ -261,6 +261,7 @@ class MainActivity : AppCompatActivity(),
             "de" -> R.drawable.ic_flag_de
             "nl" -> R.drawable.ic_flag_nl
             "fr" -> R.drawable.ic_flag_fr
+            "pl" -> R.drawable.ic_flag_pl
             else -> R.drawable.ic_flag_en
         }
         menu.findItem(R.id.action_language)?.setIcon(flagIcon)
@@ -270,6 +271,7 @@ class MainActivity : AppCompatActivity(),
         menu.findItem(R.id.action_lang_de)?.isChecked = currentLang == "de"
         menu.findItem(R.id.action_lang_nl)?.isChecked = currentLang == "nl"
         menu.findItem(R.id.action_lang_fr)?.isChecked = currentLang == "fr"
+        menu.findItem(R.id.action_lang_pl)?.isChecked = currentLang == "pl"
         
         // Update theme toggle icon based on current mode
         val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
@@ -306,6 +308,11 @@ class MainActivity : AppCompatActivity(),
             }
             R.id.action_lang_fr -> {
                 val appLocale = androidx.core.os.LocaleListCompat.forLanguageTags("fr")
+                androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(appLocale)
+                true
+            }
+            R.id.action_lang_pl -> {
+                val appLocale = androidx.core.os.LocaleListCompat.forLanguageTags("pl")
                 androidx.appcompat.app.AppCompatDelegate.setApplicationLocales(appLocale)
                 true
             }
