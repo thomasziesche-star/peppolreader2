@@ -62,6 +62,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="header_text_color">#FF000000</color>
 
+    <!-- Adaptive launcher icon background (matches new orange logo). -->
+    <color name="ic_launcher_background">#E55A0A</color>
+
     <!-- Format badges (list overview) - light mode -->
     <color name="badge_peppol_bg">#DCE7F5</color>
     <color name="badge_peppol_fg">#1E4E8C</color>

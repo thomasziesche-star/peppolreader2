@@ -2,12 +2,16 @@ package com.ziesche.peppolreader.ui
 
 import android.content.ContentValues
 import android.content.Intent
+import android.content.res.ColorStateList
+import androidx.core.content.ContextCompat
 import android.graphics.Bitmap
 import android.graphics.Canvas
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
+import android.os.ParcelFileDescriptor
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.provider.MediaStore
@@ -45,6 +49,12 @@ class InvoiceDetailFragment : Fragment() {
     private var rawXmlReady: Boolean = false
     /** Last search query; applied after the page finishes loading. */
     private var pendingRawXmlQuery: String = ""
+
+    // Original-PDF tab state. PdfRenderer requires both descriptor and renderer to be
+    // closed together; we keep both nullable and re-init when the invoice changes.
+    private var pdfRenderer: PdfRenderer? = null
+    private var pdfFileDescriptor: ParcelFileDescriptor? = null
+    private var currentPdfPath: String? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -130,19 +140,78 @@ class InvoiceDetailFragment : Fragment() {
     private fun setupTabs() {
         binding.detailTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                val rawSelected = tab?.position == 1
-                binding.invoiceWebview.visibility = if (rawSelected) View.GONE else View.VISIBLE
-                binding.rawXmlContainer.visibility = if (rawSelected) View.VISIBLE else View.GONE
-                // Attachment label only makes sense in the rendered view
-                if (rawSelected) {
-                    binding.detailAttachmentLabel.visibility = View.GONE
-                } else {
-                    updateAttachmentLabel()
-                }
+                val position = tab?.position ?: 0
+                binding.invoiceWebview.visibility = if (position == 0) View.VISIBLE else View.GONE
+                binding.rawXmlContainer.visibility = if (position == 1) View.VISIBLE else View.GONE
+                binding.pdfContainer.visibility = if (position == 2) View.VISIBLE else View.GONE
+                // Attachment label only makes sense on the rendered tab
+                if (position == 0) updateAttachmentLabel() else binding.detailAttachmentLabel.visibility = View.GONE
+
+                if (position == 2) loadPdfTab()
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+    }
+
+    /**
+     * Lazily opens the PDF attached to the current invoice and binds it to the RecyclerView.
+     * Called when the PDF tab is selected. Re-uses an already-open renderer when the
+     * attachment path hasn't changed.
+     */
+    private fun loadPdfTab() {
+        val invoice = viewModel.selectedInvoice.value
+        val path = invoice?.embeddedDocumentPath
+        val isPdf = path != null && path.endsWith(".pdf", ignoreCase = true)
+
+        if (path == null || !isPdf) {
+            showPdfEmptyState(getString(R.string.pdf_none_attached))
+            return
+        }
+        if (currentPdfPath == path && pdfRenderer != null) {
+            // Already loaded — just make sure the recycler is visible.
+            binding.pdfEmptyState.visibility = View.GONE
+            binding.pdfRecyclerView.visibility = View.VISIBLE
+            return
+        }
+        // New file — close any previous renderer and open the new one.
+        closePdfRenderer()
+        val file = File(path)
+        if (!file.exists()) {
+            showPdfEmptyState(getString(R.string.pdf_none_attached))
+            return
+        }
+        try {
+            val fd = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY)
+            val renderer = PdfRenderer(fd)
+            pdfFileDescriptor = fd
+            pdfRenderer = renderer
+            currentPdfPath = path
+            val width = binding.pdfRecyclerView.width.takeIf { it > 0 }
+                ?: resources.displayMetrics.widthPixels
+            binding.pdfRecyclerView.adapter = PdfPageAdapter(renderer, width)
+            binding.pdfEmptyState.visibility = View.GONE
+            binding.pdfRecyclerView.visibility = View.VISIBLE
+        } catch (e: Exception) {
+            showPdfEmptyState(getString(R.string.pdf_render_error))
+        }
+    }
+
+    private fun showPdfEmptyState(message: String) {
+        binding.pdfEmptyState.text = message
+        binding.pdfEmptyState.visibility = View.VISIBLE
+        binding.pdfRecyclerView.visibility = View.GONE
+        binding.pdfRecyclerView.adapter = null
+        closePdfRenderer()
+    }
+
+    private fun closePdfRenderer() {
+        binding.pdfRecyclerView.adapter = null
+        try { pdfRenderer?.close() } catch (_: Exception) {}
+        try { pdfFileDescriptor?.close() } catch (_: Exception) {}
+        pdfRenderer = null
+        pdfFileDescriptor = null
+        currentPdfPath = null
     }
 
     private fun setupRawSearch() {
@@ -173,16 +242,70 @@ class InvoiceDetailFragment : Fragment() {
         }
 
         binding.btnMarkPaid.setOnClickListener {
-            viewModel.selectedInvoice.value?.let { viewModel.togglePaid(it) }
+            val invoice = viewModel.selectedInvoice.value ?: return@setOnClickListener
+            playPaidBounce()
+            viewModel.togglePaid(invoice)
         }
 
         viewModel.selectedInvoice.observe(viewLifecycleOwner) { invoice ->
-            binding.btnMarkPaid.text = if (invoice?.paidAt != null) {
-                getString(R.string.mark_unpaid)
-            } else {
-                getString(R.string.mark_paid)
-            }
+            updatePaidButtonStyle(invoice?.paidAt != null)
+            updatePdfTabEnabledLook(invoice)
         }
+    }
+
+    /**
+     * Reflects paid/unpaid in the toggle button: muted-green tonal fill when paid, neutral
+     * surface-variant when open. Theme attributes are resolved via [MaterialColors] so the
+     * "open" state tracks light/dark mode correctly.
+     */
+    private fun updatePaidButtonStyle(paid: Boolean) {
+        val ctx = requireContext()
+        binding.btnMarkPaid.apply {
+            text = getString(if (paid) R.string.status_paid else R.string.status_open)
+            val bgColor = if (paid) {
+                ContextCompat.getColor(ctx, R.color.anthropic_green)
+            } else {
+                com.google.android.material.color.MaterialColors.getColor(
+                    this, com.google.android.material.R.attr.colorSurfaceVariant
+                )
+            }
+            val fgColor = if (paid) {
+                ContextCompat.getColor(ctx, R.color.white)
+            } else {
+                com.google.android.material.color.MaterialColors.getColor(
+                    this, com.google.android.material.R.attr.colorOnSurfaceVariant
+                )
+            }
+            backgroundTintList = ColorStateList.valueOf(bgColor)
+            setTextColor(fgColor)
+            iconTint = ColorStateList.valueOf(fgColor)
+            // Icon only when paid — emphasizes the "done" state without cluttering the open state.
+            icon = if (paid) ContextCompat.getDrawable(ctx, R.drawable.ic_check) else null
+        }
+    }
+
+    /** Small scale bounce to acknowledge the click before the DB write returns. */
+    private fun playPaidBounce() {
+        binding.btnMarkPaid.animate()
+            .scaleX(1.10f).scaleY(1.10f)
+            .setDuration(110)
+            .withEndAction {
+                binding.btnMarkPaid.animate()
+                    .scaleX(1f).scaleY(1f)
+                    .setDuration(110)
+                    .start()
+            }
+            .start()
+    }
+
+    /**
+     * Greys out the PDF tab label when the current invoice has no PDF attachment, so users
+     * see at a glance that the tab will only show a placeholder.
+     */
+    private fun updatePdfTabEnabledLook(invoice: com.ziesche.peppolreader.data.model.Invoice?) {
+        val path = invoice?.embeddedDocumentPath
+        val hasPdf = path != null && path.endsWith(".pdf", ignoreCase = true) && File(path).exists()
+        binding.detailTabs.getTabAt(2)?.view?.alpha = if (hasPdf) 1f else 0.4f
     }
     
     private fun observeViewModel() {
@@ -215,6 +338,9 @@ class InvoiceDetailFragment : Fragment() {
                 binding.rawXmlWebview.loadDataWithBaseURL(
                     null, rawHtml, "text/html", "UTF-8", null
                 )
+
+                // Invalidate any open PDF — loadPdfTab() will reopen when the user opens the tab.
+                closePdfRenderer()
 
                 updateAttachmentLabel()
             }
@@ -308,6 +434,7 @@ class InvoiceDetailFragment : Fragment() {
     }
 
     override fun onDestroyView() {
+        closePdfRenderer()
         super.onDestroyView()
         _binding = null
     }

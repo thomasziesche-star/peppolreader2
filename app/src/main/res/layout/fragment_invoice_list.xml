@@ -50,6 +50,54 @@
 
     </LinearLayout>
 
+    <!-- Status filter chips -->
+    <com.google.android.material.chip.ChipGroup
+        android:id="@+id/filter_chips"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        app:singleSelection="true"
+        app:selectionRequired="true"
+        app:singleLine="true"
+        app:layout_constraintTop_toBottomOf="@id/top_bar_container"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_filter_all"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/list_filter_all"
+            android:checked="true" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_filter_unpaid"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/list_filter_unpaid" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_filter_overdue"
+            style="@style/Widget.Material3.Chip.Filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/list_filter_overdue" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_filter_daterange"
+            style="@style/Widget.Material3.Chip.Assist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/list_filter_daterange"
+            android:checkable="false"
+            app:chipIcon="@drawable/ic_calendar"
+            app:chipIconVisible="true"
+            app:closeIconVisible="false" />
+
+    </com.google.android.material.chip.ChipGroup>
+
     <!-- Empty state -->
     <LinearLayout
         android:id="@+id/empty_state"
@@ -61,7 +109,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_bar_container">
+        app:layout_constraintTop_toBottomOf="@id/filter_chips">
 
         <ImageView
             android:layout_width="120dp"
@@ -100,7 +148,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/top_bar_container"
+        app:layout_constraintTop_toBottomOf="@id/filter_chips"
         tools:listitem="@layout/item_invoice" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

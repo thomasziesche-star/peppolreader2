@@ -13,8 +13,12 @@ import com.ziesche.peppolreader.data.model.Invoice
 import com.ziesche.peppolreader.databinding.FragmentInvoiceListBinding
 import com.ziesche.peppolreader.parser.ZugferdExtractor
 import com.ziesche.peppolreader.util.MimeTypes
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 class InvoiceListFragment : Fragment() {
 
@@ -183,6 +187,32 @@ class InvoiceListFragment : Fragment() {
                 return true
             }
         })
+
+        // Status filter chips. `selectionRequired=true` in XML guarantees one chip is always checked.
+        // The date-range chip is non-checkable (Assist style) — `checkedIds` ignores it.
+        binding.filterChips.setOnCheckedStateChangeListener { _, checkedIds ->
+            val filter = when (checkedIds.firstOrNull()) {
+                R.id.chip_filter_unpaid -> InvoiceViewModel.StatusFilter.UNPAID
+                R.id.chip_filter_overdue -> InvoiceViewModel.StatusFilter.OVERDUE
+                else -> InvoiceViewModel.StatusFilter.ALL
+            }
+            viewModel.setStatusFilter(filter)
+        }
+
+        // Date-range chip — tap to open picker, close-icon clears the active range.
+        binding.chipFilterDaterange.setOnClickListener { showDateRangePicker() }
+        binding.chipFilterDaterange.setOnCloseIconClickListener { viewModel.setDateRange(null) }
+        // Sync chip UI with the (possibly retained) ViewModel state after rotation/return.
+        viewModel.statusFilter.value?.let { current ->
+            val targetId = when (current) {
+                InvoiceViewModel.StatusFilter.UNPAID -> R.id.chip_filter_unpaid
+                InvoiceViewModel.StatusFilter.OVERDUE -> R.id.chip_filter_overdue
+                InvoiceViewModel.StatusFilter.ALL -> R.id.chip_filter_all
+            }
+            if (binding.filterChips.checkedChipId != targetId) {
+                binding.filterChips.check(targetId)
+            }
+        }
     }
     
     private fun observeViewModel() {
@@ -190,6 +220,10 @@ class InvoiceListFragment : Fragment() {
             adapter.submitList(invoices)
             updateEmptyState(invoices.isEmpty())
             binding.invoiceCounter.text = invoices.size.toString()
+        }
+
+        viewModel.dateRange.observe(viewLifecycleOwner) { range ->
+            updateDateRangeChip(range)
         }
         
         viewModel.error.observe(viewLifecycleOwner) { error ->
@@ -269,6 +303,58 @@ class InvoiceListFragment : Fragment() {
             }
         }
         return result ?: "unknown.xml"
+    }
+
+    /**
+     * Opens MaterialDatePicker in range-mode. If a range is already active, the picker
+     * opens pre-selected on those bounds — otherwise no defaults, the user picks freely.
+     * UTC-based, as MaterialDatePicker requires its selection in UTC millis.
+     */
+    private fun showDateRangePicker() {
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+            .setTitleText(R.string.list_filter_daterange_title)
+
+        viewModel.dateRange.value?.let { range ->
+            val isoUtc = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply {
+                timeZone = TimeZone.getTimeZone("UTC")
+            }
+            val from = isoUtc.parse(range.fromIso)?.time
+            val to = isoUtc.parse(range.toIso)?.time
+            if (from != null && to != null) {
+                builder.setSelection(androidx.core.util.Pair(from, to))
+            }
+        }
+
+        val picker = builder.build()
+        picker.addOnPositiveButtonClickListener { selection ->
+            val isoUtc = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply {
+                timeZone = TimeZone.getTimeZone("UTC")
+            }
+            val fromIso = isoUtc.format(java.util.Date(selection.first))
+            val toIso = isoUtc.format(java.util.Date(selection.second))
+            viewModel.setDateRange(InvoiceViewModel.DateRange(fromIso, toIso))
+        }
+        picker.show(parentFragmentManager, "daterange_picker")
+    }
+
+    /** Toggles the chip between "Zeitraum" hint and "01.01.2024 – 31.03.2024" with close icon. */
+    private fun updateDateRangeChip(range: InvoiceViewModel.DateRange?) {
+        val chip = binding.chipFilterDaterange
+        if (range == null) {
+            chip.text = getString(R.string.list_filter_daterange)
+            chip.isCloseIconVisible = false
+            chip.isChecked = false
+        } else {
+            val isoUtc = SimpleDateFormat("yyyy-MM-dd", Locale.US).apply {
+                timeZone = TimeZone.getTimeZone("UTC")
+            }
+            val display = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
+            val from = isoUtc.parse(range.fromIso)?.let { display.format(it) } ?: range.fromIso
+            val to = isoUtc.parse(range.toIso)?.let { display.format(it) } ?: range.toIso
+            chip.text = "$from – $to"
+            chip.isCloseIconVisible = true
+            chip.isChecked = true
+        }
     }
 
     override fun onDestroyView() {

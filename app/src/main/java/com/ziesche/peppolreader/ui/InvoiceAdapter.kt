@@ -61,6 +61,11 @@ class InvoiceAdapter(
                     formatBadge.visibility = android.view.View.GONE
                 }
 
+                // Paid badge — only shown when invoice is settled.
+                paidChip.visibility =
+                    if (invoice.paidAt != null) android.view.View.VISIBLE
+                    else android.view.View.GONE
+
                 // Credit-note chip + amount sign
                 val isCreditNote = DocumentType.isCreditNote(invoice.documentTypeCode)
                 creditNoteChip.visibility =

@@ -39,33 +39,89 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     // Search Query
     private val _searchQuery = MutableLiveData("")
 
+    /** Status filter chips above the list. Session-scoped, not persisted. */
+    enum class StatusFilter { ALL, UNPAID, OVERDUE }
+    private val _statusFilter = MutableLiveData(StatusFilter.ALL)
+    val statusFilter: LiveData<StatusFilter> = _statusFilter
+
+    /**
+     * Optional date range filter on `issueDate` (ISO yyyy-MM-dd, inclusive).
+     * Null = no range filter. Session-scoped, not persisted.
+     */
+    data class DateRange(val fromIso: String, val toIso: String)
+    private val _dateRange = MutableLiveData<DateRange?>(null)
+    val dateRange: LiveData<DateRange?> = _dateRange
+
     // Chart Data
     val monthlyExpenses = invoiceDao.getMonthlyExpenses()
     val topSuppliers = invoiceDao.getTopSuppliers()
-    
-    // Filtered Invoices (using MediatorLiveData to combine DB results and Search Query)
+
+    // Filtered Invoices (combines DB results, search query, status, date range)
     val allInvoices = androidx.lifecycle.MediatorLiveData<List<Invoice>>().apply {
-        addSource(allInvoicesFromDb) { invoices ->
-            value = filterInvoices(invoices, _searchQuery.value)
+        val refresh = {
+            value = filterInvoices(
+                allInvoicesFromDb.value,
+                _searchQuery.value,
+                _statusFilter.value,
+                _dateRange.value
+            )
         }
-        addSource(_searchQuery) { query ->
-            value = filterInvoices(allInvoicesFromDb.value, query)
-        }
+        addSource(allInvoicesFromDb) { refresh() }
+        addSource(_searchQuery) { refresh() }
+        addSource(_statusFilter) { refresh() }
+        addSource(_dateRange) { refresh() }
     }
-    
-    private fun filterInvoices(invoices: List<Invoice>?, query: String?): List<Invoice> {
-        val list = invoices ?: emptyList()
-        if (query.isNullOrBlank()) return list
-        
-        val q = query.trim().lowercase()
-        return list.filter { 
-            it.supplierName.lowercase().contains(q) || 
-            it.invoiceId.lowercase().contains(q) 
+
+    private fun filterInvoices(
+        invoices: List<Invoice>?,
+        query: String?,
+        status: StatusFilter?,
+        range: DateRange?
+    ): List<Invoice> {
+        var list = invoices ?: return emptyList()
+
+        // Status filter
+        when (status ?: StatusFilter.ALL) {
+            StatusFilter.ALL -> { /* no-op */ }
+            StatusFilter.UNPAID -> list = list.filter { it.paidAt == null }
+            StatusFilter.OVERDUE -> {
+                val today = java.time.LocalDate.now().toString() // ISO yyyy-MM-dd, lexically comparable
+                list = list.filter {
+                    it.paidAt == null && !it.dueDate.isNullOrBlank() && it.dueDate <= today
+                }
+            }
         }
+
+        // Date range on issueDate. ISO yyyy-MM-dd is lexically comparable.
+        if (range != null) {
+            list = list.filter {
+                it.issueDate.isNotBlank() &&
+                    it.issueDate >= range.fromIso &&
+                    it.issueDate <= range.toIso
+            }
+        }
+
+        // Text search
+        if (!query.isNullOrBlank()) {
+            val q = query.trim().lowercase()
+            list = list.filter {
+                it.supplierName.lowercase().contains(q) ||
+                    it.invoiceId.lowercase().contains(q)
+            }
+        }
+        return list
     }
-    
+
     fun setSearchQuery(query: String) {
         _searchQuery.value = query
+    }
+
+    fun setStatusFilter(filter: StatusFilter) {
+        if (_statusFilter.value != filter) _statusFilter.value = filter
+    }
+
+    fun setDateRange(range: DateRange?) {
+        if (_dateRange.value != range) _dateRange.value = range
     }
     
     // Currently selected invoice

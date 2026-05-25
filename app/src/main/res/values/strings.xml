@@ -12,6 +12,11 @@
     <!-- Invoice List -->
     <string name="invoice_item_cd">Invoice %1$s</string>
     <string name="search_hint">Search (Company, No.)...</string>
+    <string name="list_filter_all">All</string>
+    <string name="list_filter_unpaid">Unpaid</string>
+    <string name="list_filter_overdue">Overdue</string>
+    <string name="list_filter_daterange">Date range</string>
+    <string name="list_filter_daterange_title">Select date range</string>
     
     <!-- Invoice Detail -->
     <string name="invoice_detail">Invoice Details</string>
@@ -174,15 +179,19 @@
     <string name="notif_channel_desc">Reminders about upcoming payment due dates.</string>
     <string name="notif_due_title">Invoice due soon</string>
     <string name="notif_due_text">%1$s — due %2$s (payable: %3$s)</string>
-    <string name="mark_paid">Mark as paid</string>
-    <string name="mark_unpaid">Mark as unpaid</string>
+    <string name="status_open">Open</string>
+    <string name="status_paid">Paid</string>
+    <string name="list_badge_paid">Paid</string>
     <string name="paid_on">Paid on %1$s</string>
 
     <!-- Detail view tabs and raw-XML search -->
     <string name="tab_rendered">Invoice</string>
     <string name="tab_raw_xml">Raw data</string>
+    <string name="tab_original_pdf">PDF</string>
     <string name="search_xml_hint">Search XML…</string>
     <string name="search_no_matches">No matches</string>
+    <string name="pdf_none_attached">No PDF attached</string>
+    <string name="pdf_render_error">Could not open PDF</string>
 
     <!-- File picker post-filter feedback -->
     <plurals name="import_skipped_files">

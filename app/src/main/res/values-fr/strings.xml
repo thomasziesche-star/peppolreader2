@@ -12,6 +12,11 @@
     <!-- Invoice List -->
     <string name="invoice_item_cd">Facture %1$s</string>
     <string name="search_hint">Rechercher (société, n°)…</string>
+    <string name="list_filter_all">Toutes</string>
+    <string name="list_filter_unpaid">Impayées</string>
+    <string name="list_filter_overdue">En retard</string>
+    <string name="list_filter_daterange">Période</string>
+    <string name="list_filter_daterange_title">Sélectionner la période</string>
 
     <!-- Invoice Detail -->
     <string name="invoice_detail">Détails de la facture</string>
@@ -174,15 +179,19 @@
     <string name="notif_channel_desc">Rappels concernant les échéances de paiement à venir.</string>
     <string name="notif_due_title">Facture bientôt due</string>
     <string name="notif_due_text">%1$s — échéance %2$s (à payer : %3$s)</string>
-    <string name="mark_paid">Marquer comme payée</string>
-    <string name="mark_unpaid">Marquer comme non payée</string>
+    <string name="status_open">Ouverte</string>
+    <string name="status_paid">Payée</string>
+    <string name="list_badge_paid">Payée</string>
     <string name="paid_on">Payée le %1$s</string>
 
     <!-- Detail view tabs and raw-XML search -->
     <string name="tab_rendered">Facture</string>
     <string name="tab_raw_xml">Données brutes</string>
+    <string name="tab_original_pdf">PDF</string>
     <string name="search_xml_hint">Rechercher dans le XML…</string>
     <string name="search_no_matches">Aucun résultat</string>
+    <string name="pdf_none_attached">Aucun PDF joint</string>
+    <string name="pdf_render_error">Impossible d\'ouvrir le PDF</string>
 
     <!-- File picker post-filter feedback -->
     <plurals name="import_skipped_files">
