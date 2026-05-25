@@ -85,29 +85,35 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     val message: LiveData<String?> = _message
     
     /**
-     * Parse XML content and save to database
+     * One file selected for import. [originalPdfBytes] is set when the file was a
+     * ZUGFeRD / Factur-X hybrid PDF — those bytes are stored as the human-readable
+     * attachment alongside the parsed invoice data.
      */
+    data class ImportItem(
+        val fileName: String,
+        val xmlContent: String,
+        val originalPdfBytes: ByteArray? = null
+    )
+
     /**
      * Import multiple invoices
      */
-    fun importInvoices(files: List<Pair<String, String>>) {
+    fun importInvoices(files: List<ImportItem>) {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
-            
+
             var successCount = 0
             var duplicateCount = 0
             var errorCount = 0
-            
+
             val total = files.size
-            
+
             // If only one file, we want compatible behavior (open it)
             // If multiple, just summary.
-            
+
             val results = withContext(Dispatchers.IO) {
-                files.map { (fileName, xmlContent) ->
-                    processSingleInvoice(xmlContent, fileName)
-                }
+                files.map { item -> processSingleInvoice(item) }
             }
             
             var lastSuccessInvoice: Invoice? = null
@@ -166,7 +172,9 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
         data class Error(val message: String) : ImportResult()
     }
 
-    private suspend fun processSingleInvoice(xmlContent: String, fileName: String): ImportResult {
+    private suspend fun processSingleInvoice(item: ImportItem): ImportResult {
+        val xmlContent = item.xmlContent
+        val fileName = item.fileName
         return try {
             val parsed = parseByFormat(xmlContent)
                 ?: return ImportResult.Error("Unknown invoice format")
@@ -176,7 +184,30 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
             if (existing != null) {
                 return ImportResult.Duplicate(existing)
             }
-            
+
+            // Prefer an XML-embedded PDF (UBL AdditionalDocumentReference). When the source
+            // was a ZUGFeRD/Factur-X hybrid PDF and no XML-embedded PDF is present, store the
+            // original PDF itself as the readable attachment.
+            val xmlEmbeddedPath = saveEmbeddedDocument(parsed, getApplication())
+            val attachmentFilename: String?
+            val attachmentPath: String?
+            if (xmlEmbeddedPath != null) {
+                attachmentFilename = parsed.embeddedDocument?.filename
+                attachmentPath = xmlEmbeddedPath
+            } else if (item.originalPdfBytes != null) {
+                val saved = saveOriginalPdf(
+                    fileName = fileName,
+                    invoiceId = parsed.invoice.id,
+                    pdfBytes = item.originalPdfBytes,
+                    context = getApplication()
+                )
+                attachmentFilename = saved?.first
+                attachmentPath = saved?.second
+            } else {
+                attachmentFilename = null
+                attachmentPath = null
+            }
+
             // Create Invoice entity
             val invoice = Invoice(
                 invoiceId = parsed.invoice.id,
@@ -201,16 +232,48 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 payableAmount = parsed.totals.payableAmount,
                 xmlContent = xmlContent,
                 fileName = fileName,
-                embeddedDocumentFilename = parsed.embeddedDocument?.filename,
-                embeddedDocumentPath = saveEmbeddedDocument(parsed, getApplication()),
-                documentTypeCode = parsed.documentTypeCode
+                embeddedDocumentFilename = attachmentFilename,
+                embeddedDocumentPath = attachmentPath,
+                documentTypeCode = parsed.documentTypeCode,
+                formatLabel = parsed.formatLabel
             )
-            
+
             invoiceDao.insertInvoice(invoice)
             ImportResult.Success(invoice)
-            
+
         } catch (e: Exception) {
             ImportResult.Error(e.message ?: "Unknown error")
+        }
+    }
+
+    /**
+     * Persists the bytes of an original ZUGFeRD/Factur-X PDF into the app's attachments dir.
+     * @return (displayedFilename, absoluteOnDiskPath) on success, null on failure.
+     */
+    private fun saveOriginalPdf(
+        fileName: String,
+        invoiceId: String,
+        pdfBytes: ByteArray,
+        context: Context
+    ): Pair<String, String>? {
+        return try {
+            val attachmentsDir = File(context.filesDir, "attachments")
+            if (!attachmentsDir.exists()) attachmentsDir.mkdirs()
+
+            val displayName = if (fileName.endsWith(".pdf", ignoreCase = true)) {
+                fileName
+            } else {
+                "$fileName.pdf"
+            }
+            val safeOnDisk = "original-${
+                invoiceId.replace(Regex("[^a-zA-Z0-9._-]"), "_")
+            }-${System.currentTimeMillis()}.pdf"
+            val outFile = File(attachmentsDir, safeOnDisk)
+            FileOutputStream(outFile).use { it.write(pdfBytes) }
+            displayName to outFile.absolutePath
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
         }
     }
 
@@ -219,7 +282,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
      * Keeping API specifically for single file calls if any, but mapping to new logic.
      */
     fun parseAndSaveInvoice(xmlContent: String, fileName: String) {
-        importInvoices(listOf(Pair(fileName, xmlContent)))
+        importInvoices(listOf(ImportItem(fileName, xmlContent)))
     }
     
     /**

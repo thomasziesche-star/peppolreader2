@@ -47,5 +47,7 @@ data class Invoice(
     val embeddedDocumentPath: String? = null,
     val createdAt: Long = System.currentTimeMillis(),
     /** UN/EDIFACT 1001 type code: "380"=invoice, "381"=credit note, "384"=corrected, … */
-    val documentTypeCode: String? = null
+    val documentTypeCode: String? = null,
+    /** Human-readable source-format profile, e.g. "Peppol BIS 3.0", "XRechnung (UBL)", "ZUGFeRD". */
+    val formatLabel: String? = null
 )

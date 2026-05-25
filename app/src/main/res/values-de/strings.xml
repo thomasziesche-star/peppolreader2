@@ -109,4 +109,16 @@
 
     <!-- Version footer for help/info dialogs -->
     <string name="version_label">Version %1$s</string>
+
+    <!-- Detail view tabs and raw-XML search -->
+    <string name="tab_rendered">Rechnung</string>
+    <string name="tab_raw_xml">Rohdaten</string>
+    <string name="search_xml_hint">XML durchsuchen…</string>
+    <string name="search_no_matches">Keine Treffer</string>
+
+    <!-- File picker post-filter feedback -->
+    <plurals name="import_skipped_files">
+        <item quantity="one">%d Datei übersprungen – nur PDF und XML werden unterstützt</item>
+        <item quantity="other">%d Dateien übersprungen – nur PDF und XML werden unterstützt</item>
+    </plurals>
 </resources>

@@ -1,7 +1,5 @@
 package com.ziesche.peppolreader.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,37 +23,65 @@ class InvoiceListFragment : Fragment() {
     private val viewModel: InvoiceViewModel by activityViewModels()
     private lateinit var adapter: InvoiceAdapter
     
-    // File picker launcher
+    /**
+     * MIME types accepted by the picker. The DocumentsUI / Storage Access Framework picker
+     * uses this list to filter out everything else (JPEGs, PNGs, etc.) before the user sees it.
+     */
+    private val acceptedMimeTypes = arrayOf(
+        "application/pdf",
+        "application/xml",
+        "text/xml"
+    )
+
+    /**
+     * Modern multi-document picker. Replaces the old ACTION_OPEN_DOCUMENT + EXTRA_MIME_TYPES
+     * intent, which some file managers ignored and ended up showing every file.
+     *
+     * Some OEM pickers (Samsung Files, Xiaomi Mi File Manager, …) ignore the MIME filter
+     * altogether and surface everything. To keep the UX clean, we apply a second filter on
+     * the returned URIs and inform the user via a Snackbar how many files were skipped.
+     */
     private val filePickerLauncher = registerForActivityResult(
-        ActivityResultContracts.StartActivityForResult()
-    ) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            val data = result.data
-            val filesToImport = mutableListOf<Pair<String, String>>()
-            
-            try {
-                // Check for multiple selection
-                if (data?.clipData != null) {
-                    val count = data.clipData!!.itemCount
-                    for (i in 0 until count) {
-                        val uri = data.clipData!!.getItemAt(i).uri
-                        processUri(uri)?.let { filesToImport.add(it) }
-                    }
-                } else if (data?.data != null) {
-                    // Single selection
-                    processUri(data.data!!)?.let { filesToImport.add(it) }
+        ActivityResultContracts.OpenMultipleDocuments()
+    ) { uris ->
+        if (uris.isNullOrEmpty()) return@registerForActivityResult
+        val filesToImport = mutableListOf<InvoiceViewModel.ImportItem>()
+        var skipped = 0
+        try {
+            uris.forEach { uri ->
+                if (!isAcceptedFile(uri)) {
+                    skipped++
+                    return@forEach
                 }
-                
-                if (filesToImport.isNotEmpty()) {
-                    viewModel.importInvoices(filesToImport)
-                }
-            } catch (e: Exception) {
-                Snackbar.make(binding.root, R.string.error_parsing, Snackbar.LENGTH_LONG).show()
+                processUri(uri)?.let { filesToImport.add(it) }
             }
+            if (filesToImport.isNotEmpty()) {
+                viewModel.importInvoices(filesToImport)
+            }
+            if (skipped > 0) {
+                val msg = resources.getQuantityString(
+                    R.plurals.import_skipped_files, skipped, skipped
+                )
+                Snackbar.make(binding.root, msg, Snackbar.LENGTH_LONG).show()
+            }
+        } catch (e: Exception) {
+            Snackbar.make(binding.root, R.string.error_parsing, Snackbar.LENGTH_LONG).show()
         }
     }
-    
-    private fun processUri(uri: android.net.Uri): Pair<String, String>? {
+
+    /**
+     * Returns true if [uri] looks like a PDF or XML — checked via MIME type first, with a
+     * file-extension fallback for content providers that don't report a meaningful MIME.
+     */
+    private fun isAcceptedFile(uri: android.net.Uri): Boolean {
+        val mime = requireContext().contentResolver.getType(uri)
+        if (mime in acceptedMimeTypes) return true
+        val name = getFileName(uri)
+        return name.endsWith(".pdf", ignoreCase = true) ||
+            name.endsWith(".xml", ignoreCase = true)
+    }
+
+    private fun processUri(uri: android.net.Uri): InvoiceViewModel.ImportItem? {
         return try {
             val fileName = getFileName(uri)
             if (isPdf(uri, fileName)) {
@@ -63,7 +89,9 @@ class InvoiceListFragment : Fragment() {
             } else {
                 val inputStream = requireContext().contentResolver.openInputStream(uri)
                 val xmlContent = inputStream?.bufferedReader()?.use { it.readText() } ?: ""
-                if (xmlContent.isNotEmpty()) Pair(fileName, xmlContent) else null
+                if (xmlContent.isNotEmpty()) {
+                    InvoiceViewModel.ImportItem(fileName, xmlContent)
+                } else null
             }
         } catch (e: Exception) {
             null
@@ -76,11 +104,12 @@ class InvoiceListFragment : Fragment() {
         return fileName.endsWith(".pdf", ignoreCase = true)
     }
 
-    private fun processPdfUri(uri: android.net.Uri, fileName: String): Pair<String, String>? {
+    private fun processPdfUri(uri: android.net.Uri, fileName: String): InvoiceViewModel.ImportItem? {
         val stream = requireContext().contentResolver.openInputStream(uri) ?: return null
         return stream.use { input ->
             when (val result = ZugferdExtractor().extract(input)) {
-                is ZugferdExtractor.Result.Success -> Pair(fileName, result.xml)
+                is ZugferdExtractor.Result.Success ->
+                    InvoiceViewModel.ImportItem(fileName, result.xml, result.originalPdf)
                 ZugferdExtractor.Result.Encrypted -> {
                     showSnackbar(getString(R.string.error_pdf_encrypted))
                     null
@@ -222,13 +251,7 @@ class InvoiceListFragment : Fragment() {
      * Called from MainActivity to open file picker
      */
     fun openFilePicker() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "*/*"  // Accept any file type, we'll check for XML/PDF
-            putExtra(Intent.EXTRA_MIME_TYPES, arrayOf("text/xml", "application/xml", "application/pdf"))
-            putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-        }
-        filePickerLauncher.launch(intent)
+        filePickerLauncher.launch(acceptedMimeTypes)
     }
 
     private fun getFileName(uri: android.net.Uri): String {

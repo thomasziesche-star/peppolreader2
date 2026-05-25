@@ -11,6 +11,8 @@ import android.os.Environment
 import android.print.PrintAttributes
 import android.print.PrintManager
 import android.provider.MediaStore
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -20,12 +22,15 @@ import android.webkit.WebViewClient
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import com.ziesche.peppolreader.R
 import com.ziesche.peppolreader.databinding.FragmentInvoiceDetailBinding
 import com.ziesche.peppolreader.pdf.PdfGenerator
-import com.google.android.material.snackbar.Snackbar
+import com.ziesche.peppolreader.pdf.XmlPrettyPrinter
 import java.io.File
 import java.io.FileOutputStream
+import org.json.JSONObject
 
 class InvoiceDetailFragment : Fragment() {
 
@@ -34,7 +39,12 @@ class InvoiceDetailFragment : Fragment() {
     
     private val viewModel: InvoiceViewModel by activityViewModels()
     private lateinit var pdfGenerator: PdfGenerator
+    private val xmlPrettyPrinter = XmlPrettyPrinter()
     private var currentHtml: String = ""
+    /** True once the raw-XML WebView has finished loading its page. */
+    private var rawXmlReady: Boolean = false
+    /** Last search query; applied after the page finishes loading. */
+    private var pendingRawXmlQuery: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,10 +57,13 @@ class InvoiceDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        
+
         pdfGenerator = PdfGenerator(requireContext())
-        
+
         setupWebView()
+        setupRawXmlWebView()
+        setupTabs()
+        setupRawSearch()
         setupButtons()
         observeViewModel()
     }
@@ -91,7 +104,65 @@ class InvoiceDetailFragment : Fragment() {
             setBackgroundColor(resources.getColor(android.R.color.transparent, null))
         }
     }
-    
+
+    private fun setupRawXmlWebView() {
+        binding.rawXmlWebview.apply {
+            settings.apply {
+                @android.annotation.SuppressLint("SetJavaScriptEnabled")
+                javaScriptEnabled = true // Needed for the in-page live filter
+                loadWithOverviewMode = true
+                useWideViewPort = false
+                builtInZoomControls = true
+                displayZoomControls = false
+            }
+            webViewClient = object : WebViewClient() {
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    rawXmlReady = true
+                    val currentQuery = binding.rawSearchInput.text?.toString().orEmpty()
+                    if (currentQuery.isNotEmpty()) applyRawSearch(currentQuery)
+                }
+            }
+            setBackgroundColor(resources.getColor(android.R.color.transparent, null))
+        }
+    }
+
+    private fun setupTabs() {
+        binding.detailTabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                val rawSelected = tab?.position == 1
+                binding.invoiceWebview.visibility = if (rawSelected) View.GONE else View.VISIBLE
+                binding.rawXmlContainer.visibility = if (rawSelected) View.VISIBLE else View.GONE
+                // Attachment label only makes sense in the rendered view
+                if (rawSelected) {
+                    binding.detailAttachmentLabel.visibility = View.GONE
+                } else {
+                    updateAttachmentLabel()
+                }
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {}
+            override fun onTabReselected(tab: TabLayout.Tab?) {}
+        })
+    }
+
+    private fun setupRawSearch() {
+        binding.rawSearchInput.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val query = s?.toString().orEmpty()
+                pendingRawXmlQuery = query
+                if (rawXmlReady) applyRawSearch(query)
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+    }
+
+    /** Calls the in-page JS filter with the current query. JSONObject.quote escapes safely. */
+    private fun applyRawSearch(query: String) {
+        val js = "applyFilter(${JSONObject.quote(query)});"
+        binding.rawXmlWebview.evaluateJavascript(js, null)
+    }
+
     private fun setupButtons() {
         binding.btnDownloadPdf.setOnClickListener {
             savePdf()
@@ -107,11 +178,11 @@ class InvoiceDetailFragment : Fragment() {
             invoice?.let {
                 binding.loadingIndicator.visibility = View.VISIBLE
                 val fileName = viewModel.selectedInvoice.value?.fileName ?: ""
-                
+
                 // Detect Dark Mode
                 val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
                 val isDarkMode = currentNightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
-                
+
                 currentHtml = pdfGenerator.generateHtml(it, fileName, isDarkMode)
                 binding.invoiceWebview.loadDataWithBaseURL(
                     null,
@@ -120,24 +191,52 @@ class InvoiceDetailFragment : Fragment() {
                     "UTF-8",
                     null
                 )
-                
-                // Show attachment label if present
-                if (!invoice.embeddedDocument?.filename.isNullOrEmpty()) {
-                    binding.detailAttachmentLabel.text = "attachment: ${invoice.embeddedDocument?.filename}"
-                    binding.detailAttachmentLabel.visibility = View.VISIBLE
-                    binding.detailAttachmentLabel.setOnClickListener {
-                        viewModel.selectedInvoice.value?.let { selectedInvoice ->
-                            viewModel.openAttachment(selectedInvoice, requireContext())
-                        }
-                    }
-                } else {
-                    binding.detailAttachmentLabel.visibility = View.GONE
-                }
+
+                // Raw XML tab
+                val rawXml = viewModel.selectedInvoice.value?.xmlContent.orEmpty()
+                rawXmlReady = false
+                val rawHtml = xmlPrettyPrinter.toHtml(
+                    rawXml,
+                    isDarkMode,
+                    getString(R.string.search_no_matches)
+                )
+                binding.rawXmlWebview.loadDataWithBaseURL(
+                    null, rawHtml, "text/html", "UTF-8", null
+                )
+
+                updateAttachmentLabel()
             }
         }
-        
+
         viewModel.isLoading.observe(viewLifecycleOwner) { isLoading ->
             binding.loadingIndicator.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+    }
+
+    /**
+     * Renders the attachment label. Two sources, in priority order:
+     *   1) XML-embedded PDF (UBL AdditionalDocumentReference) -> parsed.embeddedDocument
+     *   2) Original ZUGFeRD/Factur-X PDF -> stored on the Invoice entity
+     * The label only shows on the rendered-invoice tab.
+     */
+    private fun updateAttachmentLabel() {
+        if (binding.detailTabs.selectedTabPosition == 1) {
+            binding.detailAttachmentLabel.visibility = View.GONE
+            return
+        }
+        val parsed = viewModel.parsedInvoice.value
+        val selected = viewModel.selectedInvoice.value
+        val attachmentName = selected?.embeddedDocumentFilename
+            ?: parsed?.embeddedDocument?.filename
+        if (!attachmentName.isNullOrEmpty()) {
+            binding.detailAttachmentLabel.text =
+                getString(R.string.attachment_label, attachmentName)
+            binding.detailAttachmentLabel.visibility = View.VISIBLE
+            binding.detailAttachmentLabel.setOnClickListener {
+                selected?.let { viewModel.openAttachment(it, requireContext()) }
+            }
+        } else {
+            binding.detailAttachmentLabel.visibility = View.GONE
         }
     }
     

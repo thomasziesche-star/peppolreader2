@@ -15,8 +15,8 @@ android {
         applicationId = "com.ziesche.peppolreader"
         minSdk = 28
         targetSdk = 35
-        versionCode = 6
-        versionName = "2.9"
+        versionCode = 8
+        versionName = "3.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -101,6 +101,7 @@ tasks.register("archiveRelease") {
 
 dependencies {
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)

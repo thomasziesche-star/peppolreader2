@@ -4,6 +4,7 @@ import com.tom_roush.pdfbox.pdmodel.PDDocument
 import com.tom_roush.pdfbox.pdmodel.common.PDNameTreeNode
 import com.tom_roush.pdfbox.pdmodel.common.filespecification.PDComplexFileSpecification
 import com.tom_roush.pdfbox.pdmodel.common.filespecification.PDEmbeddedFile
+import java.io.ByteArrayInputStream
 import java.io.InputStream
 
 /**
@@ -18,15 +19,42 @@ import java.io.InputStream
 class ZugferdExtractor {
 
     sealed class Result {
-        data class Success(val xml: String, val embeddedName: String) : Result()
+        /**
+         * @param xml          Extracted UBL or CII invoice XML.
+         * @param embeddedName File name the XML attachment had inside the PDF.
+         * @param originalPdf  Raw bytes of the source PDF, so it can be stored as the
+         *                     human-readable attachment alongside the parsed data.
+         */
+        data class Success(
+            val xml: String,
+            val embeddedName: String,
+            val originalPdf: ByteArray
+        ) : Result() {
+            // ByteArray equality is identity by default; override so data class equality stays predictable.
+            override fun equals(other: Any?): Boolean {
+                if (this === other) return true
+                if (other !is Success) return false
+                return xml == other.xml && embeddedName == other.embeddedName &&
+                    originalPdf.contentEquals(other.originalPdf)
+            }
+
+            override fun hashCode(): Int {
+                var result = xml.hashCode()
+                result = 31 * result + embeddedName.hashCode()
+                result = 31 * result + originalPdf.contentHashCode()
+                return result
+            }
+        }
         data object NoEmbeddedXml : Result()
         data object Encrypted : Result()
         data class Error(val message: String) : Result()
     }
 
     fun extract(input: InputStream): Result {
+        // Read once into memory so we can both parse with PDFBox and keep the original bytes.
+        val pdfBytes = input.readBytes()
         return try {
-            PDDocument.load(input).use { document ->
+            PDDocument.load(ByteArrayInputStream(pdfBytes)).use { document ->
                 if (document.isEncrypted) return Result.Encrypted
 
                 val catalog = document.documentCatalog ?: return Result.NoEmbeddedXml
@@ -47,7 +75,7 @@ class ZugferdExtractor {
 
                 val embedded = pickEmbedded(match.value) ?: return Result.NoEmbeddedXml
                 val xml = embedded.toByteArray().toString(Charsets.UTF_8)
-                Result.Success(xml, match.key)
+                Result.Success(xml, match.key, pdfBytes)
             }
         } catch (e: Exception) {
             Result.Error(e.message ?: e.javaClass.simpleName)

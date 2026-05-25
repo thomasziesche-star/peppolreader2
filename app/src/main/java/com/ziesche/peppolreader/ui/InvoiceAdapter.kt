@@ -2,6 +2,8 @@ package com.ziesche.peppolreader.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.content.res.ColorStateList
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -44,6 +46,21 @@ class InvoiceAdapter(
                 supplierName.text = invoice.supplierName
                 customerName.text = "→ ${invoice.customerName}"
 
+                // Format badge (e.g. "Peppol", "XRechnung", "ZUGFeRD")
+                val badgeStyle = FormatBadge.forLabel(invoice.formatLabel)
+                if (badgeStyle != null) {
+                    formatBadge.text = badgeStyle.label
+                    formatBadge.backgroundTintList = ColorStateList.valueOf(
+                        ContextCompat.getColor(root.context, badgeStyle.bgColorRes)
+                    )
+                    formatBadge.setTextColor(
+                        ContextCompat.getColor(root.context, badgeStyle.fgColorRes)
+                    )
+                    formatBadge.visibility = android.view.View.VISIBLE
+                } else {
+                    formatBadge.visibility = android.view.View.GONE
+                }
+
                 // Credit-note chip + amount sign
                 val isCreditNote = DocumentType.isCreditNote(invoice.documentTypeCode)
                 creditNoteChip.visibility =
@@ -68,9 +85,12 @@ class InvoiceAdapter(
                     invoiceDate.text = invoice.issueDate
                 }
                 
-                // Attachment label
+                // Attachment label (XML-embedded PDF or original ZUGFeRD/Factur-X PDF)
                 if (!invoice.embeddedDocumentFilename.isNullOrEmpty()) {
-                    attachmentLabel.text = "attachment: ${invoice.embeddedDocumentFilename}"
+                    attachmentLabel.text = root.context.getString(
+                        com.ziesche.peppolreader.R.string.attachment_label,
+                        invoice.embeddedDocumentFilename
+                    )
                     attachmentLabel.visibility = android.view.View.VISIBLE
                     attachmentLabel.setOnClickListener { onAttachmentClick(invoice) }
                 } else {
