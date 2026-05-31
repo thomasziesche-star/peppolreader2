@@ -19,3 +19,8 @@ local.properties
 
 # Release archives (large binaries, kept locally per version)
 release-archive/
+
+# Signing material — never commit
+keystore.properties
+*.jks
+release.jks

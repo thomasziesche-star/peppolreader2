@@ -7,7 +7,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.ziesche.peppolreader.R
-import com.ziesche.peppolreader.data.AppDatabase
+import com.ziesche.peppolreader.data.InvoiceRepository
 import java.io.File
 import java.io.FileOutputStream
 import android.util.Base64
@@ -32,12 +32,17 @@ import kotlinx.coroutines.withContext
 
 class InvoiceViewModel(application: Application) : AndroidViewModel(application) {
     
-    private val database = AppDatabase.getDatabase(application)
-    private val invoiceDao = database.invoiceDao()
-    
+    private val repository = InvoiceRepository.from(application)
+
     // All invoices as LiveData
     // All invoices from DB
-    private val allInvoicesFromDb: LiveData<List<Invoice>> = invoiceDao.getAllInvoicesLiveData()
+    private val allInvoicesFromDb: LiveData<List<Invoice>> = repository.allInvoicesLiveData()
+
+    /**
+     * Full, unfiltered invoice set. The dashboard reads this so its own time filter is the only
+     * filter applied — the list's search/status/date-range chips must not skew the statistics.
+     */
+    val allInvoicesUnfiltered: LiveData<List<Invoice>> = allInvoicesFromDb
     
     // Search Query
     private val _searchQuery = MutableLiveData("")
@@ -56,8 +61,8 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     val dateRange: LiveData<DateRange?> = _dateRange
 
     // Chart Data
-    val monthlyExpenses = invoiceDao.getMonthlyExpenses()
-    val topSuppliers = invoiceDao.getTopSuppliers()
+    val monthlyExpenses = repository.monthlyExpenses()
+    val topSuppliers = repository.topSuppliers()
 
     // Filtered Invoices (combines DB results, search query, status, date range)
     val allInvoices = androidx.lifecycle.MediatorLiveData<List<Invoice>>().apply {
@@ -257,7 +262,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 ?: return ImportResult.Error("Unknown invoice format")
 
             // Check for duplicate
-            val existing = invoiceDao.getInvoiceByNumberAndSupplier(parsed.invoice.id, parsed.supplier.name)
+            val existing = repository.findDuplicate(parsed.invoice.id, parsed.supplier.name)
             if (existing != null) {
                 return ImportResult.Duplicate(existing)
             }
@@ -317,7 +322,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 correctionInfoJson = parsed.correctionInfo?.let { serializeCorrection(it) }
             )
 
-            invoiceDao.insertInvoice(invoice)
+            repository.insert(invoice)
             ImportResult.Success(invoice)
 
         } catch (e: Exception) {
@@ -401,7 +406,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
             _isLoading.value = true
             try {
                 val invoice = withContext(Dispatchers.IO) {
-                    invoiceDao.getInvoiceById(id)
+                    repository.getById(id)
                 }
                 if (invoice != null) {
                     selectInvoice(invoice)
@@ -423,8 +428,8 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     fun togglePaid(invoice: Invoice) {
         viewModelScope.launch {
             val newPaidAt = if (invoice.paidAt == null) System.currentTimeMillis() else null
-            withContext(Dispatchers.IO) { invoiceDao.setPaid(invoice.id, newPaidAt) }
-            val refreshed = withContext(Dispatchers.IO) { invoiceDao.getInvoiceById(invoice.id) }
+            withContext(Dispatchers.IO) { repository.setPaid(invoice.id, newPaidAt) }
+            val refreshed = withContext(Dispatchers.IO) { repository.getById(invoice.id) }
             if (refreshed != null) {
                 _selectedInvoice.value = refreshed
             }
@@ -437,7 +442,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     fun deleteInvoice(invoice: Invoice) {
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                invoiceDao.deleteInvoice(invoice)
+                repository.delete(invoice)
             }
             _message.value = str(R.string.invoice_deleted)
         }
@@ -487,13 +492,21 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                 attachmentsDir.mkdirs()
             }
             
-            val file = File(attachmentsDir, embedded.filename)
+            // The filename comes from untrusted invoice XML; strip any path
+            // components and traversal chars so it can't escape attachmentsDir.
+            val safeName = File(embedded.filename).name
+                .replace(Regex("[^a-zA-Z0-9._-]"), "_")
+                .ifBlank { "attachment-${System.currentTimeMillis()}.pdf" }
+            val file = File(attachmentsDir, safeName)
+            if (!file.canonicalPath.startsWith(attachmentsDir.canonicalPath + File.separator)) {
+                return null
+            }
             val pdfBytes = Base64.decode(embedded.base64Data, Base64.DEFAULT)
-            
+
             FileOutputStream(file).use { stream ->
                 stream.write(pdfBytes)
             }
-            
+
             file.absolutePath
         } catch (e: Exception) {
             e.printStackTrace()
@@ -524,7 +537,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
         headers: CsvExporter.Headers
     ): ExportPayload = withContext(Dispatchers.IO) {
         try {
-            val invoices = invoiceDao.getInvoicesInDateRange(fromIso, toIso)
+            val invoices = repository.getInDateRange(fromIso, toIso)
             if (invoices.isEmpty()) return@withContext ExportPayload.Empty
 
             val baseName = "PeppolReader-Export-${fromIso}_${toIso}"

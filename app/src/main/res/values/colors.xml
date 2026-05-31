@@ -77,4 +77,9 @@
     <!-- KSeF FA(3) (Poland) — light mode: warm red on cream. -->
     <color name="badge_ksef_bg">#F8D7DA</color>
     <color name="badge_ksef_fg">#8B1F2B</color>
+
+    <!-- Popup / overflow menu: frosted-glass look (semi-transparent cream + faint outline),
+         deliberately neutral so the menu no longer picks up the Material baseline purple tint. -->
+    <color name="popup_surface_translucent">#F2FCFBF7</color>
+    <color name="popup_stroke">#22141413</color>
 </resources>
