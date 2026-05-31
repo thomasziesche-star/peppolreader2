@@ -11,6 +11,12 @@
     
     <!-- Invoice List -->
     <string name="invoice_item_cd">Invoice %1$s</string>
+    <string name="cd_pdf_page">PDF page %1$d of %2$d</string>
+    <string name="cd_invoice_count">%1$d invoices</string>
+    <string name="cd_status_paid">paid</string>
+    <string name="cd_status_credit_note">credit note</string>
+    <string name="cd_mark_paid">Mark as paid</string>
+    <string name="cd_mark_open">Mark as open</string>
     <string name="search_hint">Search (Company, No.)...</string>
     <string name="list_filter_all">All</string>
     <string name="list_filter_unpaid">Unpaid</string>
@@ -30,8 +36,10 @@
     <string name="next">Next</string>
     
     <!-- Messages -->
-    <string name="error_parsing">Error reading file</string>
+    <string name="error_parsing">This file can\'t be read. Please use a valid e-invoice XML or a ZUGFeRD/Factur-X PDF.</string>
     <string name="error_pdf">Error creating PDF</string>
+    <string name="pdf_export_name">Invoice_%1$s</string>
+    <string name="share_subject">Invoice %1$s</string>
     <string name="confirm_delete">Do you really want to delete this invoice?</string>
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
@@ -114,12 +122,32 @@
     <string name="chart_monthly_title">Expenses per Month</string>
     <string name="chart_suppliers_title">Top Suppliers</string>
     <string name="chart_label_expenses">Expenses (€)</string>
+    <!-- KPI cards -->
+    <string name="kpi_total_expenses">Total expenses</string>
+    <string name="kpi_invoice_count">Invoices</string>
+    <string name="kpi_open_amount">Open</string>
+    <string name="kpi_overdue_amount">Overdue</string>
+    <string name="kpi_cd">%1$s: %2$s</string>
+    <!-- Payment status chart -->
+    <string name="chart_payment_status_title">Payment status</string>
+    <string name="legend_paid">Paid</string>
+    <string name="legend_open">Open</string>
+    <string name="legend_overdue">Overdue</string>
+    <!-- Trend chart -->
+    <string name="chart_trend_title">Expense trend</string>
+    <string name="trend_total">Total</string>
+    <string name="trend_paid">Paid</string>
+    <!-- Tax overview -->
+    <string name="tax_overview_title">Tax overview</string>
+    <string name="tax_net">Net</string>
+    <string name="tax_vat">VAT</string>
+    <string name="tax_gross">Gross</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
 
     <!-- Help Manual -->
     <string name="help_title">Help &amp; Usage</string>
-    <string name="help_message">Hi there, a few quick pointers…\n\n<b>Import invoices:</b>\nTap + and pick XML or PDF files (long-press for multi-select). You can also share files straight from your mail app into E-Invoice &amp; Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded XML is extracted, and the original PDF is kept as an attachment.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X, and Polish <b>KSeF FA(3)</b> for invoices issued in Poland.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes (incl. KSeF KOR / KOR_ZAL / KOR_ROZ) are flagged with a red chip and shown with a negative amount. KSeF correction invoices also display the original number and reason.\n\n<b>Detail view:</b>\nThree tabs: rendered invoice, raw XML (with live search), and the original PDF if attached. Use <b>Open / Paid</b> to mark an invoice as settled.\n\n<b>Filter the list:</b>\nUse the chips above the list for <i>All / Unpaid / Overdue</i>, and the date range picker to limit to a period.\n\n<b>Due-date reminders:</b>\nUnder <i>Reminders…</i> you can switch on daily notifications and choose how many days ahead.\n\n<b>Export:</b>\nUnder <i>Export…</i> create a CSV (UTF-8) for your tax advisor — optionally as a ZIP bundle including the original XML/PDF files.\n\n<b>Dashboard:</b>\nThe Dashboard menu shows expenses per month and your top suppliers.\n\n<b>Delete:</b>\nLong-press a row in the list.</string>
+    <string name="help_message">Hi there, a few quick pointers…\n\n<b>Import invoices:</b>\nTap + and pick XML or PDF files (long-press for multi-select). You can also share files straight from your mail app into E-Invoice &amp; Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded XML is extracted, and the original PDF is kept as an attachment.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X, and Polish <b>KSeF FA(3)</b> for invoices issued in Poland.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes (incl. KSeF KOR / KOR_ZAL / KOR_ROZ) are flagged with a red chip and shown with a negative amount. KSeF correction invoices also display the original number and reason.\n\n<b>Detail view:</b>\nThree tabs: rendered invoice, raw XML (with live search), and the original PDF if attached. Use <b>Open / Paid</b> to mark an invoice as settled.\n\n<b>Filter the list:</b>\nUse the chips above the list for <i>All / Unpaid / Overdue</i>, and the date range picker to limit to a period.\n\n<b>Due-date reminders:</b>\nUnder <i>Reminders…</i> you can switch on daily notifications and choose how many days ahead.\n\n<b>Export:</b>\nUnder <i>Export…</i> create a CSV (UTF-8) for your tax advisor — optionally as a ZIP bundle including the original XML/PDF files.\n\n<b>Dashboard:</b>\nThe Dashboard menu shows expenses per month and your top suppliers.\n\n<b>AI assistant:</b>\nUnder <i>AI Settings</i> add an LLM provider (OpenAI, Gemini, Claude, Mistral, Langdock or a generic OpenAI-compatible endpoint) — paste your API key, load the models and pick a default. Then open an invoice and tap the speech bubble to ask questions about it. Note: the invoice data is sent to the provider you chose.\n\n<b>Delete:</b>\nLong-press a row in the list.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Disclaimer</string>
@@ -130,6 +158,53 @@
 
     <!-- Language switcher in toolbar -->
     <string name="menu_language">Language</string>
+
+    <!-- AI settings (placeholder page) -->
+    <string name="ai_settings_title">AI Settings</string>
+    <string name="ai_settings_in_progress">In progress — coming soon.</string>
+
+    <!-- AI provider management -->
+    <string name="ai_settings_help">Add your LLM providers and pick a default. The default is used for AI questions about an invoice.</string>
+    <string name="ai_no_credentials">No providers yet. Add one to get started.</string>
+    <string name="ai_add_credential">Add provider</string>
+    <string name="ai_default">Default</string>
+    <string name="ai_credential_title">AI provider</string>
+    <string name="ai_provider_label">Provider</string>
+    <string name="ai_label_label">Name</string>
+    <string name="ai_api_key_label">API key</string>
+    <string name="ai_model_label">Model</string>
+    <string name="ai_model_hint">Tap “Load models” to fetch from the API, or type a custom model ID.</string>
+    <string name="ai_load_models">Load models</string>
+    <string name="ai_models_none">No recent models found — type the model ID manually.</string>
+    <string name="ai_privacy_notice">Note: when you ask AI about an invoice, its data is sent to this provider.</string>
+    <string name="ai_base_url_label">Base URL</string>
+    <string name="ai_save">Save</string>
+    <string name="ai_cancel">Cancel</string>
+    <string name="ai_delete">Delete</string>
+    <string name="ai_delete_confirm">Remove this AI provider?</string>
+    <string name="ai_error_key_required">API key is required</string>
+    <string name="ai_error_model_required">Model is required</string>
+    <string name="ai_error_baseurl_required">Base URL is required</string>
+
+    <!-- AI chat (invoice detail) -->
+    <string name="ai_chat_title">Ask about this invoice</string>
+    <string name="ai_chat_using">Using %1$s · %2$s</string>
+    <string name="ai_chat_hint">Type your question…</string>
+    <string name="ai_send">Send</string>
+    <string name="ai_no_default">No AI provider configured yet. Add one in AI Settings.</string>
+    <string name="ai_go_to_settings">Open AI Settings</string>
+    <string name="ai_consent_title">Send invoice data to AI?</string>
+    <string name="ai_consent_message">To answer your questions, this invoice\'s raw XML is sent to your chosen AI provider — a third-party service. Invoice data may contain personal and financial information. This is a hobby project, provided without warranty. Continue?</string>
+    <string name="ai_consent_accept">Agree &amp; continue</string>
+    <string name="ai_suggest_due">When is this invoice due?</string>
+    <string name="ai_suggest_vat">How much VAT is charged?</string>
+    <string name="ai_suggest_summary">Summarise this invoice.</string>
+    <string name="ai_error_auth">Authentication failed — check your API key.</string>
+    <string name="ai_error_rate_limit">Rate limit reached — please try again later.</string>
+    <string name="ai_error_network">Network error — check your connection.</string>
+    <string name="ai_error_generic">Something went wrong. Please try again.</string>
+    <string name="ai_system_prompt">You are a helpful assistant answering questions about an electronic invoice. Base your answers only on the invoice XML below. If the answer is not present, say so. Answer in the language of the user\'s question.\n\nInvoice XML:\n%1$s</string>
+    <string name="cd_ask_ai">Ask AI about this invoice</string>
 
     <!-- Export -->
     <string name="action_export">Export…</string>

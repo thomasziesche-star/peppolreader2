@@ -29,6 +29,11 @@
         <!-- Error -->
         <item name="colorError">@color/md_theme_dark_error</item>
         <item name="colorOnError">@color/md_theme_dark_onError</item>
+
+        <!-- Popup / overflow menus: frosted-glass rounded background. -->
+        <item name="popupMenuStyle">@style/Widget.Peppol.PopupMenu</item>
+        <item name="android:popupMenuStyle">@style/Widget.Peppol.PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.Peppol.PopupMenu.Overflow</item>
     </style>
 
     <style name="Theme.Peppolreaderfree" parent="Base.Theme.Peppolreaderfree" />

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
+    <!-- Shared HTML invoice written to cacheDir root (InvoiceDetailFragment.shareAsHtml). -->
     <cache-path
         name="shared_files"
-        path="/" />
+        path="." />
+    <!-- Original/embedded PDFs opened from filesDir/attachments (openAttachment). -->
     <files-path
         name="internal_files"
-        path="/" />
-    <external-files-path
-        name="external_files"
-        path="/" />
+        path="attachments/" />
 </paths>

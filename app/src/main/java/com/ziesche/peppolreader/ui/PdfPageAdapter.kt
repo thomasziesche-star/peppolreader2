@@ -43,6 +43,8 @@ class PdfPageAdapter(
             page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
             holder.image.setImageBitmap(bitmap)
         }
+        holder.image.contentDescription =
+            holder.image.context.getString(R.string.cd_pdf_page, position + 1, itemCount)
     }
 
     override fun onViewRecycled(holder: PageViewHolder) {

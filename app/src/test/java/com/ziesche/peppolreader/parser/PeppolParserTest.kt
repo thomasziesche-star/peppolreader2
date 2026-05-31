@@ -2,7 +2,13 @@ package com.ziesche.peppolreader.parser
 
 import org.junit.Assert.*
 import org.junit.Test
+import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestRunner
+import org.robolectric.RuntimeEnvironment
+import org.robolectric.annotation.Config
 
+@RunWith(RobolectricTestRunner::class)
+@Config(sdk = [33])
 class PeppolParserTest {
 
     @Test
@@ -68,7 +74,7 @@ class PeppolParserTest {
 </StandardBusinessDocument>
         """.trimIndent()
 
-        val parser = PeppolParser(xml)
+        val parser = PeppolParser(xml, RuntimeEnvironment.getApplication())
         val invoice = parser.parse()
 
         assertEquals("14413574", invoice.invoice.id)

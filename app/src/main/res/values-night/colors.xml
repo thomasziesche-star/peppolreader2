@@ -13,4 +13,8 @@
     <color name="badge_neutral_fg">#CCC9BE</color>
     <color name="badge_ksef_bg">#5A1E25</color>
     <color name="badge_ksef_fg">#F5B5BC</color>
+
+    <!-- Popup / overflow menu: frosted-glass look in dark mode (semi-transparent dark panel). -->
+    <color name="popup_surface_translucent">#F22A2926</color>
+    <color name="popup_stroke">#33FFFFFF</color>
 </resources>

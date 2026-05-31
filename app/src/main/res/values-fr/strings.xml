@@ -11,6 +11,12 @@
 
     <!-- Invoice List -->
     <string name="invoice_item_cd">Facture %1$s</string>
+    <string name="cd_pdf_page">Page PDF %1$d sur %2$d</string>
+    <string name="cd_invoice_count">%1$d factures</string>
+    <string name="cd_status_paid">payée</string>
+    <string name="cd_status_credit_note">avoir</string>
+    <string name="cd_mark_paid">Marquer comme payée</string>
+    <string name="cd_mark_open">Marquer comme impayée</string>
     <string name="search_hint">Rechercher (société, n°)…</string>
     <string name="list_filter_all">Toutes</string>
     <string name="list_filter_unpaid">Impayées</string>
@@ -30,7 +36,9 @@
     <string name="next">Suivant</string>
 
     <!-- Messages -->
-    <string name="error_parsing">Erreur lors de la lecture du fichier</string>
+    <string name="error_parsing">Ce fichier ne peut pas être lu. Veuillez utiliser un XML de facture électronique valide ou un PDF ZUGFeRD/Factur-X.</string>
+    <string name="pdf_export_name">Facture_%1$s</string>
+    <string name="share_subject">Facture %1$s</string>
     <string name="error_pdf">Erreur lors de la création du PDF</string>
     <string name="confirm_delete">Voulez-vous vraiment supprimer cette facture ?</string>
     <string name="delete">Supprimer</string>
@@ -114,12 +122,32 @@
     <string name="chart_monthly_title">Dépenses par mois</string>
     <string name="chart_suppliers_title">Principaux fournisseurs</string>
     <string name="chart_label_expenses">Dépenses (€)</string>
+    <!-- KPI cards -->
+    <string name="kpi_total_expenses">Dépenses totales</string>
+    <string name="kpi_invoice_count">Factures</string>
+    <string name="kpi_open_amount">À payer</string>
+    <string name="kpi_overdue_amount">En retard</string>
+    <string name="kpi_cd">%1$s : %2$s</string>
+    <!-- Payment status chart -->
+    <string name="chart_payment_status_title">Statut de paiement</string>
+    <string name="legend_paid">Payées</string>
+    <string name="legend_open">À payer</string>
+    <string name="legend_overdue">En retard</string>
+    <!-- Trend chart -->
+    <string name="chart_trend_title">Tendance des dépenses</string>
+    <string name="trend_total">Total</string>
+    <string name="trend_paid">Payées</string>
+    <!-- Tax overview -->
+    <string name="tax_overview_title">Aperçu de la TVA</string>
+    <string name="tax_net">Net</string>
+    <string name="tax_vat">TVA</string>
+    <string name="tax_gross">Brut</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
 
     <!-- Help Manual -->
     <string name="help_title">Aide &amp; utilisation</string>
-    <string name="help_message">Bonjour, voici quelques conseils rapides…\n\n<b>Importer des factures :</b>\nAppuyez sur + et choisissez des fichiers XML ou PDF (appui long pour la sélection multiple). Vous pouvez aussi partager des fichiers depuis votre application de messagerie vers l\'application.\n\n<b>PDF ZUGFeRD &amp; Factur-X :</b>\nLes PDF hybrides sont détectés automatiquement — le XML intégré est extrait et le PDF d\'origine est conservé en pièce jointe.\n\n<b>Formats pris en charge :</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL et CII), ZUGFeRD 1.x et 2.x, Factur-X et <b>KSeF FA(3)</b> polonais pour les factures émises en Pologne.\n\n<b>Factures &amp; avoirs :</b>\nDistingués automatiquement — les avoirs (y compris KSeF KOR / KOR_ZAL / KOR_ROZ) sont marqués d\'une étiquette rouge et affichés avec un montant négatif. Pour les corrections KSeF, le numéro et le motif d\'origine sont affichés.\n\n<b>Vue détaillée :</b>\nTrois onglets : facture rendue, XML brut (avec recherche en direct) et PDF d\'origine s\'il est joint. Utilisez <b>Ouvert / Payé</b> pour marquer une facture comme réglée.\n\n<b>Filtrer la liste :</b>\nLes puces au-dessus de la liste filtrent <i>Tout / Impayé / En retard</i>, et le filtre de période limite à un intervalle de dates.\n\n<b>Rappels d\'échéance :</b>\nDans <i>Rappels…</i>, activez les notifications quotidiennes avec délai au choix.\n\n<b>Export :</b>\nDans <i>Exporter…</i>, créez un CSV (UTF-8) pour votre expert-comptable — au choix sous forme de bundle ZIP avec les XML/PDF d\'origine.\n\n<b>Tableau de bord :</b>\nLe tableau de bord affiche les dépenses par mois et vos principaux fournisseurs.\n\n<b>Supprimer :</b>\nAppuyez longuement sur une ligne dans la liste.</string>
+    <string name="help_message">Bonjour, voici quelques conseils rapides…\n\n<b>Importer des factures :</b>\nAppuyez sur + et choisissez des fichiers XML ou PDF (appui long pour la sélection multiple). Vous pouvez aussi partager des fichiers depuis votre application de messagerie vers l\'application.\n\n<b>PDF ZUGFeRD &amp; Factur-X :</b>\nLes PDF hybrides sont détectés automatiquement — le XML intégré est extrait et le PDF d\'origine est conservé en pièce jointe.\n\n<b>Formats pris en charge :</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL et CII), ZUGFeRD 1.x et 2.x, Factur-X et <b>KSeF FA(3)</b> polonais pour les factures émises en Pologne.\n\n<b>Factures &amp; avoirs :</b>\nDistingués automatiquement — les avoirs (y compris KSeF KOR / KOR_ZAL / KOR_ROZ) sont marqués d\'une étiquette rouge et affichés avec un montant négatif. Pour les corrections KSeF, le numéro et le motif d\'origine sont affichés.\n\n<b>Vue détaillée :</b>\nTrois onglets : facture rendue, XML brut (avec recherche en direct) et PDF d\'origine s\'il est joint. Utilisez <b>Ouvert / Payé</b> pour marquer une facture comme réglée.\n\n<b>Filtrer la liste :</b>\nLes puces au-dessus de la liste filtrent <i>Tout / Impayé / En retard</i>, et le filtre de période limite à un intervalle de dates.\n\n<b>Rappels d\'échéance :</b>\nDans <i>Rappels…</i>, activez les notifications quotidiennes avec délai au choix.\n\n<b>Export :</b>\nDans <i>Exporter…</i>, créez un CSV (UTF-8) pour votre expert-comptable — au choix sous forme de bundle ZIP avec les XML/PDF d\'origine.\n\n<b>Tableau de bord :</b>\nLe tableau de bord affiche les dépenses par mois et vos principaux fournisseurs.\n\n<b>Assistant IA :</b>\nDans <i>Paramètres IA</i>, ajoutez un fournisseur LLM (OpenAI, Gemini, Claude, Mistral, Langdock ou un endpoint générique compatible OpenAI) — saisissez votre clé API, chargez les modèles et choisissez un fournisseur par défaut. Ouvrez ensuite une facture et touchez la bulle pour poser des questions. Remarque : les données de la facture sont envoyées au fournisseur choisi.\n\n<b>Supprimer :</b>\nAppuyez longuement sur une ligne dans la liste.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Infos &amp; mentions légales</string>
@@ -130,6 +158,53 @@
 
     <!-- Language switcher in toolbar -->
     <string name="menu_language">Langue</string>
+
+    <!-- AI settings (placeholder page) -->
+    <string name="ai_settings_title">Paramètres IA</string>
+    <string name="ai_settings_in_progress">En cours — bientôt disponible.</string>
+
+    <!-- Gestion des fournisseurs IA -->
+    <string name="ai_settings_help">Ajoutez vos fournisseurs LLM et choisissez un fournisseur par défaut. Il sera utilisé pour les questions IA sur une facture.</string>
+    <string name="ai_no_credentials">Aucun fournisseur pour l\'instant. Ajoutez-en un pour commencer.</string>
+    <string name="ai_add_credential">Ajouter un fournisseur</string>
+    <string name="ai_default">Par défaut</string>
+    <string name="ai_credential_title">Fournisseur IA</string>
+    <string name="ai_provider_label">Fournisseur</string>
+    <string name="ai_label_label">Nom</string>
+    <string name="ai_api_key_label">Clé API</string>
+    <string name="ai_model_label">Modèle</string>
+    <string name="ai_model_hint">Touchez « Charger les modèles » pour les récupérer via l\'API, ou saisissez un ID de modèle.</string>
+    <string name="ai_load_models">Charger les modèles</string>
+    <string name="ai_models_none">Aucun modèle récent trouvé — saisissez l\'ID du modèle manuellement.</string>
+    <string name="ai_privacy_notice">Remarque : lors d\'une question IA sur une facture, ses données sont envoyées à ce fournisseur.</string>
+    <string name="ai_base_url_label">URL de base</string>
+    <string name="ai_save">Enregistrer</string>
+    <string name="ai_cancel">Annuler</string>
+    <string name="ai_delete">Supprimer</string>
+    <string name="ai_delete_confirm">Supprimer ce fournisseur IA ?</string>
+    <string name="ai_error_key_required">Clé API requise</string>
+    <string name="ai_error_model_required">Modèle requis</string>
+    <string name="ai_error_baseurl_required">URL de base requise</string>
+
+    <!-- Chat IA (détail de la facture) -->
+    <string name="ai_chat_title">Poser une question sur cette facture</string>
+    <string name="ai_chat_using">Utilise %1$s · %2$s</string>
+    <string name="ai_chat_hint">Saisissez votre question…</string>
+    <string name="ai_send">Envoyer</string>
+    <string name="ai_no_default">Aucun fournisseur IA configuré. Ajoutez-en un dans les paramètres IA.</string>
+    <string name="ai_go_to_settings">Ouvrir les paramètres IA</string>
+    <string name="ai_consent_title">Envoyer les données de la facture à l\'IA ?</string>
+    <string name="ai_consent_message">Pour répondre à vos questions, le XML brut de cette facture est envoyé au fournisseur IA choisi — un service tiers. Les données de facture peuvent contenir des informations personnelles et financières. Ceci est un projet amateur, sans garantie. Continuer ?</string>
+    <string name="ai_consent_accept">Accepter &amp; continuer</string>
+    <string name="ai_suggest_due">Quand cette facture est-elle due ?</string>
+    <string name="ai_suggest_vat">Quel est le montant de la TVA ?</string>
+    <string name="ai_suggest_summary">Résumez cette facture.</string>
+    <string name="ai_error_auth">Échec de l\'authentification — vérifiez votre clé API.</string>
+    <string name="ai_error_rate_limit">Limite atteinte — réessayez plus tard.</string>
+    <string name="ai_error_network">Erreur réseau — vérifiez votre connexion.</string>
+    <string name="ai_error_generic">Une erreur est survenue. Veuillez réessayer.</string>
+    <string name="ai_system_prompt">Vous êtes un assistant qui répond aux questions sur une facture électronique. Basez vos réponses uniquement sur le XML de facture ci-dessous. Si la réponse ne s\'y trouve pas, dites-le. Répondez dans la langue de la question.\n\nXML de la facture :\n%1$s</string>
+    <string name="cd_ask_ai">Interroger l\'IA sur cette facture</string>
 
     <!-- Export -->
     <string name="action_export">Exporter…</string>

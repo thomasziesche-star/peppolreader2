@@ -266,12 +266,20 @@ class MainActivity : AppCompatActivity(),
         }
         menu.findItem(R.id.action_language)?.setIcon(flagIcon)
 
-        // Mark the active language inside the sub-menu (checkableBehavior="single")
-        menu.findItem(R.id.action_lang_en)?.isChecked = currentLang == "en"
-        menu.findItem(R.id.action_lang_de)?.isChecked = currentLang == "de"
-        menu.findItem(R.id.action_lang_nl)?.isChecked = currentLang == "nl"
-        menu.findItem(R.id.action_lang_fr)?.isChecked = currentLang == "fr"
-        menu.findItem(R.id.action_lang_pl)?.isChecked = currentLang == "pl"
+        // Mark the active language inside the sub-menu. The group uses
+        // checkableBehavior="single"; for an exclusive group MenuItem.setChecked()
+        // IGNORES its boolean argument and always selects the item it is called on.
+        // Calling it on every entry therefore left the LAST one (Polski) checked,
+        // regardless of the active locale. Only touch the active entry and let the
+        // single-choice group clear the others.
+        val activeLangItemId = when (currentLang) {
+            "de" -> R.id.action_lang_de
+            "nl" -> R.id.action_lang_nl
+            "fr" -> R.id.action_lang_fr
+            "pl" -> R.id.action_lang_pl
+            else -> R.id.action_lang_en
+        }
+        menu.findItem(activeLangItemId)?.isChecked = true
         
         // Update theme toggle icon based on current mode
         val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
@@ -353,6 +361,11 @@ class MainActivity : AppCompatActivity(),
                     supportFragmentManager,
                     ReminderSettingsBottomSheet.TAG
                 )
+                true
+            }
+            R.id.action_ai_settings -> {
+                val navController = findNavController(R.id.nav_host_fragment_content_main)
+                navController.navigate(R.id.aiSettingsFragment)
                 true
             }
             R.id.action_info -> {

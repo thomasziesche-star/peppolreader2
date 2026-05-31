@@ -32,6 +32,10 @@
         android:label="Dashboard"
         tools:layout="@layout/fragment_dashboard" />
 
-
+    <fragment
+        android:id="@+id/aiSettingsFragment"
+        android:name="com.ziesche.peppolreader.ui.AiSettingsFragment"
+        android:label="@string/ai_settings_title"
+        tools:layout="@layout/fragment_ai_settings" />
 
 </navigation>

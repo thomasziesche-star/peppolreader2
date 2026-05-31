@@ -248,6 +248,11 @@ class InvoiceDetailFragment : Fragment() {
             viewModel.togglePaid(invoice)
         }
 
+        binding.fabAskAi.setOnClickListener {
+            if (viewModel.selectedInvoice.value == null) return@setOnClickListener
+            AiChatBottomSheet().show(childFragmentManager, AiChatBottomSheet.TAG)
+        }
+
         viewModel.selectedInvoice.observe(viewLifecycleOwner) { invoice ->
             updatePaidButtonStyle(invoice?.paidAt != null)
             updatePdfTabEnabledLook(invoice)
@@ -264,6 +269,8 @@ class InvoiceDetailFragment : Fragment() {
         val ctx = requireContext()
         binding.btnMarkPaid.apply {
             text = getString(if (paid) R.string.status_paid else R.string.status_open)
+            // Visible label shows the state; the spoken label states the action this toggle performs.
+            contentDescription = getString(if (paid) R.string.cd_mark_open else R.string.cd_mark_paid)
             val bgColor = if (paid) {
                 ContextCompat.getColor(ctx, R.color.anthropic_green)
             } else {
@@ -429,7 +436,7 @@ class InvoiceDetailFragment : Fragment() {
                 .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
                 .build()
             
-            printManager.print("Rechnung_$invoiceId", printAdapter, attributes)
+            printManager.print(getString(R.string.pdf_export_name, invoiceId), printAdapter, attributes)
             
         } catch (e: Exception) {
             Snackbar.make(binding.root, R.string.error_pdf, Snackbar.LENGTH_LONG).show()
@@ -442,7 +449,7 @@ class InvoiceDetailFragment : Fragment() {
         
         try {
             // Create a temporary HTML file
-            val htmlFile = File(requireContext().cacheDir, "Rechnung_$invoiceId.html")
+            val htmlFile = File(requireContext().cacheDir, "${getString(R.string.pdf_export_name, invoiceId)}.html")
             htmlFile.writeText(currentHtml)
             
             // Create content URI using FileProvider
@@ -456,7 +463,7 @@ class InvoiceDetailFragment : Fragment() {
             val shareIntent = Intent(Intent.ACTION_SEND).apply {
                 type = com.ziesche.peppolreader.util.MimeTypes.TEXT_HTML
                 putExtra(Intent.EXTRA_STREAM, contentUri)
-                putExtra(Intent.EXTRA_SUBJECT, "Rechnung $invoiceId")
+                putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_subject, invoiceId))
                 addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
             }
 
@@ -464,7 +471,7 @@ class InvoiceDetailFragment : Fragment() {
             startActivity(chooserIntent)
             
         } catch (e: Exception) {
-            Snackbar.make(binding.root, "Fehler beim Teilen: ${e.message}", Snackbar.LENGTH_LONG).show()
+            Snackbar.make(binding.root, getString(R.string.error_share, e.message ?: ""), Snackbar.LENGTH_LONG).show()
         }
     }
 
