@@ -147,7 +147,7 @@
 
     <!-- Help Manual -->
     <string name="help_title">Help &amp; Usage</string>
-    <string name="help_message">Hi there, a few quick pointers…\n\n<b>Import invoices:</b>\nTap + and pick XML or PDF files (long-press for multi-select). You can also share files straight from your mail app into E-Invoice &amp; Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded XML is extracted, and the original PDF is kept as an attachment.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X, and Polish <b>KSeF FA(3)</b> for invoices issued in Poland.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes (incl. KSeF KOR / KOR_ZAL / KOR_ROZ) are flagged with a red chip and shown with a negative amount. KSeF correction invoices also display the original number and reason.\n\n<b>Detail view:</b>\nThree tabs: rendered invoice, raw XML (with live search), and the original PDF if attached. Use <b>Open / Paid</b> to mark an invoice as settled.\n\n<b>Filter the list:</b>\nUse the chips above the list for <i>All / Unpaid / Overdue</i>, and the date range picker to limit to a period.\n\n<b>Due-date reminders:</b>\nUnder <i>Reminders…</i> you can switch on daily notifications and choose how many days ahead.\n\n<b>Export:</b>\nUnder <i>Export…</i> create a CSV (UTF-8) for your tax advisor — optionally as a ZIP bundle including the original XML/PDF files.\n\n<b>Dashboard:</b>\nThe Dashboard menu shows expenses per month and your top suppliers.\n\n<b>AI assistant:</b>\nUnder <i>AI Settings</i> add an LLM provider (OpenAI, Gemini, Claude, Mistral, Langdock or a generic OpenAI-compatible endpoint) — paste your API key, load the models and pick a default. Then open an invoice and tap the speech bubble to ask questions about it. Note: the invoice data is sent to the provider you chose.\n\n<b>Delete:</b>\nLong-press a row in the list.</string>
+    <string name="help_message">Hi there, a few quick pointers…\n\n<b>Import invoices:</b>\nTap + and pick XML or PDF files (long-press for multi-select). You can also share files straight from your mail app into E-Invoice &amp; Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded XML is extracted, and the original PDF is kept as an attachment.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X, and Polish <b>KSeF FA(3)</b> for invoices issued in Poland.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes (incl. KSeF KOR / KOR_ZAL / KOR_ROZ) are flagged with a red chip and shown with a negative amount. KSeF correction invoices also display the original number and reason.\n\n<b>Detail view:</b>\nThree tabs: rendered invoice, raw XML (with live search), and the original PDF if attached. Use <b>Open / Paid</b> to mark an invoice as settled.\n\n<b>Filter the list:</b>\nUse the chips above the list for <i>All / Unpaid / Overdue</i>, and the date range picker to limit to a period.\n\n<b>Due-date reminders:</b>\nUnder <i>Reminders…</i> you can switch on daily notifications and choose how many days ahead.\n\n<b>Export:</b>\nUnder <i>Export…</i> create a CSV (UTF-8) for your tax advisor — optionally as a ZIP bundle including the original XML/PDF files.\n\n<b>Dashboard:</b>\nThe Dashboard menu shows expenses per month and your top suppliers.\n\n<b>AI assistant:</b>\nUnder <i>AI Settings</i> add an LLM provider (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock or a generic OpenAI-compatible endpoint) — paste your API key, load the models and pick a default. Then open an invoice and tap the speech bubble to ask questions about it. Note: the invoice data is sent to the provider you chose.\n\n<b>Delete:</b>\nLong-press a row in the list.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Disclaimer</string>
@@ -279,4 +279,103 @@
         <item quantity="one">%d file skipped — only PDF and XML are supported</item>
         <item quantity="other">%d files skipped — only PDF and XML are supported</item>
     </plurals>
+
+    <!-- ===== Invoice Creator mode (ZUGFeRD 2.x / EN 16931) ===== -->
+    <string name="creator_title">Create invoice</string>
+    <string name="creator_subtitle">Generate ZUGFeRD e-invoices as a hybrid PDF/A-3 (EN 16931).</string>
+    <string name="creator_no_drafts">No drafts yet. Tap “New invoice” to start.</string>
+    <string name="creator_new_draft">New invoice</string>
+    <string name="creator_company_profile">Company profile</string>
+    <string name="creator_company_profile_hint">Your details appear as the sender on every invoice.</string>
+
+    <!-- Company / party fields -->
+    <string name="creator_company_name">Company name</string>
+    <string name="creator_street">Street and number</string>
+    <string name="creator_zip">Postal code</string>
+    <string name="creator_city">City</string>
+    <string name="creator_country">Country code (e.g. DE)</string>
+    <string name="creator_vat_id">VAT ID</string>
+    <string name="creator_tax_number">Tax number</string>
+    <string name="creator_iban">IBAN</string>
+    <string name="creator_bic">BIC</string>
+    <string name="creator_email">Email</string>
+    <string name="creator_phone">Phone</string>
+    <string name="creator_logo">Company logo</string>
+    <string name="creator_logo_hint">Shown in the top-right corner of the invoice PDF. PNG with transparent background works best.</string>
+    <string name="creator_logo_pick">Choose logo</string>
+    <string name="creator_logo_error">Could not load the image.</string>
+    <string name="creator_storage_title">Storage location</string>
+    <string name="creator_storage_hint">Where generated ZUGFeRD PDFs are saved (a copy always stays inside the app).</string>
+    <string name="creator_storage_downloads">Downloads (default)</string>
+    <string name="creator_storage_custom">Custom folder</string>
+    <string name="creator_storage_pick">Choose folder</string>
+    <string name="creator_storage_folder">Folder: %1$s</string>
+    <string name="creator_numbering_title">Invoice numbers</string>
+    <string name="creator_numbering_auto">Assign automatically</string>
+    <string name="creator_numbering_prefix">Prefix (e.g. RE-2026-)</string>
+    <string name="creator_numbering_next">Next no.</string>
+    <string name="creator_payment_days">Default payment term (days)</string>
+    <string name="creator_payment_days_hint">New invoices suggest the due date automatically; it stays editable. Empty = no suggestion.</string>
+    <string name="app_title_creator">ZUGFeRD Builder</string>
+    <string name="creator_search_hint">Search (no., customer, date)</string>
+    <string name="creator_customers_title">Customers</string>
+    <string name="creator_customers_hint">Create and edit customers — buyers are also added automatically when an invoice is generated.</string>
+    <string name="creator_new_customer">New customer</string>
+    <string name="creator_delete_customer_confirm">Delete this customer?</string>
+    <string name="creator_pick_customer">From customers</string>
+    <string name="creator_no_customers">No saved customers yet. Buyers are stored automatically when an invoice is generated.</string>
+    <string name="creator_view_pdf">View document</string>
+    <string name="creator_view_error">No app found to display PDFs.</string>
+    <string name="creator_pdf_missing">The PDF file is no longer available.</string>
+    <string name="creator_generated_locked">Generated invoices can no longer be changed.</string>
+    <string name="creator_pdf_created_at">ZUGFeRD PDF created — saved to “%1$s”.</string>
+    <string name="creator_save">Save</string>
+    <string name="creator_saved">Saved</string>
+
+    <!-- Invoice header -->
+    <string name="creator_invoice_number">Invoice number</string>
+    <string name="creator_issue_date">Issue date</string>
+    <string name="creator_due_date">Due date (optional)</string>
+    <string name="creator_doc_type">Document type</string>
+    <string name="creator_doc_type_invoice">Invoice</string>
+    <string name="creator_doc_type_credit_note">Credit note</string>
+    <string name="creator_currency">Currency</string>
+
+    <!-- Parties -->
+    <string name="creator_seller">Seller (you)</string>
+    <string name="creator_buyer">Buyer</string>
+    <string name="creator_edit_seller">Edit seller for this invoice</string>
+
+    <!-- Line items -->
+    <string name="creator_line_items">Line items</string>
+    <string name="creator_add_line">Add line item</string>
+    <string name="creator_description">Description</string>
+    <string name="creator_quantity">Qty</string>
+    <string name="creator_unit">Unit</string>
+    <string name="creator_unit_price">Unit price</string>
+    <string name="creator_vat_rate">VAT %</string>
+    <string name="creator_remove">Remove</string>
+
+    <!-- Payment -->
+    <string name="creator_payment_terms_note">Payment terms note (optional)</string>
+
+    <!-- Totals -->
+    <string name="creator_totals">Totals</string>
+    <string name="creator_net">Net</string>
+    <string name="creator_vat">VAT</string>
+    <string name="creator_gross">Gross</string>
+    <string name="creator_payable">Amount due</string>
+
+    <!-- Actions / feedback -->
+    <string name="creator_generate_pdf">Create ZUGFeRD PDF</string>
+    <string name="creator_pdf_created">ZUGFeRD PDF created.</string>
+    <string name="creator_share">Share</string>
+    <string name="creator_delete">Delete</string>
+    <string name="creator_delete_confirm">Delete this draft?</string>
+    <string name="creator_status_draft">Draft</string>
+    <string name="creator_status_generated">Generated</string>
+    <string name="creator_error_profile_required">Please fill in the company profile first.</string>
+    <string name="creator_error_no_lines">Add at least one line item.</string>
+    <string name="creator_error_invalid">Please complete the required fields.</string>
+    <string name="creator_error_generate">Could not create the PDF: %1$s</string>
 </resources>

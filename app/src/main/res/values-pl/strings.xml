@@ -147,7 +147,7 @@
 
     <!-- Pomoc -->
     <string name="help_title">Pomoc i obsługa</string>
-    <string name="help_message">Witaj, oto najważniejsze wskazówki…\n\n<b>Importowanie faktur:</b>\nDotknij + i wybierz pliki XML lub PDF (przytrzymaj, aby zaznaczyć kilka). Możesz też udostępnić pliki bezpośrednio z programu pocztowego do aplikacji.\n\n<b>PDF ZUGFeRD i Factur-X:</b>\nPDF hybrydowe są wykrywane automatycznie — osadzony XML jest wyodrębniany, a oryginalny PDF zachowywany jako załącznik.\n\n<b>Obsługiwane formaty:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL i CII), ZUGFeRD 1.x i 2.x, Factur-X oraz polski <b>KSeF FA(3)</b> dla faktur wystawianych w Polsce.\n\n<b>Faktury i korekty:</b>\nRozróżniane automatycznie — korekty (w tym KSeF KOR / KOR_ZAL / KOR_ROZ) są oznaczone czerwonym znacznikiem i wyświetlane z ujemną kwotą. Przy korektach KSeF widoczny jest oryginalny numer i powód.\n\n<b>Widok szczegółów:</b>\nTrzy zakładki: wyrenderowana faktura, surowy XML (z wyszukiwaniem na żywo) oraz oryginalny PDF, jeśli jest załączony. Przyciskiem <b>Otwarte / Opłacone</b> oznaczasz fakturę jako rozliczoną.\n\n<b>Filtrowanie listy:</b>\nZnaczniki nad listą filtrują <i>Wszystkie / Nieopłacone / Przeterminowane</i>, a filtr zakresu dat ogranicza widok do okresu.\n\n<b>Przypomnienia o terminach:</b>\nW <i>Przypomnienia…</i> włącz codzienne powiadomienia z konfigurowalnym wyprzedzeniem.\n\n<b>Eksport:</b>\nW <i>Eksportuj…</i> utworzysz plik CSV (UTF-8) dla księgowego — opcjonalnie jako paczkę ZIP z oryginalnymi XML/PDF.\n\n<b>Pulpit:</b>\nPulpit pokazuje wydatki miesięczne i największych dostawców.\n\n<b>Asystent AI:</b>\nW <i>Ustawieniach AI</i> dodaj dostawcę LLM (OpenAI, Gemini, Claude, Mistral, Langdock lub generyczny endpoint zgodny z OpenAI) — wklej klucz API, załaduj modele i wybierz domyślnego. Następnie otwórz fakturę i dotknij dymka, aby zadawać pytania. Uwaga: dane faktury są wysyłane do wybranego dostawcy.\n\n<b>Usuwanie:</b>\nPrzytrzymaj wpis na liście.</string>
+    <string name="help_message">Witaj, oto najważniejsze wskazówki…\n\n<b>Importowanie faktur:</b>\nDotknij + i wybierz pliki XML lub PDF (przytrzymaj, aby zaznaczyć kilka). Możesz też udostępnić pliki bezpośrednio z programu pocztowego do aplikacji.\n\n<b>PDF ZUGFeRD i Factur-X:</b>\nPDF hybrydowe są wykrywane automatycznie — osadzony XML jest wyodrębniany, a oryginalny PDF zachowywany jako załącznik.\n\n<b>Obsługiwane formaty:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL i CII), ZUGFeRD 1.x i 2.x, Factur-X oraz polski <b>KSeF FA(3)</b> dla faktur wystawianych w Polsce.\n\n<b>Faktury i korekty:</b>\nRozróżniane automatycznie — korekty (w tym KSeF KOR / KOR_ZAL / KOR_ROZ) są oznaczone czerwonym znacznikiem i wyświetlane z ujemną kwotą. Przy korektach KSeF widoczny jest oryginalny numer i powód.\n\n<b>Widok szczegółów:</b>\nTrzy zakładki: wyrenderowana faktura, surowy XML (z wyszukiwaniem na żywo) oraz oryginalny PDF, jeśli jest załączony. Przyciskiem <b>Otwarte / Opłacone</b> oznaczasz fakturę jako rozliczoną.\n\n<b>Filtrowanie listy:</b>\nZnaczniki nad listą filtrują <i>Wszystkie / Nieopłacone / Przeterminowane</i>, a filtr zakresu dat ogranicza widok do okresu.\n\n<b>Przypomnienia o terminach:</b>\nW <i>Przypomnienia…</i> włącz codzienne powiadomienia z konfigurowalnym wyprzedzeniem.\n\n<b>Eksport:</b>\nW <i>Eksportuj…</i> utworzysz plik CSV (UTF-8) dla księgowego — opcjonalnie jako paczkę ZIP z oryginalnymi XML/PDF.\n\n<b>Pulpit:</b>\nPulpit pokazuje wydatki miesięczne i największych dostawców.\n\n<b>Asystent AI:</b>\nW <i>Ustawieniach AI</i> dodaj dostawcę LLM (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock lub generyczny endpoint zgodny z OpenAI) — wklej klucz API, załaduj modele i wybierz domyślnego. Następnie otwórz fakturę i dotknij dymka, aby zadawać pytania. Uwaga: dane faktury są wysyłane do wybranego dostawcy.\n\n<b>Usuwanie:</b>\nPrzytrzymaj wpis na liście.</string>
 
     <!-- Informacje -->
     <string name="info_title">Informacje i zastrzeżenia</string>
@@ -283,4 +283,102 @@
         <item quantity="many">Pominięto %d plików — obsługiwane są tylko PDF i XML</item>
         <item quantity="other">Pominięto %d plików — obsługiwane są tylko PDF i XML</item>
     </plurals>
+
+    <!-- ===== Tryb „Utwórz fakturę" (ZUGFeRD 2.x / EN 16931) ===== -->
+    <string name="creator_title">Utwórz fakturę</string>
+    <string name="creator_subtitle">Generuj faktury ZUGFeRD jako hybrydowy PDF/A-3 (EN 16931).</string>
+    <string name="creator_no_drafts">Brak wersji roboczych. Dotknij „Nowa faktura".</string>
+    <string name="creator_new_draft">Nowa faktura</string>
+    <string name="creator_company_profile">Profil firmy</string>
+    <string name="creator_company_profile_hint">Twoje dane pojawią się jako nadawca na każdej fakturze.</string>
+
+    <!-- Pola firmy / strony -->
+    <string name="creator_company_name">Nazwa firmy</string>
+    <string name="creator_street">Ulica i numer</string>
+    <string name="creator_zip">Kod pocztowy</string>
+    <string name="creator_city">Miasto</string>
+    <string name="creator_country">Kod kraju (np. DE)</string>
+    <string name="creator_vat_id">NIP / VAT</string>
+    <string name="creator_tax_number">Numer podatkowy</string>
+    <string name="creator_iban">IBAN</string>
+    <string name="creator_bic">BIC</string>
+    <string name="creator_email">E-mail</string>
+    <string name="creator_phone">Telefon</string>
+    <string name="creator_logo">Logo firmy</string>
+    <string name="creator_logo_hint">Wyświetlane w prawym górnym rogu faktury PDF. Najlepiej sprawdza się PNG z przezroczystym tłem.</string>
+    <string name="creator_logo_pick">Wybierz logo</string>
+    <string name="creator_logo_error">Nie udało się wczytać obrazu.</string>
+    <string name="creator_storage_title">Lokalizacja zapisu</string>
+    <string name="creator_storage_hint">Gdzie zapisywane są wygenerowane pliki PDF ZUGFeRD (kopia zawsze pozostaje w aplikacji).</string>
+    <string name="creator_storage_downloads">Pobrane (domyślnie)</string>
+    <string name="creator_storage_custom">Własny folder</string>
+    <string name="creator_storage_pick">Wybierz folder</string>
+    <string name="creator_storage_folder">Folder: %1$s</string>
+    <string name="creator_numbering_title">Numery faktur</string>
+    <string name="creator_numbering_auto">Nadawaj automatycznie</string>
+    <string name="creator_numbering_prefix">Prefiks (np. FV-2026-)</string>
+    <string name="creator_numbering_next">Następny nr</string>
+    <string name="creator_payment_days">Domyślny termin płatności (dni)</string>
+    <string name="creator_payment_days_hint">Nowe faktury automatycznie proponują termin płatności; można go zmienić. Puste = brak propozycji.</string>
+    <string name="creator_search_hint">Szukaj (nr, klient, data)</string>
+    <string name="creator_customers_title">Klienci</string>
+    <string name="creator_customers_hint">Twórz i edytuj klientów — nabywcy są też dodawani automatycznie przy generowaniu faktury.</string>
+    <string name="creator_new_customer">Nowy klient</string>
+    <string name="creator_delete_customer_confirm">Usunąć tego klienta?</string>
+    <string name="creator_pick_customer">Z bazy klientów</string>
+    <string name="creator_no_customers">Brak zapisanych klientów. Nabywcy są zapisywani automatycznie przy generowaniu faktury.</string>
+    <string name="creator_view_pdf">Pokaż dokument</string>
+    <string name="creator_view_error">Nie znaleziono aplikacji do wyświetlania plików PDF.</string>
+    <string name="creator_pdf_missing">Plik PDF nie jest już dostępny.</string>
+    <string name="creator_generated_locked">Wygenerowanych faktur nie można już zmieniać.</string>
+    <string name="creator_pdf_created_at">Utworzono PDF ZUGFeRD — zapisano w „%1$s”.</string>
+    <string name="creator_save">Zapisz</string>
+    <string name="creator_saved">Zapisano</string>
+
+    <!-- Nagłówek faktury -->
+    <string name="creator_invoice_number">Numer faktury</string>
+    <string name="creator_issue_date">Data wystawienia</string>
+    <string name="creator_due_date">Termin płatności (opcjonalnie)</string>
+    <string name="creator_doc_type">Typ dokumentu</string>
+    <string name="creator_doc_type_invoice">Faktura</string>
+    <string name="creator_doc_type_credit_note">Faktura korygująca</string>
+    <string name="creator_currency">Waluta</string>
+
+    <!-- Strony -->
+    <string name="creator_seller">Sprzedawca (Ty)</string>
+    <string name="creator_buyer">Nabywca</string>
+    <string name="creator_edit_seller">Edytuj sprzedawcę dla tej faktury</string>
+
+    <!-- Pozycje -->
+    <string name="creator_line_items">Pozycje</string>
+    <string name="creator_add_line">Dodaj pozycję</string>
+    <string name="creator_description">Opis</string>
+    <string name="creator_quantity">Ilość</string>
+    <string name="creator_unit">Jedn.</string>
+    <string name="creator_unit_price">Cena jedn.</string>
+    <string name="creator_vat_rate">VAT %</string>
+    <string name="creator_remove">Usuń</string>
+
+    <!-- Płatność -->
+    <string name="creator_payment_terms_note">Uwaga dot. płatności (opcjonalnie)</string>
+
+    <!-- Sumy -->
+    <string name="creator_totals">Sumy</string>
+    <string name="creator_net">Netto</string>
+    <string name="creator_vat">VAT</string>
+    <string name="creator_gross">Brutto</string>
+    <string name="creator_payable">Do zapłaty</string>
+
+    <!-- Akcje / komunikaty -->
+    <string name="creator_generate_pdf">Utwórz PDF ZUGFeRD</string>
+    <string name="creator_pdf_created">Utworzono PDF ZUGFeRD.</string>
+    <string name="creator_share">Udostępnij</string>
+    <string name="creator_delete">Usuń</string>
+    <string name="creator_delete_confirm">Usunąć tę wersję roboczą?</string>
+    <string name="creator_status_draft">Wersja robocza</string>
+    <string name="creator_status_generated">Wygenerowano</string>
+    <string name="creator_error_profile_required">Najpierw wypełnij profil firmy.</string>
+    <string name="creator_error_no_lines">Dodaj co najmniej jedną pozycję.</string>
+    <string name="creator_error_invalid">Uzupełnij wymagane pola.</string>
+    <string name="creator_error_generate">Nie można utworzyć PDF: %1$s</string>
 </resources>

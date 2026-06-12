@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".creator.ui.InvoiceCreatorListFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/creator_title"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="12dp"
+        android:text="@string/creator_subtitle"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="14sp" />
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="4dp">
+
+        <androidx.appcompat.widget.SearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            app:iconifiedByDefault="false"
+            app:queryHint="@string/creator_search_hint" />
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:text="@string/creator_no_drafts"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="15sp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/drafts_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingTop="4dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        tools:listitem="@layout/item_outgoing_invoice" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_customers"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/creator_customers_title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_company_profile"
+        style="@style/Widget.Material3.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/creator_company_profile" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_new_draft"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/creator_new_draft" />
+
+</LinearLayout>

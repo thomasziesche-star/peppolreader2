@@ -147,7 +147,7 @@
 
     <!-- Help Manual -->
     <string name="help_title">Hilfe &amp; Bedienung</string>
-    <string name="help_message">Hallo, hier die wichtigsten Hinweise…\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf +, wählen Sie XML- oder PDF-Dateien (mehrere gleichzeitig durch langes Drücken). Sie können Dateien auch direkt aus Ihrem E-Mail-Programm an die App teilen.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid-PDFs werden automatisch erkannt — die eingebettete XML wird ausgelesen, das Original-PDF als Anhang behalten.\n\n<b>Unterstützte Formate:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL und CII), ZUGFeRD 1.x und 2.x, Factur-X sowie polnisches <b>KSeF FA(3)</b> für Rechnungen aus Polen.\n\n<b>Rechnungen &amp; Gutschriften:</b>\nWerden automatisch unterschieden — Gutschriften (auch KSeF KOR / KOR_ZAL / KOR_ROZ) erhalten einen roten Chip und werden mit negativem Betrag angezeigt. Bei KSeF-Korrekturen werden Originalnummer und Grund eingeblendet.\n\n<b>Detail-Ansicht:</b>\nDrei Tabs: gerenderte Rechnung, Rohdaten (mit Live-Suche) und Original-PDF, falls angehängt. Mit <b>Offen / Bezahlt</b> markieren Sie eine Rechnung als beglichen.\n\n<b>Liste filtern:</b>\nDie Chips über der Liste filtern <i>Alle / Unbezahlt / Überfällig</i>, der Zeitraum-Filter grenzt auf eine Periode ein.\n\n<b>Fälligkeits-Erinnerungen:</b>\nUnter <i>Erinnerungen…</i> aktivieren Sie tägliche Benachrichtigungen mit wählbarer Vorlaufzeit.\n\n<b>Export:</b>\nUnter <i>Exportieren…</i> erzeugen Sie eine CSV (UTF-8) für den Steuerberater — wahlweise als ZIP-Bündel inklusive Original-XML/PDF.\n\n<b>Dashboard:</b>\nIm Dashboard sehen Sie Ausgaben pro Monat und Ihre Top-Lieferanten.\n\n<b>KI-Assistent:</b>\nUnter <i>KI-Einstellungen</i> hinterlegen Sie einen LLM-Anbieter (OpenAI, Gemini, Claude, Mistral, Langdock oder einen generischen OpenAI-kompatiblen Endpoint) — API-Schlüssel eintragen, Modelle laden und Standard wählen. Öffnen Sie dann eine Rechnung und tippen Sie auf die Sprechblase, um Fragen dazu zu stellen. Hinweis: Die Belegdaten werden an den gewählten Anbieter gesendet.\n\n<b>Löschen:</b>\nHalten Sie einen Eintrag in der Liste gedrückt.</string>
+    <string name="help_message">Hallo, hier die wichtigsten Hinweise…\n\n<b>Rechnungen importieren:</b>\nTippen Sie auf +, wählen Sie XML- oder PDF-Dateien (mehrere gleichzeitig durch langes Drücken). Sie können Dateien auch direkt aus Ihrem E-Mail-Programm an die App teilen.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid-PDFs werden automatisch erkannt — die eingebettete XML wird ausgelesen, das Original-PDF als Anhang behalten.\n\n<b>Unterstützte Formate:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL und CII), ZUGFeRD 1.x und 2.x, Factur-X sowie polnisches <b>KSeF FA(3)</b> für Rechnungen aus Polen.\n\n<b>Rechnungen &amp; Gutschriften:</b>\nWerden automatisch unterschieden — Gutschriften (auch KSeF KOR / KOR_ZAL / KOR_ROZ) erhalten einen roten Chip und werden mit negativem Betrag angezeigt. Bei KSeF-Korrekturen werden Originalnummer und Grund eingeblendet.\n\n<b>Detail-Ansicht:</b>\nDrei Tabs: gerenderte Rechnung, Rohdaten (mit Live-Suche) und Original-PDF, falls angehängt. Mit <b>Offen / Bezahlt</b> markieren Sie eine Rechnung als beglichen.\n\n<b>Liste filtern:</b>\nDie Chips über der Liste filtern <i>Alle / Unbezahlt / Überfällig</i>, der Zeitraum-Filter grenzt auf eine Periode ein.\n\n<b>Fälligkeits-Erinnerungen:</b>\nUnter <i>Erinnerungen…</i> aktivieren Sie tägliche Benachrichtigungen mit wählbarer Vorlaufzeit.\n\n<b>Export:</b>\nUnter <i>Exportieren…</i> erzeugen Sie eine CSV (UTF-8) für den Steuerberater — wahlweise als ZIP-Bündel inklusive Original-XML/PDF.\n\n<b>Dashboard:</b>\nIm Dashboard sehen Sie Ausgaben pro Monat und Ihre Top-Lieferanten.\n\n<b>KI-Assistent:</b>\nUnter <i>KI-Einstellungen</i> hinterlegen Sie einen LLM-Anbieter (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock oder einen generischen OpenAI-kompatiblen Endpoint) — API-Schlüssel eintragen, Modelle laden und Standard wählen. Öffnen Sie dann eine Rechnung und tippen Sie auf die Sprechblase, um Fragen dazu zu stellen. Hinweis: Die Belegdaten werden an den gewählten Anbieter gesendet.\n\n<b>Löschen:</b>\nHalten Sie einen Eintrag in der Liste gedrückt.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Impressum</string>
@@ -279,4 +279,102 @@
         <item quantity="one">%d Datei übersprungen – nur PDF und XML werden unterstützt</item>
         <item quantity="other">%d Dateien übersprungen – nur PDF und XML werden unterstützt</item>
     </plurals>
+
+    <!-- ===== Modus „Rechnung erstellen" (ZUGFeRD 2.x / EN 16931) ===== -->
+    <string name="creator_title">Rechnung erstellen</string>
+    <string name="creator_subtitle">ZUGFeRD-Rechnungen als hybrides PDF/A-3 erzeugen (EN 16931).</string>
+    <string name="creator_no_drafts">Noch keine Entwürfe. Tippe auf „Neue Rechnung".</string>
+    <string name="creator_new_draft">Neue Rechnung</string>
+    <string name="creator_company_profile">Firmenprofil</string>
+    <string name="creator_company_profile_hint">Deine Angaben erscheinen als Absender auf jeder Rechnung.</string>
+
+    <!-- Firmen-/Parteifelder -->
+    <string name="creator_company_name">Firmenname</string>
+    <string name="creator_street">Straße und Nr.</string>
+    <string name="creator_zip">PLZ</string>
+    <string name="creator_city">Ort</string>
+    <string name="creator_country">Ländercode (z. B. DE)</string>
+    <string name="creator_vat_id">USt-IdNr.</string>
+    <string name="creator_tax_number">Steuernummer</string>
+    <string name="creator_iban">IBAN</string>
+    <string name="creator_bic">BIC</string>
+    <string name="creator_email">E-Mail</string>
+    <string name="creator_phone">Telefon</string>
+    <string name="creator_logo">Firmenlogo</string>
+    <string name="creator_logo_hint">Erscheint oben rechts auf der Rechnungs-PDF. PNG mit transparentem Hintergrund eignet sich am besten.</string>
+    <string name="creator_logo_pick">Logo auswählen</string>
+    <string name="creator_logo_error">Bild konnte nicht geladen werden.</string>
+    <string name="creator_storage_title">Speicherort</string>
+    <string name="creator_storage_hint">Wohin erstellte ZUGFeRD-PDFs gespeichert werden (eine Kopie bleibt immer in der App).</string>
+    <string name="creator_storage_downloads">Downloads (Standard)</string>
+    <string name="creator_storage_custom">Eigener Ordner</string>
+    <string name="creator_storage_pick">Ordner wählen</string>
+    <string name="creator_storage_folder">Ordner: %1$s</string>
+    <string name="creator_numbering_title">Rechnungsnummern</string>
+    <string name="creator_numbering_auto">Automatisch vergeben</string>
+    <string name="creator_numbering_prefix">Präfix (z. B. RE-2026-)</string>
+    <string name="creator_numbering_next">Nächste Nr.</string>
+    <string name="creator_payment_days">Standard-Zahlungsziel (Tage)</string>
+    <string name="creator_payment_days_hint">Neue Rechnungen schlagen die Fälligkeit automatisch vor; sie bleibt anpassbar. Leer = kein Vorschlag.</string>
+    <string name="creator_search_hint">Suchen (Nr., Kunde, Datum)</string>
+    <string name="creator_customers_title">Kundenstamm</string>
+    <string name="creator_customers_hint">Kunden anlegen und bearbeiten – beim Erstellen einer Rechnung werden Käufer auch automatisch übernommen.</string>
+    <string name="creator_new_customer">Neuer Kunde</string>
+    <string name="creator_delete_customer_confirm">Diesen Kunden löschen?</string>
+    <string name="creator_pick_customer">Aus Kundenstamm</string>
+    <string name="creator_no_customers">Noch keine Kunden gespeichert. Käufer werden beim Erstellen einer Rechnung automatisch übernommen.</string>
+    <string name="creator_view_pdf">Beleg anzeigen</string>
+    <string name="creator_view_error">Keine App zum Anzeigen von PDFs gefunden.</string>
+    <string name="creator_pdf_missing">Die PDF-Datei ist nicht mehr vorhanden.</string>
+    <string name="creator_generated_locked">Erstellte Rechnungen können nicht mehr geändert werden.</string>
+    <string name="creator_pdf_created_at">ZUGFeRD-PDF erstellt – gespeichert in „%1$s“.</string>
+    <string name="creator_save">Speichern</string>
+    <string name="creator_saved">Gespeichert</string>
+
+    <!-- Rechnungskopf -->
+    <string name="creator_invoice_number">Rechnungsnummer</string>
+    <string name="creator_issue_date">Rechnungsdatum</string>
+    <string name="creator_due_date">Fälligkeitsdatum (optional)</string>
+    <string name="creator_doc_type">Dokumenttyp</string>
+    <string name="creator_doc_type_invoice">Rechnung</string>
+    <string name="creator_doc_type_credit_note">Gutschrift</string>
+    <string name="creator_currency">Währung</string>
+
+    <!-- Parteien -->
+    <string name="creator_seller">Verkäufer (du)</string>
+    <string name="creator_buyer">Käufer</string>
+    <string name="creator_edit_seller">Verkäufer für diese Rechnung anpassen</string>
+
+    <!-- Positionen -->
+    <string name="creator_line_items">Positionen</string>
+    <string name="creator_add_line">Position hinzufügen</string>
+    <string name="creator_description">Beschreibung</string>
+    <string name="creator_quantity">Menge</string>
+    <string name="creator_unit">Einheit</string>
+    <string name="creator_unit_price">Einzelpreis</string>
+    <string name="creator_vat_rate">USt-%</string>
+    <string name="creator_remove">Entfernen</string>
+
+    <!-- Zahlung -->
+    <string name="creator_payment_terms_note">Zahlungshinweis (optional)</string>
+
+    <!-- Summen -->
+    <string name="creator_totals">Summen</string>
+    <string name="creator_net">Netto</string>
+    <string name="creator_vat">USt.</string>
+    <string name="creator_gross">Brutto</string>
+    <string name="creator_payable">Zahlbetrag</string>
+
+    <!-- Aktionen / Rückmeldungen -->
+    <string name="creator_generate_pdf">ZUGFeRD-PDF erzeugen</string>
+    <string name="creator_pdf_created">ZUGFeRD-PDF erstellt.</string>
+    <string name="creator_share">Teilen</string>
+    <string name="creator_delete">Löschen</string>
+    <string name="creator_delete_confirm">Diesen Entwurf löschen?</string>
+    <string name="creator_status_draft">Entwurf</string>
+    <string name="creator_status_generated">Erzeugt</string>
+    <string name="creator_error_profile_required">Bitte zuerst das Firmenprofil ausfüllen.</string>
+    <string name="creator_error_no_lines">Mindestens eine Position hinzufügen.</string>
+    <string name="creator_error_invalid">Bitte die Pflichtfelder ausfüllen.</string>
+    <string name="creator_error_generate">PDF konnte nicht erstellt werden: %1$s</string>
 </resources>

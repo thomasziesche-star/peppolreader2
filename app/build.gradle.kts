@@ -15,10 +15,14 @@ android {
         applicationId = "com.ziesche.peppolreader"
         minSdk = 28
         targetSdk = 35
-        versionCode = 14
-        versionName = "3.5"
+        versionCode = 17
+        versionName = "3.7"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        // Feature flag for the separate "Invoice Creator" mode (ZUGFeRD 2.x generation).
+        // Set to "false" to completely hide the mode; the reader is unaffected.
+        buildConfigField("boolean", "ENABLE_INVOICE_CREATOR", "true")
     }
 
     signingConfigs {
@@ -57,6 +61,7 @@ android {
 
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 
     testOptions {

@@ -8,4 +8,8 @@
     <files-path
         name="internal_files"
         path="attachments/" />
+    <!-- Generated ZUGFeRD PDFs from the Invoice Creator (filesDir/created_invoices). -->
+    <files-path
+        name="created_invoices"
+        path="created_invoices/" />
 </paths>

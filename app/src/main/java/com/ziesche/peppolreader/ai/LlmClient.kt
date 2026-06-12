@@ -29,7 +29,7 @@ class LlmClient {
     ): String = withContext(Dispatchers.IO) {
         when (credential.provider) {
             LlmProvider.OPENAI, LlmProvider.GENERIC,
-            LlmProvider.MISTRAL, LlmProvider.LANGDOCK ->
+            LlmProvider.MISTRAL, LlmProvider.LANGDOCK, LlmProvider.OPENROUTER ->
                 askOpenAi(credential, systemPrompt, question)
             LlmProvider.GEMINI -> askGemini(credential, systemPrompt, question)
             LlmProvider.CLAUDE -> askClaude(credential, systemPrompt, question)
@@ -109,7 +109,7 @@ class LlmClient {
         val cutoff = (System.currentTimeMillis() / 1000L) - FIVE_MONTHS_SECONDS
         when (provider) {
             LlmProvider.OPENAI, LlmProvider.GENERIC,
-            LlmProvider.MISTRAL, LlmProvider.LANGDOCK ->
+            LlmProvider.MISTRAL, LlmProvider.LANGDOCK, LlmProvider.OPENROUTER ->
                 parseOpenAiModels(
                     get("$base/models", mapOf("Authorization" to "Bearer $apiKey")),
                     cutoff

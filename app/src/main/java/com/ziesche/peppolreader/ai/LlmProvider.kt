@@ -37,6 +37,18 @@ enum class LlmProvider(
         baseUrlEditable = false,
         models = listOf("mistral-large-latest", "mistral-small-latest", "open-mistral-nemo", "pixtral-large-latest")
     ),
+    OPENROUTER(
+        // OpenAI-compatible aggregator; model IDs are namespaced "vendor/model".
+        displayName = "OpenRouter",
+        defaultBaseUrl = "https://openrouter.ai/api/v1",
+        baseUrlEditable = false,
+        models = listOf(
+            "openai/gpt-4o-mini",
+            "anthropic/claude-3.5-sonnet",
+            "google/gemini-2.0-flash-001",
+            "meta-llama/llama-3.3-70b-instruct"
+        )
+    ),
     LANGDOCK(
         // OpenAI-compatible; base URL is region-specific (EU/US), so it stays editable.
         displayName = "Langdock",

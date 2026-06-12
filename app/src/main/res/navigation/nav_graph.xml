@@ -38,4 +38,54 @@
         android:label="@string/ai_settings_title"
         tools:layout="@layout/fragment_ai_settings" />
 
+    <!-- Invoice Creator mode (separate, gated behind BuildConfig.ENABLE_INVOICE_CREATOR). -->
+    <fragment
+        android:id="@+id/invoiceCreatorListFragment"
+        android:name="com.ziesche.peppolreader.creator.ui.InvoiceCreatorListFragment"
+        android:label="@string/creator_title"
+        tools:layout="@layout/fragment_invoice_creator_list">
+
+        <action
+            android:id="@+id/action_creatorList_to_creatorEdit"
+            app:destination="@id/invoiceCreatorEditFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_creatorList_to_companyProfile"
+            app:destination="@id/companyProfileFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_creatorList_to_customers"
+            app:destination="@id/creatorCustomerListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/invoiceCreatorEditFragment"
+        android:name="com.ziesche.peppolreader.creator.ui.InvoiceCreatorEditFragment"
+        android:label="@string/creator_new_draft"
+        tools:layout="@layout/fragment_invoice_creator_edit" />
+
+    <fragment
+        android:id="@+id/companyProfileFragment"
+        android:name="com.ziesche.peppolreader.creator.ui.CompanyProfileFragment"
+        android:label="@string/creator_company_profile"
+        tools:layout="@layout/fragment_company_profile" />
+
+    <fragment
+        android:id="@+id/creatorCustomerListFragment"
+        android:name="com.ziesche.peppolreader.creator.ui.CreatorCustomerListFragment"
+        android:label="@string/creator_customers_title"
+        tools:layout="@layout/fragment_creator_customer_list" />
+
 </navigation>
