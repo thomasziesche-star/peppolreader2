@@ -132,12 +132,22 @@ class MainActivity : AppCompatActivity(),
         binding.fab.setImageResource(R.drawable.ic_file_upload)
         binding.fab.contentDescription = getString(R.string.import_file)
         
-        // Hide FAB on detail screen/settings
+        // Hide FAB on detail screen/settings (and on all Invoice Creator screens).
+        // The Invoice Creator screens also rebrand the toolbar headline.
+        val creatorDestinations = setOf(
+            R.id.invoiceCreatorListFragment,
+            R.id.invoiceCreatorEditFragment,
+            R.id.companyProfileFragment,
+            R.id.creatorCustomerListFragment
+        )
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.invoiceListFragment -> binding.fab.show()
                 else -> binding.fab.hide() // Hide on detail and settings
             }
+            binding.toolbarTitle.text = getString(
+                if (destination.id in creatorDestinations) R.string.app_title_creator else R.string.app_title
+            )
         }
         
         // Adjust logo color and remove background (make white transparent)
@@ -266,13 +276,35 @@ class MainActivity : AppCompatActivity(),
         }
         menu.findItem(R.id.action_language)?.setIcon(flagIcon)
 
-        // Mark the active language inside the sub-menu (checkableBehavior="single")
-        menu.findItem(R.id.action_lang_en)?.isChecked = currentLang == "en"
-        menu.findItem(R.id.action_lang_de)?.isChecked = currentLang == "de"
-        menu.findItem(R.id.action_lang_nl)?.isChecked = currentLang == "nl"
-        menu.findItem(R.id.action_lang_fr)?.isChecked = currentLang == "fr"
-        menu.findItem(R.id.action_lang_pl)?.isChecked = currentLang == "pl"
-        
+        // Mark the active language inside the sub-menu. The group uses
+        // checkableBehavior="single"; for an exclusive group MenuItem.setChecked()
+        // IGNORES its boolean argument and always selects the item it is called on.
+        // Calling it on every entry therefore left the LAST one (Polski) checked,
+        // regardless of the active locale. Only touch the active entry and let the
+        // single-choice group clear the others.
+        val activeLangItemId = when (currentLang) {
+            "de" -> R.id.action_lang_de
+            "nl" -> R.id.action_lang_nl
+            "fr" -> R.id.action_lang_fr
+            "pl" -> R.id.action_lang_pl
+            else -> R.id.action_lang_en
+        }
+        menu.findItem(activeLangItemId)?.isChecked = true
+
+        // Hide the Invoice Creator entry entirely when the feature flag is off.
+        // When visible, set it apart from the other overflow entries: primary color + bold.
+        menu.findItem(R.id.action_invoice_creator)?.let { creatorItem ->
+            creatorItem.isVisible = BuildConfig.ENABLE_INVOICE_CREATOR
+            if (creatorItem.isVisible) {
+                val tv = android.util.TypedValue()
+                theme.resolveAttribute(androidx.appcompat.R.attr.colorPrimary, tv, true)
+                val styled = android.text.SpannableString(getString(R.string.creator_title))
+                styled.setSpan(android.text.style.ForegroundColorSpan(tv.data), 0, styled.length, 0)
+                styled.setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, styled.length, 0)
+                creatorItem.title = styled
+            }
+        }
+
         // Update theme toggle icon based on current mode
         val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
         val isNightMode = currentNightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -353,6 +385,18 @@ class MainActivity : AppCompatActivity(),
                     supportFragmentManager,
                     ReminderSettingsBottomSheet.TAG
                 )
+                true
+            }
+            R.id.action_ai_settings -> {
+                val navController = findNavController(R.id.nav_host_fragment_content_main)
+                navController.navigate(R.id.aiSettingsFragment)
+                true
+            }
+            R.id.action_invoice_creator -> {
+                if (BuildConfig.ENABLE_INVOICE_CREATOR) {
+                    val navController = findNavController(R.id.nav_host_fragment_content_main)
+                    navController.navigate(R.id.invoiceCreatorListFragment)
+                }
                 true
             }
             R.id.action_info -> {

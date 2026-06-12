@@ -220,6 +220,8 @@ class InvoiceListFragment : Fragment() {
             adapter.submitList(invoices)
             updateEmptyState(invoices.isEmpty())
             binding.invoiceCounter.text = invoices.size.toString()
+            binding.invoiceCounter.contentDescription =
+                getString(R.string.cd_invoice_count, invoices.size)
         }
 
         viewModel.dateRange.observe(viewLifecycleOwner) { range ->

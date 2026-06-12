@@ -11,6 +11,12 @@
 
     <!-- Invoice List -->
     <string name="invoice_item_cd">Factuur %1$s</string>
+    <string name="cd_pdf_page">PDF-pagina %1$d van %2$d</string>
+    <string name="cd_invoice_count">%1$d facturen</string>
+    <string name="cd_status_paid">betaald</string>
+    <string name="cd_status_credit_note">creditnota</string>
+    <string name="cd_mark_paid">Als betaald markeren</string>
+    <string name="cd_mark_open">Als openstaand markeren</string>
     <string name="search_hint">Zoeken (bedrijf, nr.)…</string>
     <string name="list_filter_all">Alle</string>
     <string name="list_filter_unpaid">Onbetaald</string>
@@ -30,7 +36,9 @@
     <string name="next">Volgende</string>
 
     <!-- Messages -->
-    <string name="error_parsing">Fout bij het lezen van het bestand</string>
+    <string name="error_parsing">Dit bestand kan niet worden gelezen. Gebruik een geldige e-factuur-XML of een ZUGFeRD/Factur-X-PDF.</string>
+    <string name="pdf_export_name">Factuur_%1$s</string>
+    <string name="share_subject">Factuur %1$s</string>
     <string name="error_pdf">Fout bij het maken van de PDF</string>
     <string name="confirm_delete">Wil je deze factuur echt verwijderen?</string>
     <string name="delete">Verwijderen</string>
@@ -114,12 +122,32 @@
     <string name="chart_monthly_title">Uitgaven per maand</string>
     <string name="chart_suppliers_title">Top-leveranciers</string>
     <string name="chart_label_expenses">Uitgaven (€)</string>
+    <!-- KPI cards -->
+    <string name="kpi_total_expenses">Totale uitgaven</string>
+    <string name="kpi_invoice_count">Facturen</string>
+    <string name="kpi_open_amount">Openstaand</string>
+    <string name="kpi_overdue_amount">Achterstallig</string>
+    <string name="kpi_cd">%1$s: %2$s</string>
+    <!-- Payment status chart -->
+    <string name="chart_payment_status_title">Betaalstatus</string>
+    <string name="legend_paid">Betaald</string>
+    <string name="legend_open">Openstaand</string>
+    <string name="legend_overdue">Achterstallig</string>
+    <!-- Trend chart -->
+    <string name="chart_trend_title">Uitgaventrend</string>
+    <string name="trend_total">Totaal</string>
+    <string name="trend_paid">Betaald</string>
+    <!-- Tax overview -->
+    <string name="tax_overview_title">Btw-overzicht</string>
+    <string name="tax_net">Netto</string>
+    <string name="tax_vat">Btw</string>
+    <string name="tax_gross">Bruto</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
 
     <!-- Help Manual -->
     <string name="help_title">Hulp &amp; bediening</string>
-    <string name="help_message">Hallo, hier de belangrijkste tips…\n\n<b>Facturen importeren:</b>\nTik op + en kies XML- of PDF-bestanden (lang ingedrukt houden voor meerdere). Je kunt bestanden ook rechtstreeks vanuit je e-mailprogramma delen met de app.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybride PDF\'s worden automatisch herkend — de ingesloten XML wordt uitgelezen, de originele PDF blijft als bijlage bewaard.\n\n<b>Ondersteunde formaten:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL en CII), ZUGFeRD 1.x en 2.x, Factur-X en Pools <b>KSeF FA(3)</b> voor facturen uit Polen.\n\n<b>Facturen &amp; creditnota\'s:</b>\nWorden automatisch onderscheiden — creditnota\'s (ook KSeF KOR / KOR_ZAL / KOR_ROZ) krijgen een rood label en worden met een negatief bedrag weergegeven. Bij KSeF-correcties worden het originele factuurnummer en de reden getoond.\n\n<b>Detailweergave:</b>\nDrie tabbladen: gerenderde factuur, ruwe XML (met live-zoeken) en de originele PDF indien bijgevoegd. Met <b>Open / Betaald</b> markeer je een factuur als afgehandeld.\n\n<b>Lijst filteren:</b>\nDe chips boven de lijst filteren <i>Alle / Onbetaald / Verlopen</i>, en de datumfilter beperkt tot een periode.\n\n<b>Vervaldatum-herinneringen:</b>\nVia <i>Herinneringen…</i> activeer je dagelijkse meldingen met een instelbare aanlooptijd.\n\n<b>Export:</b>\nVia <i>Exporteren…</i> maak je een CSV (UTF-8) voor je accountant — optioneel als ZIP-bundel met originele XML/PDF.\n\n<b>Dashboard:</b>\nHet Dashboard toont uitgaven per maand en je belangrijkste leveranciers.\n\n<b>Verwijderen:</b>\nHoud een rij in de lijst ingedrukt.</string>
+    <string name="help_message">Hallo, hier de belangrijkste tips…\n\n<b>Facturen importeren:</b>\nTik op + en kies XML- of PDF-bestanden (lang ingedrukt houden voor meerdere). Je kunt bestanden ook rechtstreeks vanuit je e-mailprogramma delen met de app.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybride PDF\'s worden automatisch herkend — de ingesloten XML wordt uitgelezen, de originele PDF blijft als bijlage bewaard.\n\n<b>Ondersteunde formaten:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL en CII), ZUGFeRD 1.x en 2.x, Factur-X en Pools <b>KSeF FA(3)</b> voor facturen uit Polen.\n\n<b>Facturen &amp; creditnota\'s:</b>\nWorden automatisch onderscheiden — creditnota\'s (ook KSeF KOR / KOR_ZAL / KOR_ROZ) krijgen een rood label en worden met een negatief bedrag weergegeven. Bij KSeF-correcties worden het originele factuurnummer en de reden getoond.\n\n<b>Detailweergave:</b>\nDrie tabbladen: gerenderde factuur, ruwe XML (met live-zoeken) en de originele PDF indien bijgevoegd. Met <b>Open / Betaald</b> markeer je een factuur als afgehandeld.\n\n<b>Lijst filteren:</b>\nDe chips boven de lijst filteren <i>Alle / Onbetaald / Verlopen</i>, en de datumfilter beperkt tot een periode.\n\n<b>Vervaldatum-herinneringen:</b>\nVia <i>Herinneringen…</i> activeer je dagelijkse meldingen met een instelbare aanlooptijd.\n\n<b>Export:</b>\nVia <i>Exporteren…</i> maak je een CSV (UTF-8) voor je accountant — optioneel als ZIP-bundel met originele XML/PDF.\n\n<b>Dashboard:</b>\nHet Dashboard toont uitgaven per maand en je belangrijkste leveranciers.\n\n<b>AI-assistent:</b>\nVoeg via <i>AI-instellingen</i> een LLM-aanbieder toe (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock of een generiek OpenAI-compatibel endpoint) — plak je API-sleutel, laad de modellen en kies een standaard. Open daarna een factuur en tik op de tekstballon om er vragen over te stellen. Let op: de factuurgegevens worden naar de gekozen aanbieder gestuurd.\n\n<b>Verwijderen:</b>\nHoud een rij in de lijst ingedrukt.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; disclaimer</string>
@@ -130,6 +158,53 @@
 
     <!-- Language switcher in toolbar -->
     <string name="menu_language">Taal</string>
+
+    <!-- AI settings (placeholder page) -->
+    <string name="ai_settings_title">AI-instellingen</string>
+    <string name="ai_settings_in_progress">In ontwikkeling – binnenkort beschikbaar.</string>
+
+    <!-- AI-aanbieders beheren -->
+    <string name="ai_settings_help">Voeg je LLM-aanbieders toe en kies een standaard. De standaard wordt gebruikt voor AI-vragen over een factuur.</string>
+    <string name="ai_no_credentials">Nog geen aanbieders. Voeg er een toe om te beginnen.</string>
+    <string name="ai_add_credential">Aanbieder toevoegen</string>
+    <string name="ai_default">Standaard</string>
+    <string name="ai_credential_title">AI-aanbieder</string>
+    <string name="ai_provider_label">Aanbieder</string>
+    <string name="ai_label_label">Naam</string>
+    <string name="ai_api_key_label">API-sleutel</string>
+    <string name="ai_model_label">Model</string>
+    <string name="ai_model_hint">Tik op “Modellen laden” om ze via de API op te halen, of typ een eigen model-ID.</string>
+    <string name="ai_load_models">Modellen laden</string>
+    <string name="ai_models_none">Geen recente modellen gevonden — typ de model-ID handmatig.</string>
+    <string name="ai_privacy_notice">Let op: bij AI-vragen over een factuur worden de gegevens naar deze aanbieder gestuurd.</string>
+    <string name="ai_base_url_label">Basis-URL</string>
+    <string name="ai_save">Opslaan</string>
+    <string name="ai_cancel">Annuleren</string>
+    <string name="ai_delete">Verwijderen</string>
+    <string name="ai_delete_confirm">Deze AI-aanbieder verwijderen?</string>
+    <string name="ai_error_key_required">API-sleutel is vereist</string>
+    <string name="ai_error_model_required">Model is vereist</string>
+    <string name="ai_error_baseurl_required">Basis-URL is vereist</string>
+
+    <!-- AI-chat (factuurdetail) -->
+    <string name="ai_chat_title">Vraag over deze factuur</string>
+    <string name="ai_chat_using">Gebruikt %1$s · %2$s</string>
+    <string name="ai_chat_hint">Typ je vraag…</string>
+    <string name="ai_send">Verzenden</string>
+    <string name="ai_no_default">Nog geen AI-aanbieder geconfigureerd. Voeg er een toe in AI-instellingen.</string>
+    <string name="ai_go_to_settings">AI-instellingen openen</string>
+    <string name="ai_consent_title">Factuurgegevens naar AI sturen?</string>
+    <string name="ai_consent_message">Om je vragen te beantwoorden wordt de ruwe XML van deze factuur naar je gekozen AI-aanbieder gestuurd — een externe dienst. Factuurgegevens kunnen persoonlijke en financiële informatie bevatten. Dit is een hobbyproject, zonder garantie. Doorgaan?</string>
+    <string name="ai_consent_accept">Akkoord &amp; doorgaan</string>
+    <string name="ai_suggest_due">Wanneer moet deze factuur betaald worden?</string>
+    <string name="ai_suggest_vat">Hoeveel btw wordt er berekend?</string>
+    <string name="ai_suggest_summary">Vat deze factuur samen.</string>
+    <string name="ai_error_auth">Authenticatie mislukt — controleer je API-sleutel.</string>
+    <string name="ai_error_rate_limit">Limiet bereikt — probeer het later opnieuw.</string>
+    <string name="ai_error_network">Netwerkfout — controleer je verbinding.</string>
+    <string name="ai_error_generic">Er ging iets mis. Probeer het opnieuw.</string>
+    <string name="ai_system_prompt">Je bent een behulpzame assistent die vragen over een elektronische factuur beantwoordt. Baseer je antwoorden uitsluitend op de onderstaande factuur-XML. Als het antwoord er niet in staat, zeg dat dan. Antwoord in de taal van de vraag.\n\nFactuur-XML:\n%1$s</string>
+    <string name="cd_ask_ai">AI vragen over deze factuur</string>
 
     <!-- Export -->
     <string name="action_export">Exporteren…</string>
@@ -204,4 +279,102 @@
         <item quantity="one">%d bestand overgeslagen – alleen PDF en XML worden ondersteund</item>
         <item quantity="other">%d bestanden overgeslagen – alleen PDF en XML worden ondersteund</item>
     </plurals>
+
+    <!-- ===== Modus „Factuur maken" (ZUGFeRD 2.x / EN 16931) ===== -->
+    <string name="creator_title">Factuur maken</string>
+    <string name="creator_subtitle">Genereer ZUGFeRD-facturen als hybride PDF/A-3 (EN 16931).</string>
+    <string name="creator_no_drafts">Nog geen concepten. Tik op „Nieuwe factuur".</string>
+    <string name="creator_new_draft">Nieuwe factuur</string>
+    <string name="creator_company_profile">Bedrijfsprofiel</string>
+    <string name="creator_company_profile_hint">Uw gegevens verschijnen als afzender op elke factuur.</string>
+
+    <!-- Bedrijfs-/partijvelden -->
+    <string name="creator_company_name">Bedrijfsnaam</string>
+    <string name="creator_street">Straat en nummer</string>
+    <string name="creator_zip">Postcode</string>
+    <string name="creator_city">Plaats</string>
+    <string name="creator_country">Landcode (bijv. DE)</string>
+    <string name="creator_vat_id">Btw-nummer</string>
+    <string name="creator_tax_number">Fiscaal nummer</string>
+    <string name="creator_iban">IBAN</string>
+    <string name="creator_bic">BIC</string>
+    <string name="creator_email">E-mail</string>
+    <string name="creator_phone">Telefoon</string>
+    <string name="creator_logo">Bedrijfslogo</string>
+    <string name="creator_logo_hint">Wordt rechtsboven op de factuur-PDF getoond. PNG met transparante achtergrond werkt het best.</string>
+    <string name="creator_logo_pick">Logo kiezen</string>
+    <string name="creator_logo_error">Afbeelding kon niet worden geladen.</string>
+    <string name="creator_storage_title">Opslaglocatie</string>
+    <string name="creator_storage_hint">Waar gegenereerde ZUGFeRD-PDF\'s worden opgeslagen (een kopie blijft altijd in de app).</string>
+    <string name="creator_storage_downloads">Downloads (standaard)</string>
+    <string name="creator_storage_custom">Eigen map</string>
+    <string name="creator_storage_pick">Map kiezen</string>
+    <string name="creator_storage_folder">Map: %1$s</string>
+    <string name="creator_numbering_title">Factuurnummers</string>
+    <string name="creator_numbering_auto">Automatisch toewijzen</string>
+    <string name="creator_numbering_prefix">Voorvoegsel (bijv. FA-2026-)</string>
+    <string name="creator_numbering_next">Volgend nr.</string>
+    <string name="creator_payment_days">Standaard betalingstermijn (dagen)</string>
+    <string name="creator_payment_days_hint">Nieuwe facturen stellen de vervaldatum automatisch voor; deze blijft aanpasbaar. Leeg = geen voorstel.</string>
+    <string name="creator_search_hint">Zoeken (nr., klant, datum)</string>
+    <string name="creator_customers_title">Klanten</string>
+    <string name="creator_customers_hint">Klanten aanmaken en bewerken — kopers worden ook automatisch toegevoegd bij het genereren van een factuur.</string>
+    <string name="creator_new_customer">Nieuwe klant</string>
+    <string name="creator_delete_customer_confirm">Deze klant verwijderen?</string>
+    <string name="creator_pick_customer">Uit klantenbestand</string>
+    <string name="creator_no_customers">Nog geen klanten opgeslagen. Kopers worden automatisch bewaard bij het genereren van een factuur.</string>
+    <string name="creator_view_pdf">Document weergeven</string>
+    <string name="creator_view_error">Geen app gevonden om PDF\'s weer te geven.</string>
+    <string name="creator_pdf_missing">Het PDF-bestand is niet meer beschikbaar.</string>
+    <string name="creator_generated_locked">Gegenereerde facturen kunnen niet meer worden gewijzigd.</string>
+    <string name="creator_pdf_created_at">ZUGFeRD-PDF gemaakt — opgeslagen in “%1$s”.</string>
+    <string name="creator_save">Opslaan</string>
+    <string name="creator_saved">Opgeslagen</string>
+
+    <!-- Factuurkop -->
+    <string name="creator_invoice_number">Factuurnummer</string>
+    <string name="creator_issue_date">Factuurdatum</string>
+    <string name="creator_due_date">Vervaldatum (optioneel)</string>
+    <string name="creator_doc_type">Documenttype</string>
+    <string name="creator_doc_type_invoice">Factuur</string>
+    <string name="creator_doc_type_credit_note">Creditnota</string>
+    <string name="creator_currency">Valuta</string>
+
+    <!-- Partijen -->
+    <string name="creator_seller">Verkoper (u)</string>
+    <string name="creator_buyer">Koper</string>
+    <string name="creator_edit_seller">Verkoper voor deze factuur aanpassen</string>
+
+    <!-- Regels -->
+    <string name="creator_line_items">Regels</string>
+    <string name="creator_add_line">Regel toevoegen</string>
+    <string name="creator_description">Omschrijving</string>
+    <string name="creator_quantity">Aantal</string>
+    <string name="creator_unit">Eenheid</string>
+    <string name="creator_unit_price">Stukprijs</string>
+    <string name="creator_vat_rate">Btw %</string>
+    <string name="creator_remove">Verwijderen</string>
+
+    <!-- Betaling -->
+    <string name="creator_payment_terms_note">Betalingsnotitie (optioneel)</string>
+
+    <!-- Totalen -->
+    <string name="creator_totals">Totalen</string>
+    <string name="creator_net">Netto</string>
+    <string name="creator_vat">Btw</string>
+    <string name="creator_gross">Bruto</string>
+    <string name="creator_payable">Te betalen</string>
+
+    <!-- Acties / feedback -->
+    <string name="creator_generate_pdf">ZUGFeRD-PDF maken</string>
+    <string name="creator_pdf_created">ZUGFeRD-PDF gemaakt.</string>
+    <string name="creator_share">Delen</string>
+    <string name="creator_delete">Verwijderen</string>
+    <string name="creator_delete_confirm">Dit concept verwijderen?</string>
+    <string name="creator_status_draft">Concept</string>
+    <string name="creator_status_generated">Gegenereerd</string>
+    <string name="creator_error_profile_required">Vul eerst het bedrijfsprofiel in.</string>
+    <string name="creator_error_no_lines">Voeg ten minste één regel toe.</string>
+    <string name="creator_error_invalid">Vul de verplichte velden in.</string>
+    <string name="creator_error_generate">Kan de PDF niet maken: %1$s</string>
 </resources>

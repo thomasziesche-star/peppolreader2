@@ -171,73 +171,22 @@ class PeppolParser(private val xmlContent: String, private val context: android.
         return result
     }
     
-    private fun getText(map: Map<String, Any>?, path: String, default: String = ""): String {
-        if (map == null) return default
-        
-        val parts = path.split("/")
-        var current: Any? = map
-        
-        for (part in parts) {
-            current = when (current) {
-                is Map<*, *> -> current[part]
-                is List<*> -> (current.firstOrNull() as? Map<*, *>)?.get(part)
-                else -> null
-            }
-            if (current == null) return default
-        }
-        
-        return when (current) {
-            is String -> current
-            is Map<*, *> -> (current["#text"] as? String) ?: default
-            else -> default
-        }
-    }
-    
-    private fun getAttribute(map: Map<String, Any>?, attrName: String): String? {
-        val attrs = map?.get("@attributes") as? Map<*, *>
-        return attrs?.get(attrName) as? String
-    }
-    
-    @Suppress("UNCHECKED_CAST")
-    private fun getMap(path: String): Map<String, Any>? {
-        val parts = path.split("/")
-        var current: Any? = invoiceElement
-        
-        for (part in parts) {
-            current = when (current) {
-                is Map<*, *> -> current[part]
-                is List<*> -> current.firstOrNull()
-                else -> null
-            }
-            if (current == null) return null
-        }
-        
-        return current as? Map<String, Any>
-    }
-    
-    @Suppress("UNCHECKED_CAST")
-    private fun getList(path: String): List<Map<String, Any>> {
-        val parts = path.split("/")
-        var current: Any? = invoiceElement
-        
-        for ((index, part) in parts.withIndex()) {
-            if (index == parts.lastIndex) {
-                val items = (current as? Map<*, *>)?.get(part)
-                return when (items) {
-                    is List<*> -> items as List<Map<String, Any>>
-                    is Map<*, *> -> listOf(items as Map<String, Any>)
-                    else -> emptyList()
-                }
-            }
-            current = when (current) {
-                is Map<*, *> -> current[part]
-                is List<*> -> current.firstOrNull()
-                else -> null
-            }
-            if (current == null) return emptyList()
-        }
-        return emptyList()
-    }
+    // --- generic XML→Map navigation (delegated to XmlMapReader) -------------
+    // parseDocument/parseElement above stay local: Peppol unwraps children at the
+    // top level and handles the StandardBusinessDocument wrapper, unlike the
+    // "wrapped" variant Cii/Ksef share via XmlMapReader.
+
+    private fun getText(map: Map<String, Any>?, path: String, default: String = ""): String =
+        XmlMapReader.getText(map, path, default)
+
+    private fun getAttribute(map: Map<String, Any>?, attrName: String): String? =
+        XmlMapReader.getAttribute(map, attrName)
+
+    private fun getMap(path: String): Map<String, Any>? =
+        XmlMapReader.getMap(invoiceElement, path)
+
+    private fun getList(path: String): List<Map<String, Any>> =
+        XmlMapReader.getList(invoiceElement, path)
     
     private fun parseInvoiceDetails(): InvoiceDetails {
         return InvoiceDetails(

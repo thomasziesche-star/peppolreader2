@@ -63,6 +63,17 @@
         app:showAsAction="never" />
 
     <item
+        android:id="@+id/action_ai_settings"
+        android:title="@string/ai_settings_title"
+        app:showAsAction="never" />
+
+    <!-- Visibility toggled at runtime in MainActivity via BuildConfig.ENABLE_INVOICE_CREATOR. -->
+    <item
+        android:id="@+id/action_invoice_creator"
+        android:title="@string/creator_title"
+        app:showAsAction="never" />
+
+    <item
         android:id="@+id/action_info"
         android:icon="@drawable/ic_info"
         android:title="@string/info_title"

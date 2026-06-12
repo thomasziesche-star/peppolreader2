@@ -9,7 +9,7 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.ziesche.peppolreader.MainActivity
 import com.ziesche.peppolreader.R
-import com.ziesche.peppolreader.data.AppDatabase
+import com.ziesche.peppolreader.data.InvoiceRepository
 import com.ziesche.peppolreader.data.model.Invoice
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -49,15 +49,15 @@ class DueDateWorker(
         val thresholdCal = (now.clone() as Calendar).apply { add(Calendar.DAY_OF_YEAR, daysBefore) }
         val thresholdIso = ISO.format(thresholdCal.time)
 
-        val dao = AppDatabase.getDatabase(ctx).invoiceDao()
-        val due = dao.getDueSoon(thresholdIso, startOfToday.timeInMillis)
+        val repository = InvoiceRepository.from(ctx)
+        val due = repository.getDueSoon(thresholdIso, startOfToday.timeInMillis)
 
         if (due.isEmpty()) return Result.success()
 
         val currency = NumberFormat.getCurrencyInstance(Locale.getDefault())
         due.forEach { invoice ->
             postNotification(ctx, invoice, currency)
-            dao.touchReminderShown(invoice.id, System.currentTimeMillis())
+            repository.touchReminderShown(invoice.id, System.currentTimeMillis())
         }
         return Result.success()
     }

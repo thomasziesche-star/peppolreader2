@@ -11,6 +11,12 @@
 
     <!-- Invoice List -->
     <string name="invoice_item_cd">Facture %1$s</string>
+    <string name="cd_pdf_page">Page PDF %1$d sur %2$d</string>
+    <string name="cd_invoice_count">%1$d factures</string>
+    <string name="cd_status_paid">payée</string>
+    <string name="cd_status_credit_note">avoir</string>
+    <string name="cd_mark_paid">Marquer comme payée</string>
+    <string name="cd_mark_open">Marquer comme impayée</string>
     <string name="search_hint">Rechercher (société, n°)…</string>
     <string name="list_filter_all">Toutes</string>
     <string name="list_filter_unpaid">Impayées</string>
@@ -30,7 +36,9 @@
     <string name="next">Suivant</string>
 
     <!-- Messages -->
-    <string name="error_parsing">Erreur lors de la lecture du fichier</string>
+    <string name="error_parsing">Ce fichier ne peut pas être lu. Veuillez utiliser un XML de facture électronique valide ou un PDF ZUGFeRD/Factur-X.</string>
+    <string name="pdf_export_name">Facture_%1$s</string>
+    <string name="share_subject">Facture %1$s</string>
     <string name="error_pdf">Erreur lors de la création du PDF</string>
     <string name="confirm_delete">Voulez-vous vraiment supprimer cette facture ?</string>
     <string name="delete">Supprimer</string>
@@ -114,12 +122,32 @@
     <string name="chart_monthly_title">Dépenses par mois</string>
     <string name="chart_suppliers_title">Principaux fournisseurs</string>
     <string name="chart_label_expenses">Dépenses (€)</string>
+    <!-- KPI cards -->
+    <string name="kpi_total_expenses">Dépenses totales</string>
+    <string name="kpi_invoice_count">Factures</string>
+    <string name="kpi_open_amount">À payer</string>
+    <string name="kpi_overdue_amount">En retard</string>
+    <string name="kpi_cd">%1$s : %2$s</string>
+    <!-- Payment status chart -->
+    <string name="chart_payment_status_title">Statut de paiement</string>
+    <string name="legend_paid">Payées</string>
+    <string name="legend_open">À payer</string>
+    <string name="legend_overdue">En retard</string>
+    <!-- Trend chart -->
+    <string name="chart_trend_title">Tendance des dépenses</string>
+    <string name="trend_total">Total</string>
+    <string name="trend_paid">Payées</string>
+    <!-- Tax overview -->
+    <string name="tax_overview_title">Aperçu de la TVA</string>
+    <string name="tax_net">Net</string>
+    <string name="tax_vat">TVA</string>
+    <string name="tax_gross">Brut</string>
 
     <string name="lorem_ipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</string>
 
     <!-- Help Manual -->
     <string name="help_title">Aide &amp; utilisation</string>
-    <string name="help_message">Bonjour, voici quelques conseils rapides…\n\n<b>Importer des factures :</b>\nAppuyez sur + et choisissez des fichiers XML ou PDF (appui long pour la sélection multiple). Vous pouvez aussi partager des fichiers depuis votre application de messagerie vers l\'application.\n\n<b>PDF ZUGFeRD &amp; Factur-X :</b>\nLes PDF hybrides sont détectés automatiquement — le XML intégré est extrait et le PDF d\'origine est conservé en pièce jointe.\n\n<b>Formats pris en charge :</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL et CII), ZUGFeRD 1.x et 2.x, Factur-X et <b>KSeF FA(3)</b> polonais pour les factures émises en Pologne.\n\n<b>Factures &amp; avoirs :</b>\nDistingués automatiquement — les avoirs (y compris KSeF KOR / KOR_ZAL / KOR_ROZ) sont marqués d\'une étiquette rouge et affichés avec un montant négatif. Pour les corrections KSeF, le numéro et le motif d\'origine sont affichés.\n\n<b>Vue détaillée :</b>\nTrois onglets : facture rendue, XML brut (avec recherche en direct) et PDF d\'origine s\'il est joint. Utilisez <b>Ouvert / Payé</b> pour marquer une facture comme réglée.\n\n<b>Filtrer la liste :</b>\nLes puces au-dessus de la liste filtrent <i>Tout / Impayé / En retard</i>, et le filtre de période limite à un intervalle de dates.\n\n<b>Rappels d\'échéance :</b>\nDans <i>Rappels…</i>, activez les notifications quotidiennes avec délai au choix.\n\n<b>Export :</b>\nDans <i>Exporter…</i>, créez un CSV (UTF-8) pour votre expert-comptable — au choix sous forme de bundle ZIP avec les XML/PDF d\'origine.\n\n<b>Tableau de bord :</b>\nLe tableau de bord affiche les dépenses par mois et vos principaux fournisseurs.\n\n<b>Supprimer :</b>\nAppuyez longuement sur une ligne dans la liste.</string>
+    <string name="help_message">Bonjour, voici quelques conseils rapides…\n\n<b>Importer des factures :</b>\nAppuyez sur + et choisissez des fichiers XML ou PDF (appui long pour la sélection multiple). Vous pouvez aussi partager des fichiers depuis votre application de messagerie vers l\'application.\n\n<b>PDF ZUGFeRD &amp; Factur-X :</b>\nLes PDF hybrides sont détectés automatiquement — le XML intégré est extrait et le PDF d\'origine est conservé en pièce jointe.\n\n<b>Formats pris en charge :</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL et CII), ZUGFeRD 1.x et 2.x, Factur-X et <b>KSeF FA(3)</b> polonais pour les factures émises en Pologne.\n\n<b>Factures &amp; avoirs :</b>\nDistingués automatiquement — les avoirs (y compris KSeF KOR / KOR_ZAL / KOR_ROZ) sont marqués d\'une étiquette rouge et affichés avec un montant négatif. Pour les corrections KSeF, le numéro et le motif d\'origine sont affichés.\n\n<b>Vue détaillée :</b>\nTrois onglets : facture rendue, XML brut (avec recherche en direct) et PDF d\'origine s\'il est joint. Utilisez <b>Ouvert / Payé</b> pour marquer une facture comme réglée.\n\n<b>Filtrer la liste :</b>\nLes puces au-dessus de la liste filtrent <i>Tout / Impayé / En retard</i>, et le filtre de période limite à un intervalle de dates.\n\n<b>Rappels d\'échéance :</b>\nDans <i>Rappels…</i>, activez les notifications quotidiennes avec délai au choix.\n\n<b>Export :</b>\nDans <i>Exporter…</i>, créez un CSV (UTF-8) pour votre expert-comptable — au choix sous forme de bundle ZIP avec les XML/PDF d\'origine.\n\n<b>Tableau de bord :</b>\nLe tableau de bord affiche les dépenses par mois et vos principaux fournisseurs.\n\n<b>Assistant IA :</b>\nDans <i>Paramètres IA</i>, ajoutez un fournisseur LLM (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock ou un endpoint générique compatible OpenAI) — saisissez votre clé API, chargez les modèles et choisissez un fournisseur par défaut. Ouvrez ensuite une facture et touchez la bulle pour poser des questions. Remarque : les données de la facture sont envoyées au fournisseur choisi.\n\n<b>Supprimer :</b>\nAppuyez longuement sur une ligne dans la liste.</string>
 
     <!-- Info Menu -->
     <string name="info_title">Infos &amp; mentions légales</string>
@@ -130,6 +158,53 @@
 
     <!-- Language switcher in toolbar -->
     <string name="menu_language">Langue</string>
+
+    <!-- AI settings (placeholder page) -->
+    <string name="ai_settings_title">Paramètres IA</string>
+    <string name="ai_settings_in_progress">En cours — bientôt disponible.</string>
+
+    <!-- Gestion des fournisseurs IA -->
+    <string name="ai_settings_help">Ajoutez vos fournisseurs LLM et choisissez un fournisseur par défaut. Il sera utilisé pour les questions IA sur une facture.</string>
+    <string name="ai_no_credentials">Aucun fournisseur pour l\'instant. Ajoutez-en un pour commencer.</string>
+    <string name="ai_add_credential">Ajouter un fournisseur</string>
+    <string name="ai_default">Par défaut</string>
+    <string name="ai_credential_title">Fournisseur IA</string>
+    <string name="ai_provider_label">Fournisseur</string>
+    <string name="ai_label_label">Nom</string>
+    <string name="ai_api_key_label">Clé API</string>
+    <string name="ai_model_label">Modèle</string>
+    <string name="ai_model_hint">Touchez « Charger les modèles » pour les récupérer via l\'API, ou saisissez un ID de modèle.</string>
+    <string name="ai_load_models">Charger les modèles</string>
+    <string name="ai_models_none">Aucun modèle récent trouvé — saisissez l\'ID du modèle manuellement.</string>
+    <string name="ai_privacy_notice">Remarque : lors d\'une question IA sur une facture, ses données sont envoyées à ce fournisseur.</string>
+    <string name="ai_base_url_label">URL de base</string>
+    <string name="ai_save">Enregistrer</string>
+    <string name="ai_cancel">Annuler</string>
+    <string name="ai_delete">Supprimer</string>
+    <string name="ai_delete_confirm">Supprimer ce fournisseur IA ?</string>
+    <string name="ai_error_key_required">Clé API requise</string>
+    <string name="ai_error_model_required">Modèle requis</string>
+    <string name="ai_error_baseurl_required">URL de base requise</string>
+
+    <!-- Chat IA (détail de la facture) -->
+    <string name="ai_chat_title">Poser une question sur cette facture</string>
+    <string name="ai_chat_using">Utilise %1$s · %2$s</string>
+    <string name="ai_chat_hint">Saisissez votre question…</string>
+    <string name="ai_send">Envoyer</string>
+    <string name="ai_no_default">Aucun fournisseur IA configuré. Ajoutez-en un dans les paramètres IA.</string>
+    <string name="ai_go_to_settings">Ouvrir les paramètres IA</string>
+    <string name="ai_consent_title">Envoyer les données de la facture à l\'IA ?</string>
+    <string name="ai_consent_message">Pour répondre à vos questions, le XML brut de cette facture est envoyé au fournisseur IA choisi — un service tiers. Les données de facture peuvent contenir des informations personnelles et financières. Ceci est un projet amateur, sans garantie. Continuer ?</string>
+    <string name="ai_consent_accept">Accepter &amp; continuer</string>
+    <string name="ai_suggest_due">Quand cette facture est-elle due ?</string>
+    <string name="ai_suggest_vat">Quel est le montant de la TVA ?</string>
+    <string name="ai_suggest_summary">Résumez cette facture.</string>
+    <string name="ai_error_auth">Échec de l\'authentification — vérifiez votre clé API.</string>
+    <string name="ai_error_rate_limit">Limite atteinte — réessayez plus tard.</string>
+    <string name="ai_error_network">Erreur réseau — vérifiez votre connexion.</string>
+    <string name="ai_error_generic">Une erreur est survenue. Veuillez réessayer.</string>
+    <string name="ai_system_prompt">Vous êtes un assistant qui répond aux questions sur une facture électronique. Basez vos réponses uniquement sur le XML de facture ci-dessous. Si la réponse ne s\'y trouve pas, dites-le. Répondez dans la langue de la question.\n\nXML de la facture :\n%1$s</string>
+    <string name="cd_ask_ai">Interroger l\'IA sur cette facture</string>
 
     <!-- Export -->
     <string name="action_export">Exporter…</string>
@@ -204,4 +279,102 @@
         <item quantity="one">%d fichier ignoré – seuls PDF et XML sont pris en charge</item>
         <item quantity="other">%d fichiers ignorés – seuls PDF et XML sont pris en charge</item>
     </plurals>
+
+    <!-- ===== Mode « Créer une facture » (ZUGFeRD 2.x / EN 16931) ===== -->
+    <string name="creator_title">Créer une facture</string>
+    <string name="creator_subtitle">Générez des factures ZUGFeRD au format hybride PDF/A-3 (EN 16931).</string>
+    <string name="creator_no_drafts">Aucun brouillon. Touchez « Nouvelle facture ».</string>
+    <string name="creator_new_draft">Nouvelle facture</string>
+    <string name="creator_company_profile">Profil de l\'entreprise</string>
+    <string name="creator_company_profile_hint">Vos coordonnées apparaissent comme expéditeur sur chaque facture.</string>
+
+    <!-- Champs entreprise / partie -->
+    <string name="creator_company_name">Nom de l\'entreprise</string>
+    <string name="creator_street">Rue et numéro</string>
+    <string name="creator_zip">Code postal</string>
+    <string name="creator_city">Ville</string>
+    <string name="creator_country">Code pays (ex. DE)</string>
+    <string name="creator_vat_id">N° de TVA</string>
+    <string name="creator_tax_number">Numéro fiscal</string>
+    <string name="creator_iban">IBAN</string>
+    <string name="creator_bic">BIC</string>
+    <string name="creator_email">E-mail</string>
+    <string name="creator_phone">Téléphone</string>
+    <string name="creator_logo">Logo de l\'entreprise</string>
+    <string name="creator_logo_hint">Affiché en haut à droite du PDF de facture. Un PNG à fond transparent convient le mieux.</string>
+    <string name="creator_logo_pick">Choisir un logo</string>
+    <string name="creator_logo_error">Impossible de charger l\'image.</string>
+    <string name="creator_storage_title">Emplacement d\'enregistrement</string>
+    <string name="creator_storage_hint">Où les PDF ZUGFeRD générés sont enregistrés (une copie reste toujours dans l\'application).</string>
+    <string name="creator_storage_downloads">Téléchargements (par défaut)</string>
+    <string name="creator_storage_custom">Dossier personnalisé</string>
+    <string name="creator_storage_pick">Choisir un dossier</string>
+    <string name="creator_storage_folder">Dossier : %1$s</string>
+    <string name="creator_numbering_title">Numéros de facture</string>
+    <string name="creator_numbering_auto">Attribuer automatiquement</string>
+    <string name="creator_numbering_prefix">Préfixe (ex. FA-2026-)</string>
+    <string name="creator_numbering_next">N° suivant</string>
+    <string name="creator_payment_days">Délai de paiement par défaut (jours)</string>
+    <string name="creator_payment_days_hint">Les nouvelles factures suggèrent automatiquement la date d\'échéance ; elle reste modifiable. Vide = aucune suggestion.</string>
+    <string name="creator_search_hint">Rechercher (n°, client, date)</string>
+    <string name="creator_customers_title">Clients</string>
+    <string name="creator_customers_hint">Créer et modifier des clients — les acheteurs sont aussi ajoutés automatiquement lors de la génération d\'une facture.</string>
+    <string name="creator_new_customer">Nouveau client</string>
+    <string name="creator_delete_customer_confirm">Supprimer ce client ?</string>
+    <string name="creator_pick_customer">Depuis les clients</string>
+    <string name="creator_no_customers">Aucun client enregistré. Les acheteurs sont mémorisés automatiquement lors de la génération d\'une facture.</string>
+    <string name="creator_view_pdf">Afficher le document</string>
+    <string name="creator_view_error">Aucune application trouvée pour afficher les PDF.</string>
+    <string name="creator_pdf_missing">Le fichier PDF n\'est plus disponible.</string>
+    <string name="creator_generated_locked">Les factures générées ne peuvent plus être modifiées.</string>
+    <string name="creator_pdf_created_at">PDF ZUGFeRD créé — enregistré dans « %1$s ».</string>
+    <string name="creator_save">Enregistrer</string>
+    <string name="creator_saved">Enregistré</string>
+
+    <!-- En-tête de facture -->
+    <string name="creator_invoice_number">Numéro de facture</string>
+    <string name="creator_issue_date">Date d\'émission</string>
+    <string name="creator_due_date">Date d\'échéance (facultatif)</string>
+    <string name="creator_doc_type">Type de document</string>
+    <string name="creator_doc_type_invoice">Facture</string>
+    <string name="creator_doc_type_credit_note">Avoir</string>
+    <string name="creator_currency">Devise</string>
+
+    <!-- Parties -->
+    <string name="creator_seller">Vendeur (vous)</string>
+    <string name="creator_buyer">Acheteur</string>
+    <string name="creator_edit_seller">Modifier le vendeur pour cette facture</string>
+
+    <!-- Lignes -->
+    <string name="creator_line_items">Lignes</string>
+    <string name="creator_add_line">Ajouter une ligne</string>
+    <string name="creator_description">Description</string>
+    <string name="creator_quantity">Qté</string>
+    <string name="creator_unit">Unité</string>
+    <string name="creator_unit_price">Prix unitaire</string>
+    <string name="creator_vat_rate">TVA %</string>
+    <string name="creator_remove">Supprimer</string>
+
+    <!-- Paiement -->
+    <string name="creator_payment_terms_note">Note de paiement (facultatif)</string>
+
+    <!-- Totaux -->
+    <string name="creator_totals">Totaux</string>
+    <string name="creator_net">Net</string>
+    <string name="creator_vat">TVA</string>
+    <string name="creator_gross">Brut</string>
+    <string name="creator_payable">Montant dû</string>
+
+    <!-- Actions / retours -->
+    <string name="creator_generate_pdf">Créer le PDF ZUGFeRD</string>
+    <string name="creator_pdf_created">PDF ZUGFeRD créé.</string>
+    <string name="creator_share">Partager</string>
+    <string name="creator_delete">Supprimer</string>
+    <string name="creator_delete_confirm">Supprimer ce brouillon ?</string>
+    <string name="creator_status_draft">Brouillon</string>
+    <string name="creator_status_generated">Généré</string>
+    <string name="creator_error_profile_required">Veuillez d\'abord remplir le profil de l\'entreprise.</string>
+    <string name="creator_error_no_lines">Ajoutez au moins une ligne.</string>
+    <string name="creator_error_invalid">Veuillez compléter les champs obligatoires.</string>
+    <string name="creator_error_generate">Impossible de créer le PDF : %1$s</string>
 </resources>

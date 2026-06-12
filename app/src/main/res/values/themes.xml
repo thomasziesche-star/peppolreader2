@@ -29,10 +29,33 @@
         <!-- Error -->
         <item name="colorError">@color/md_theme_light_error</item>
         <item name="colorOnError">@color/md_theme_light_onError</item>
-        
 
-        
+        <!-- Popup / overflow menus: the custom frosted-glass background (see bg_popup_menu)
+             replaces the tinted Material surface, removing the baseline "purple" cast. -->
+        <item name="popupMenuStyle">@style/Widget.Peppol.PopupMenu</item>
+        <item name="android:popupMenuStyle">@style/Widget.Peppol.PopupMenu</item>
+        <item name="actionOverflowMenuStyle">@style/Widget.Peppol.PopupMenu.Overflow</item>
     </style>
 
     <style name="Theme.Peppolreaderfree" parent="Base.Theme.Peppolreaderfree" />
+
+    <!-- Frosted-glass popup menus: custom rounded translucent background (see bg_popup_menu). -->
+    <style name="Widget.Peppol.PopupMenu" parent="Widget.Material3.PopupMenu">
+        <item name="android:popupBackground">@drawable/bg_popup_menu</item>
+        <item name="android:popupElevation">4dp</item>
+    </style>
+
+    <style name="Widget.Peppol.PopupMenu.Overflow" parent="Widget.Material3.PopupMenu.Overflow">
+        <item name="android:popupBackground">@drawable/bg_popup_menu</item>
+        <item name="android:popupElevation">4dp</item>
+        <item name="android:dropDownVerticalOffset">6dp</item>
+    </style>
+
+    <!-- Bottom sheets that contain text input (AI editor / AI chat). The dialog's own
+         edge-to-edge mode otherwise swallows adjustResize, leaving inputs hidden behind the
+         keyboard. Disabling it lets the sheet window resize so inputs stay above the IME. -->
+    <style name="Theme.Peppol.BottomSheet" parent="ThemeOverlay.Material3.BottomSheetDialog">
+        <item name="android:windowSoftInputMode">adjustResize</item>
+        <item name="enableEdgeToEdge">false</item>
+    </style>
 </resources>

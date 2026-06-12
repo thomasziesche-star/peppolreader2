@@ -35,7 +35,7 @@ class KsefFa3Parser(private val xmlContent: String, @Suppress("UNUSED_PARAMETER"
         val pull = XmlPullParserFactory.newInstance().newPullParser()
         pull.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, true)
         pull.setInput(StringReader(xmlContent))
-        root = parseDocument(pull)
+        root = XmlMapReader.parseDocument(pull)
 
         // Unwrap the <Faktura> root.
         @Suppress("UNCHECKED_CAST")
@@ -238,96 +238,14 @@ class KsefFa3Parser(private val xmlContent: String, @Suppress("UNUSED_PARAMETER"
         return parts.joinToString(" • ").ifEmpty { null }
     }
 
-    // --- generic XML→Map helpers (same shape as PeppolParser/CiiParser) -----
+    // --- generic XML→Map helpers (delegated to XmlMapReader) ----------------
 
-    private fun parseDocument(parser: XmlPullParser): Map<String, Any> {
-        val result = mutableMapOf<String, Any>()
-        var eventType = parser.eventType
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-            if (eventType == XmlPullParser.START_TAG) {
-                result.putAll(parseElement(parser))
-                return result
-            }
-            eventType = parser.next()
-        }
-        return result
-    }
+    private fun getText(map: Map<String, Any>?, path: String, default: String = ""): String =
+        XmlMapReader.getText(map, path, default)
 
-    @Suppress("UNCHECKED_CAST")
-    private fun parseElement(parser: XmlPullParser): Map<String, Any> {
-        val outer = mutableMapOf<String, Any>()
-        val elementName = parser.name
-        val inner = mutableMapOf<String, Any>()
+    private fun getMap(path: String): Map<String, Any>? =
+        XmlMapReader.getMap(root, path)
 
-        val attrs = mutableMapOf<String, String>()
-        for (i in 0 until parser.attributeCount) {
-            attrs[parser.getAttributeName(i)] = parser.getAttributeValue(i)
-        }
-        if (attrs.isNotEmpty()) inner["@attributes"] = attrs
-
-        val textBuf = StringBuilder()
-        var eventType = parser.next()
-        while (eventType != XmlPullParser.END_TAG || parser.name != elementName) {
-            when (eventType) {
-                XmlPullParser.START_TAG -> {
-                    val childName = parser.name
-                    val child = parseElement(parser)[childName] as Map<String, Any>
-                    when (val existing = inner[childName]) {
-                        null -> inner[childName] = child
-                        is MutableList<*> -> (existing as MutableList<Map<String, Any>>).add(child)
-                        is Map<*, *> -> inner[childName] = mutableListOf(existing as Map<String, Any>, child)
-                    }
-                }
-                XmlPullParser.TEXT -> {
-                    val text = parser.text?.trim()
-                    if (!text.isNullOrEmpty()) textBuf.append(text)
-                }
-            }
-            eventType = parser.next()
-        }
-        if (textBuf.isNotEmpty()) inner["#text"] = textBuf.toString()
-
-        outer[elementName] = inner
-        return outer
-    }
-
-    private fun getText(map: Map<String, Any>?, path: String, default: String = ""): String {
-        if (map == null) return default
-        var current: Any? = map
-        for (part in path.split("/")) {
-            current = when (current) {
-                is Map<*, *> -> current[part]
-                is List<*> -> (current.firstOrNull() as? Map<*, *>)?.get(part)
-                else -> null
-            }
-            if (current == null) return default
-        }
-        return when (current) {
-            is String -> current
-            is Map<*, *> -> (current["#text"] as? String) ?: default
-            else -> default
-        }
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun getMap(path: String): Map<String, Any>? {
-        var current: Any? = root
-        for (part in path.split("/")) {
-            current = when (current) {
-                is Map<*, *> -> current[part]
-                is List<*> -> current.firstOrNull()
-                else -> null
-            }
-            if (current == null) return null
-        }
-        return current as? Map<String, Any>
-    }
-
-    @Suppress("UNCHECKED_CAST")
-    private fun listOfMaps(value: Any?): List<Map<String, Any>> = when (value) {
-        null -> emptyList()
-        is List<*> -> value as List<Map<String, Any>>
-        is Map<*, *> -> listOf(value as Map<String, Any>)
-        else -> emptyList()
-    }
+    private fun listOfMaps(value: Any?): List<Map<String, Any>> =
+        XmlMapReader.listOfMaps(value)
 }

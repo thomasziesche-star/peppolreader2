@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ziesche.peppolreader.data.model.DocumentType
 import com.ziesche.peppolreader.data.model.Invoice
+import com.ziesche.peppolreader.data.model.signedPayable
 import com.ziesche.peppolreader.databinding.ItemInvoiceBinding
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
@@ -85,8 +86,7 @@ class InvoiceAdapter(
                 val isCreditNote = DocumentType.isCreditNote(invoice.documentTypeCode)
                 creditNoteChip.visibility =
                     if (isCreditNote) android.view.View.VISIBLE else android.view.View.GONE
-                val signedAmount = if (isCreditNote) -invoice.payableAmount else invoice.payableAmount
-                invoiceAmount.text = currencyFormat.format(signedAmount)
+                invoiceAmount.text = currencyFormat.format(invoice.signedPayable)
                 val colorAttr =
                     if (isCreditNote) com.google.android.material.R.attr.colorError
                     else com.google.android.material.R.attr.colorPrimary
@@ -104,6 +104,21 @@ class InvoiceAdapter(
                 } catch (e: Exception) {
                     invoiceDate.text = invoice.issueDate
                 }
+
+                // Consolidated screen-reader description: one card = one spoken summary
+                // instead of TalkBack reading each unlabeled chip/field separately.
+                val ctx = root.context
+                val statusParts = buildList {
+                    if (isCreditNote) add(ctx.getString(com.ziesche.peppolreader.R.string.cd_status_credit_note))
+                    if (invoice.paidAt != null) add(ctx.getString(com.ziesche.peppolreader.R.string.cd_status_paid))
+                }
+                root.contentDescription = buildList {
+                    add(ctx.getString(com.ziesche.peppolreader.R.string.invoice_item_cd, invoice.invoiceId))
+                    add(invoice.supplierName)
+                    add(invoiceAmount.text.toString())
+                    add(invoiceDate.text.toString())
+                    addAll(statusParts)
+                }.joinToString(", ")
                 
                 // Attachment label (XML-embedded PDF or original ZUGFeRD/Factur-X PDF)
                 if (!invoice.embeddedDocumentFilename.isNullOrEmpty()) {
