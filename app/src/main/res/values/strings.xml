@@ -147,7 +147,7 @@
 
     <!-- Help Manual -->
     <string name="help_title">Help &amp; Usage</string>
-    <string name="help_message">Hi there, a few quick pointers…\n\n<b>Import invoices:</b>\nTap + and pick XML or PDF files (long-press for multi-select). You can also share files straight from your mail app into E-Invoice &amp; Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded XML is extracted, and the original PDF is kept as an attachment.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X, and Polish <b>KSeF FA(3)</b> for invoices issued in Poland.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes (incl. KSeF KOR / KOR_ZAL / KOR_ROZ) are flagged with a red chip and shown with a negative amount. KSeF correction invoices also display the original number and reason.\n\n<b>Detail view:</b>\nThree tabs: rendered invoice, raw XML (with live search), and the original PDF if attached. Use <b>Open / Paid</b> to mark an invoice as settled.\n\n<b>Filter the list:</b>\nUse the chips above the list for <i>All / Unpaid / Overdue</i>, and the date range picker to limit to a period.\n\n<b>Due-date reminders:</b>\nUnder <i>Reminders…</i> you can switch on daily notifications and choose how many days ahead.\n\n<b>Export:</b>\nUnder <i>Export…</i> create a CSV (UTF-8) for your tax advisor — optionally as a ZIP bundle including the original XML/PDF files.\n\n<b>Dashboard:</b>\nThe Dashboard menu shows expenses per month and your top suppliers.\n\n<b>AI assistant:</b>\nUnder <i>AI Settings</i> add an LLM provider (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock or a generic OpenAI-compatible endpoint) — paste your API key, load the models and pick a default. Then open an invoice and tap the speech bubble to ask questions about it. Note: the invoice data is sent to the provider you chose.\n\n<b>Delete:</b>\nLong-press a row in the list.</string>
+    <string name="help_message">Hi there, a few quick pointers…\n\n<b>Import invoices:</b>\nTap + and pick XML or PDF files (long-press for multi-select). You can also share files straight from your mail app into E-Invoice &amp; Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded XML is extracted, and the original PDF is kept as an attachment.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X, and Polish <b>KSeF FA(3)</b> for invoices issued in Poland.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes (incl. KSeF KOR / KOR_ZAL / KOR_ROZ) are flagged with a red chip and shown with a negative amount. KSeF correction invoices also display the original number and reason.\n\n<b>Detail view:</b>\nThree tabs: rendered invoice, raw XML (with live search), and the original PDF if attached. Use <b>Open / Paid</b> to mark an invoice as settled.\n\n<b>Filter the list:</b>\nUse the chips above the list for <i>All / Unpaid / Overdue</i>, and the date range picker to limit to a period.\n\n<b>Due-date reminders:</b>\nUnder <i>Reminders…</i> you can switch on daily notifications and choose how many days ahead.\n\n<b>Export:</b>\nUnder <i>Export…</i> create a CSV (UTF-8) for your tax advisor — optionally as a ZIP bundle including the original XML/PDF files.\n\n<b>Dashboard:</b>\nThe Dashboard menu shows expenses per month and your top suppliers.\n\n<b>AI assistant:</b>\nUnder <i>AI Settings</i> add an LLM provider (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock or a generic OpenAI-compatible endpoint) — paste your API key, load the models and pick a default. Then open an invoice and tap the speech bubble to ask questions about it. Note: the invoice data is sent to the provider you chose.\n\n<b>Create invoices (ZUGFeRD Builder):</b>\nThe highlighted menu entry opens a separate mode to issue your own ZUGFeRD invoices (EN 16931).\n\n<b>Notes &amp; categories:</b>\nOpen an invoice and tap the line above the tabs to add a bookkeeping note and category — both go into the CSV export.\n\n<b>Backup:</b>\nUnder the menu you can create a full backup (database + attachments) or restore one — your safety net against device loss.\n\n<b>Delete:</b>\nLong-press a row in the list.\n\n<i>Tip: every screen and panel has its own ? help button.</i></string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Disclaimer</string>
@@ -239,6 +239,8 @@
     <string name="csv_currency">Currency</string>
     <string name="csv_format">Format</string>
     <string name="csv_doc_type">Type</string>
+    <string name="csv_category">Category</string>
+    <string name="csv_note">Note</string>
     <string name="csv_file_name">File name</string>
     <string name="csv_doc_type_invoice">Invoice</string>
     <string name="csv_doc_type_credit_note">Credit note</string>
@@ -395,4 +397,40 @@
     <string name="creator_validate_iban_missing">No IBAN in the company profile — the customer has no payment account.</string>
     <string name="creator_validate_iban_invalid">The IBAN in the company profile looks invalid.</string>
     <string name="creator_duplicate">Duplicate as draft</string>
+
+    <!-- Invoice note + bookkeeping category -->
+    <string name="save">Save</string>
+    <string name="note_dialog_title">Note &amp; category</string>
+    <string name="note_category_hint">Category</string>
+    <string name="note_hint">Note</string>
+    <string name="note_add_prompt">+ Add note / category</string>
+    <string name="note_label_both" translatable="false">🏷 %1$s · %2$s</string>
+    <string name="note_label_category" translatable="false">🏷 %1$s</string>
+    <string name="note_label_note" translatable="false">📝 %1$s</string>
+
+    <!-- Dashboard: VAT per quarter -->
+    <string name="tax_quarterly_title">VAT per quarter</string>
+    <string name="tax_quarterly_empty">No data for the selected period.</string>
+    <string name="tax_quarterly_row">%1$s · Net %2$s · VAT %3$s · Gross %4$s</string>
+
+    <!-- Backup &amp; restore -->
+    <string name="backup_create">Create backup</string>
+    <string name="backup_restore">Restore backup</string>
+    <string name="backup_success">Backup saved.</string>
+    <string name="backup_error">Backup failed.</string>
+    <string name="backup_restore_warning">This replaces all current invoices and attachments with the backup. Continue?</string>
+    <string name="backup_restore_confirm">Restore</string>
+    <string name="backup_restore_error">Restore failed — not a valid backup file.</string>
+
+    <!-- Context-specific help per screen / sheet -->
+    <string name="help_detail"><b>Detail view</b>\n\nThree tabs: the rendered invoice, the raw XML (with live search) and the original PDF if one is attached.\n\n<b>Open / Paid:</b> toggle whether the invoice is settled.\n\n<b>Note &amp; category:</b> tap the line above the tabs to add a bookkeeping note and a category — both appear in the CSV export and are searchable.\n\n<b>Ask AI:</b> the speech bubble opens a chat about this invoice (needs an AI provider in AI Settings).</string>
+    <string name="help_dashboard"><b>Dashboard</b>\n\nOverview of your invoices for the selected period (use the filter at the top).\n\n<b>KPIs:</b> total, count, open and overdue amounts.\n<b>Charts:</b> payment status, expenses per month, a paid-vs-total trend and your top suppliers.\n<b>VAT per quarter:</b> net/VAT/gross per quarter for your VAT return.\n\nCredit notes count negatively everywhere.</string>
+    <string name="help_ai"><b>AI settings</b>\n\nAdd one or more AI providers (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock or a generic OpenAI-compatible endpoint).\n\nAdd a provider, paste your API key, load the models and pick one — then mark an entry as the default.\n\nAfterwards open any invoice and tap the speech bubble to ask about it.\n\n<b>Privacy:</b> the invoice content is sent to the provider you choose.</string>
+    <string name="help_creator_list"><b>ZUGFeRD Builder</b>\n\nCreate your own e-invoices as hybrid ZUGFeRD PDF/A-3 (EN 16931).\n\n<b>New invoice:</b> starts a draft.\n<b>Company profile:</b> your sender data — fill it in first.\n<b>Customers:</b> your customer master for quick reuse.\n\nDrafts can be edited; <i>generated</i> invoices are final — tap one to view, share or duplicate it as a new draft (handy for recurring invoices).</string>
+    <string name="help_creator_edit"><b>Invoice editor</b>\n\nEnter the number, dates, your customer and the line items (description, quantity, unit, unit price, VAT rate). Totals update live.\n\n<b>From customer master:</b> fills the buyer fields from a saved customer.\n\n<b>Create:</b> runs an EN 16931 check first — errors block, warnings can be skipped — then produces the hybrid ZUGFeRD PDF. A generated invoice can no longer be edited.</string>
+    <string name="help_company_profile"><b>Company profile</b>\n\nYour sender data, used on every invoice you create. EN 16931 needs at least a full address plus a VAT ID or tax number.\n\n<b>Logo:</b> optional, shown on the PDF.\n<b>Numbering:</b> auto-suggests the next number (still editable).\n<b>Payment term:</b> pre-fills the due date (issue date + N days).\n<b>Storage:</b> where generated PDFs are saved.</string>
+    <string name="help_creator_customers"><b>Customer master</b>\n\nSaved customers for your created invoices. New customers are added automatically when you generate an invoice; you can also add, edit or delete them here.\n\nIn the editor, <i>From customer master</i> fills the buyer fields with one tap.</string>
+    <string name="help_export"><b>Export</b>\n\nCreate a CSV (UTF-8, semicolon-separated) of your invoices for the chosen period — ready for your tax advisor or spreadsheet.\n\n<b>Bundle as ZIP:</b> additionally includes the original XML and PDF files per invoice.\n\nThe CSV includes category and note columns. Credit notes are exported with a negative amount.</string>
+    <string name="help_reminders"><b>Due-date reminders</b>\n\nSwitch on a daily check that notifies you about invoices coming due.\n\n<b>Lead time:</b> how many days ahead to be reminded (0/3/7/14).\n\n<b>Check now</b> runs the check immediately. On Android 13+ the app asks for notification permission when you enable this.</string>
+    <string name="help_ai_credential"><b>AI provider</b>\n\n<b>Provider:</b> pick your service (or <i>Generic</i> for any OpenAI-compatible endpoint).\n<b>API key:</b> paste your key, load the models, then pick one.\n<b>Label:</b> a name to recognise this entry.\n\nThe key is stored only on this device. When you chat about an invoice, its content is sent to this provider.</string>
 </resources>

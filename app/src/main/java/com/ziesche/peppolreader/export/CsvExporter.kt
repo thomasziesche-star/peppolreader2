@@ -36,6 +36,8 @@ class CsvExporter(
         val currency: String = "Währung",
         val format: String = "Format",
         val docType: String = "Typ",
+        val category: String = "Kategorie",
+        val note: String = "Notiz",
         val fileName: String = "Dateiname",
         val docTypeInvoice: String = "Rechnung",
         val docTypeCreditNote: String = "Gutschrift",
@@ -69,6 +71,8 @@ class CsvExporter(
             headers.currency,
             headers.format,
             headers.docType,
+            headers.category,
+            headers.note,
             headers.fileName
         )
 
@@ -112,6 +116,8 @@ class CsvExporter(
                 invoice.currency,
                 invoice.formatLabel.orEmpty(),
                 docTypeLabel,
+                invoice.category.orEmpty(),
+                invoice.note.orEmpty(),
                 invoice.fileName
             )
         }

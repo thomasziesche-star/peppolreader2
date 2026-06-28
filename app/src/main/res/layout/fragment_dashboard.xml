@@ -392,6 +392,32 @@
                             tools:text="€ 11.900,00" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <!-- VAT per quarter (Umsatzsteuervoranmeldung) -->
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="16dp"
+                    android:background="?attr/colorOutlineVariant" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/tax_quarterly_title"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorOnSurfaceVariant" />
+
+                <TextView
+                    android:id="@+id/tax_quarterly"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:lineSpacingExtra="3dp"
+                    android:textSize="13sp"
+                    android:textColor="?attr/colorOnSurface"
+                    tools:text="2026-Q1\tNetto 1.000  USt 190  Brutto 1.190" />
             </LinearLayout>
 
         </com.google.android.material.card.MaterialCardView>

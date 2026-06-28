@@ -58,6 +58,22 @@ interface InvoiceDao {
     @Query("UPDATE invoices SET paidAt = :paidAtMs WHERE id = :id")
     suspend fun setPaid(id: Long, paidAtMs: Long?)
 
+    /** Persists the user-entered bookkeeping [note] and [category] for one invoice. */
+    @Query("UPDATE invoices SET note = :note, category = :category WHERE id = :id")
+    suspend fun setNoteAndCategory(id: Long, note: String?, category: String?)
+
+    /** Distinct non-empty categories already in use, for autocomplete suggestions. */
+    @Query("SELECT DISTINCT category FROM invoices WHERE category IS NOT NULL AND category != '' ORDER BY category")
+    suspend fun getUsedCategories(): List<String>
+
+    /** All invoices missing a format label or document-type code — re-parsed by the backfill worker. */
+    @Query("SELECT * FROM invoices WHERE formatLabel IS NULL OR documentTypeCode IS NULL")
+    suspend fun getInvoicesMissingMetadata(): List<Invoice>
+
+    /** Backfill: sets only the derived metadata columns, never touches user data. */
+    @Query("UPDATE invoices SET formatLabel = :formatLabel, documentTypeCode = :documentTypeCode WHERE id = :id")
+    suspend fun setDerivedMetadata(id: Long, formatLabel: String?, documentTypeCode: String?)
+
     /** Stamps an invoice as just-reminded so the worker doesn't notify twice on the same day. */
     @Query("UPDATE invoices SET lastReminderShownAt = :timestamp WHERE id = :id")
     suspend fun touchReminderShown(id: Long, timestamp: Long)

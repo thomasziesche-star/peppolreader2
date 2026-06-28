@@ -60,6 +60,10 @@ class ExportBottomSheetFragment : BottomSheetDialogFragment() {
         toCal.apply { endOfDay() }
         refreshInputs()
 
+        binding.btnHelp.setOnClickListener {
+            com.ziesche.peppolreader.util.HelpDialog.show(requireContext(), R.string.help_export)
+        }
+
         binding.fromInput.setOnClickListener { showDatePicker(fromCal) { refreshInputs() } }
         binding.toInput.setOnClickListener { showDatePicker(toCal) { refreshInputs() } }
 

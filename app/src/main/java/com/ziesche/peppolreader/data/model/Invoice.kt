@@ -57,5 +57,9 @@ data class Invoice(
     /** KSeF FA(3) only: invoice subtype (VAT/KOR/ZAL/UPR/ROZ/KOR_ZAL/KOR_ROZ). */
     val invoiceSubtype: String? = null,
     /** KSeF FA(3) only: JSON-serialised [com.ziesche.peppolreader.data.model.CorrectionInfo]. */
-    val correctionInfoJson: String? = null
+    val correctionInfoJson: String? = null,
+    /** Free-text note the user adds for bookkeeping context (not from the XML). */
+    val note: String? = null,
+    /** Optional bookkeeping category/account, e.g. "Software", "Reise" — surfaced in the CSV export. */
+    val category: String? = null
 )

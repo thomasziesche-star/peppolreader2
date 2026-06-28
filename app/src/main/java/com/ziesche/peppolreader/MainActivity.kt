@@ -79,6 +79,24 @@ class MainActivity : AppCompatActivity(),
         writeExportPayload(uri, payload)
     }
 
+    /** SAF picker for writing the full backup ZIP. */
+    private val createBackupLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+        val uri = result.data?.data ?: return@registerForActivityResult
+        performBackup(uri)
+    }
+
+    /** SAF picker for choosing a backup ZIP to restore. */
+    private val openBackupLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode != Activity.RESULT_OK) return@registerForActivityResult
+        val uri = result.data?.data ?: return@registerForActivityResult
+        confirmAndRestore(uri)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -399,6 +417,14 @@ class MainActivity : AppCompatActivity(),
                 }
                 true
             }
+            R.id.action_backup -> {
+                launchCreateBackup()
+                true
+            }
+            R.id.action_restore -> {
+                launchOpenBackup()
+                true
+            }
             R.id.action_info -> {
                 showInfoDialog()
                 true
@@ -417,10 +443,26 @@ class MainActivity : AppCompatActivity(),
                 || super.onSupportNavigateUp()
     }
 
+    /**
+     * Context-aware help: shows guidance for the screen the user is currently on. The home list
+     * keeps the full overview; every other destination has its own focused help text.
+     */
     private fun showHelpDialog() {
+        val destinationId = findNavController(R.id.nav_host_fragment_content_main)
+            .currentDestination?.id
+        val messageRes = when (destinationId) {
+            R.id.invoiceDetailFragment -> R.string.help_detail
+            R.id.dashboardFragment -> R.string.help_dashboard
+            R.id.aiSettingsFragment -> R.string.help_ai
+            R.id.invoiceCreatorListFragment -> R.string.help_creator_list
+            R.id.invoiceCreatorEditFragment -> R.string.help_creator_edit
+            R.id.companyProfileFragment -> R.string.help_company_profile
+            R.id.creatorCustomerListFragment -> R.string.help_creator_customers
+            else -> R.string.help_message
+        }
         MaterialAlertDialogBuilder(this)
             .setTitle(R.string.help_title)
-            .setMessage(withVersionFooter(getText(R.string.help_message)))
+            .setMessage(withVersionFooter(getText(messageRes)))
             .setPositiveButton(android.R.string.ok, null)
             .show()
     }
@@ -454,6 +496,8 @@ class MainActivity : AppCompatActivity(),
             currency = getString(R.string.csv_currency),
             format = getString(R.string.csv_format),
             docType = getString(R.string.csv_doc_type),
+            category = getString(R.string.csv_category),
+            note = getString(R.string.csv_note),
             fileName = getString(R.string.csv_file_name),
             docTypeInvoice = getString(R.string.csv_doc_type_invoice),
             docTypeCreditNote = getString(R.string.csv_doc_type_credit_note),
@@ -504,6 +548,77 @@ class MainActivity : AppCompatActivity(),
                 .setAction(R.string.export_share) { shareExportedFile(uri, payload.mimeType) }
                 .show()
         }
+    }
+
+    // ----- Backup & Restore ------------------------------------------------------------
+
+    private fun launchCreateBackup() {
+        val stamp = java.text.SimpleDateFormat("yyyy-MM-dd", java.util.Locale.US)
+            .format(java.util.Date())
+        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT)
+            .addCategory(Intent.CATEGORY_OPENABLE)
+            .setType("application/zip")
+            .putExtra(Intent.EXTRA_TITLE, "PeppolReader-Backup-$stamp.peppolbackup.zip")
+        createBackupLauncher.launch(intent)
+    }
+
+    private fun launchOpenBackup() {
+        // ZIPs are reported under various MIME types by different providers, so accept any file.
+        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
+            .addCategory(Intent.CATEGORY_OPENABLE)
+            .setType("*/*")
+        openBackupLauncher.launch(intent)
+    }
+
+    private fun performBackup(uri: Uri) {
+        lifecycleScope.launch {
+            val ok = withContext(Dispatchers.IO) {
+                runCatching {
+                    contentResolver.openOutputStream(uri)?.use {
+                        com.ziesche.peppolreader.data.BackupManager.export(this@MainActivity, it)
+                    } ?: throw java.io.IOException("no output stream")
+                    true
+                }.getOrElse { false }
+            }
+            Snackbar.make(
+                binding.root,
+                if (ok) R.string.backup_success else R.string.backup_error,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun confirmAndRestore(uri: Uri) {
+        MaterialAlertDialogBuilder(this)
+            .setTitle(R.string.backup_restore)
+            .setMessage(R.string.backup_restore_warning)
+            .setPositiveButton(R.string.backup_restore_confirm) { _, _ -> performRestore(uri) }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun performRestore(uri: Uri) {
+        lifecycleScope.launch {
+            val ok = withContext(Dispatchers.IO) {
+                runCatching {
+                    contentResolver.openInputStream(uri)?.use {
+                        com.ziesche.peppolreader.data.BackupManager.restore(this@MainActivity, it)
+                    } ?: false
+                }.getOrElse { false }
+            }
+            if (ok) restartApp() else {
+                Snackbar.make(binding.root, R.string.backup_restore_error, Snackbar.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    /** Hard process restart so the freshly restored database is reopened cleanly. */
+    private fun restartApp() {
+        val intent = packageManager.getLaunchIntentForPackage(packageName)?.apply {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        }
+        startActivity(intent)
+        Runtime.getRuntime().exit(0)
     }
 
     // ----- Reminder pipeline -----------------------------------------------------------

@@ -54,8 +54,8 @@ class CsvExporterTest {
     fun headerAndRowAreSemicolonSeparated() {
         val rows = lines(CsvExporter(Locale.GERMANY).toCsvBytes(listOf(invoice())))
         assertEquals(2, rows.size) // header + 1 data row
-        // 14 columns → 13 separators in the header
-        assertEquals(13, rows[0].count { it == ';' })
+        // 16 columns → 15 separators in the header
+        assertEquals(15, rows[0].count { it == ';' })
         assertTrue(rows[1].startsWith("INV-1;2026-01-15;2026-02-15;Supplier GmbH;"))
     }
 
@@ -76,7 +76,8 @@ class CsvExporterTest {
                 .toCsvBytes(listOf(invoice(documentTypeCode = DocumentType.CREDIT_NOTE)))
         )[1]
         assertTrue("credit note nets out negative", row.contains(";-100,00;-19,00;-119,00;-119,00;"))
-        assertTrue("credit note is labelled as such", row.endsWith(";${headers.docTypeCreditNote};INV-1.xml"))
+        // docType ; category(empty) ; note(empty) ; fileName
+        assertTrue("credit note is labelled as such", row.endsWith(";${headers.docTypeCreditNote};;;INV-1.xml"))
     }
 
     @Test

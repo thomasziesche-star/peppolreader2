@@ -25,6 +25,9 @@ object DashboardStats {
 
     data class TaxTotals(val net: Double, val tax: Double, val gross: Double)
 
+    /** Per-quarter VAT totals for the Umsatzsteuervoranmeldung. [label] is e.g. "2026-Q1". */
+    data class QuarterTotals(val label: String, val net: Double, val tax: Double, val gross: Double)
+
     data class Result(
         val totalExpenses: Double,
         val invoiceCount: Int,
@@ -34,7 +37,8 @@ object DashboardStats {
         val perMonthPaid: List<MonthlyPoint>,
         val topSuppliers: List<SupplierShare>,
         val statusBreakdown: StatusBreakdown,
-        val taxTotals: TaxTotals
+        val taxTotals: TaxTotals,
+        val perQuarter: List<QuarterTotals>
     ) {
         val isEmpty: Boolean get() = invoiceCount == 0
     }
@@ -50,6 +54,14 @@ object DashboardStats {
 
     private fun monthOf(invoice: Invoice): String? =
         invoice.issueDate.takeIf { it.length >= 7 }?.substring(0, 7)
+
+    /** "2026-Q1".."2026-Q4" from the ISO issue date, or null if it can't be derived. */
+    private fun quarterOf(invoice: Invoice): String? {
+        val ym = invoice.issueDate.takeIf { it.length >= 7 } ?: return null
+        val month = ym.substring(5, 7).toIntOrNull() ?: return null
+        val quarter = (month - 1) / 3 + 1
+        return "${ym.substring(0, 4)}-Q$quarter"
+    }
 
     fun compute(invoices: List<Invoice>, todayIso: String = todayIso(), topN: Int = 5): Result {
         val total = invoices.sumOf { it.signedPayable }
@@ -88,6 +100,19 @@ object DashboardStats {
             gross = invoices.sumOf { it.signedGross }
         )
 
+        val perQuarter = invoices
+            .mapNotNull { inv -> quarterOf(inv)?.let { it to inv } }
+            .groupBy({ it.first }, { it.second })
+            .map { (label, group) ->
+                QuarterTotals(
+                    label = label,
+                    net = group.sumOf { it.signedNet },
+                    tax = group.sumOf { it.signedTax },
+                    gross = group.sumOf { it.signedGross }
+                )
+            }
+            .sortedByDescending { it.label } // most recent quarter first
+
         return Result(
             totalExpenses = total,
             invoiceCount = invoices.size,
@@ -97,7 +122,8 @@ object DashboardStats {
             perMonthPaid = perMonthPaid,
             topSuppliers = topSuppliers,
             statusBreakdown = status,
-            taxTotals = taxTotals
+            taxTotals = taxTotals,
+            perQuarter = perQuarter
         )
     }
 }
