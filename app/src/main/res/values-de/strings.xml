@@ -377,4 +377,21 @@
     <string name="creator_error_no_lines">Mindestens eine Position hinzufügen.</string>
     <string name="creator_error_invalid">Bitte die Pflichtfelder ausfüllen.</string>
     <string name="creator_error_generate">PDF konnte nicht erstellt werden: %1$s</string>
+
+    <!-- Creator: EN-16931-Prüfung vor dem Erstellen + wiederkehrende Rechnungen -->
+    <string name="creator_validation_errors_title">Rechnung noch nicht erstellbar</string>
+    <string name="creator_validation_warnings_title">Bitte prüfen</string>
+    <string name="creator_generate_anyway">Trotzdem erstellen</string>
+    <string name="creator_validation_passed">✓ EN-16931-Prüfung bestanden</string>
+    <string name="creator_validate_seller_incomplete">Firmenprofil unvollständig (Anschrift und USt-IdNr. oder Steuernummer nötig).</string>
+    <string name="creator_validate_number_missing">Rechnungsnummer fehlt.</string>
+    <string name="creator_validate_date_invalid">Rechnungsdatum fehlt oder ist kein gültiges Datum.</string>
+    <string name="creator_validate_buyer_missing">Kundenname fehlt.</string>
+    <string name="creator_validate_no_lines">Die Rechnung hat keine Positionen.</string>
+    <string name="creator_validate_line_no_desc">Position %1$d hat keine Beschreibung.</string>
+    <string name="creator_validate_line_qty">Position %1$d hat eine Menge von 0 oder weniger.</string>
+    <string name="creator_validate_due_before_issue">Fälligkeitsdatum liegt vor dem Rechnungsdatum.</string>
+    <string name="creator_validate_iban_missing">Keine IBAN im Firmenprofil — der Kunde hat kein Zahlungskonto.</string>
+    <string name="creator_validate_iban_invalid">Die IBAN im Firmenprofil sieht ungültig aus.</string>
+    <string name="creator_duplicate">Als Entwurf duplizieren</string>
 </resources>

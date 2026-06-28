@@ -19,7 +19,7 @@ import com.ziesche.peppolreader.data.model.Invoice
 import com.ziesche.peppolreader.data.model.ParsedInvoice
 import org.json.JSONObject
 import com.ziesche.peppolreader.export.CsvExporter
-import com.ziesche.peppolreader.export.ZipBundler
+import com.ziesche.peppolreader.export.InvoiceExporter
 import com.ziesche.peppolreader.parser.CiiParser
 import com.ziesche.peppolreader.parser.InvoiceFormat
 import com.ziesche.peppolreader.parser.KsefFa3Parser
@@ -540,25 +540,14 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
             val invoices = repository.getInDateRange(fromIso, toIso)
             if (invoices.isEmpty()) return@withContext ExportPayload.Empty
 
-            val baseName = "PeppolReader-Export-${fromIso}_${toIso}"
-            val csvBytes = CsvExporter(headers = headers).toCsvBytes(invoices)
-
-            if (includeXmlBundle) {
-                val zipBytes = ZipBundler().bundle(csvBytes, "$baseName.csv", invoices)
-                ExportPayload.Success(
-                    bytes = zipBytes,
-                    mimeType = "application/zip",
-                    suggestedFileName = "$baseName.zip",
-                    invoiceCount = invoices.size
-                )
-            } else {
-                ExportPayload.Success(
-                    bytes = csvBytes,
-                    mimeType = "text/csv",
-                    suggestedFileName = "$baseName.csv",
-                    invoiceCount = invoices.size
-                )
-            }
+            val artifact = InvoiceExporter(headers)
+                .export(invoices, fromIso, toIso, includeXmlBundle)
+            ExportPayload.Success(
+                bytes = artifact.bytes,
+                mimeType = artifact.mimeType,
+                suggestedFileName = artifact.fileName,
+                invoiceCount = artifact.invoiceCount
+            )
         } catch (e: Exception) {
             ExportPayload.Error(e.message ?: e.javaClass.simpleName)
         }

@@ -381,4 +381,21 @@
     <string name="creator_error_no_lines">Dodaj co najmniej jedną pozycję.</string>
     <string name="creator_error_invalid">Uzupełnij wymagane pola.</string>
     <string name="creator_error_generate">Nie można utworzyć PDF: %1$s</string>
+
+    <!-- Kreator: kontrola EN 16931 przed generowaniem + faktury cykliczne -->
+    <string name="creator_validation_errors_title">Nie można jeszcze utworzyć faktury</string>
+    <string name="creator_validation_warnings_title">Sprawdź proszę</string>
+    <string name="creator_generate_anyway">Utwórz mimo to</string>
+    <string name="creator_validation_passed">✓ Kontrola EN 16931 zaliczona</string>
+    <string name="creator_validate_seller_incomplete">Profil firmy niekompletny (wymagany adres oraz NIP/numer VAT lub numer podatkowy).</string>
+    <string name="creator_validate_number_missing">Brak numeru faktury.</string>
+    <string name="creator_validate_date_invalid">Brak daty faktury lub data jest nieprawidłowa.</string>
+    <string name="creator_validate_buyer_missing">Brak nazwy klienta.</string>
+    <string name="creator_validate_no_lines">Faktura nie zawiera pozycji.</string>
+    <string name="creator_validate_line_no_desc">Pozycja %1$d nie ma opisu.</string>
+    <string name="creator_validate_line_qty">Pozycja %1$d ma ilość zero lub mniejszą.</string>
+    <string name="creator_validate_due_before_issue">Termin płatności jest przed datą faktury.</string>
+    <string name="creator_validate_iban_missing">Brak IBAN w profilu firmy — klient nie ma konta do zapłaty.</string>
+    <string name="creator_validate_iban_invalid">IBAN w profilu firmy wygląda na nieprawidłowy.</string>
+    <string name="creator_duplicate">Powiel jako wersję roboczą</string>
 </resources>

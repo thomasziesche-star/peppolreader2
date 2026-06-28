@@ -378,4 +378,21 @@
     <string name="creator_error_no_lines">Add at least one line item.</string>
     <string name="creator_error_invalid">Please complete the required fields.</string>
     <string name="creator_error_generate">Could not create the PDF: %1$s</string>
+
+    <!-- Creator: EN 16931 pre-flight validation + recurring invoices -->
+    <string name="creator_validation_errors_title">Cannot create invoice yet</string>
+    <string name="creator_validation_warnings_title">Please double-check</string>
+    <string name="creator_generate_anyway">Create anyway</string>
+    <string name="creator_validation_passed">✓ EN 16931 check passed</string>
+    <string name="creator_validate_seller_incomplete">Company profile incomplete (address and VAT ID or tax number required).</string>
+    <string name="creator_validate_number_missing">Invoice number is missing.</string>
+    <string name="creator_validate_date_invalid">Invoice date is missing or not a valid date.</string>
+    <string name="creator_validate_buyer_missing">Customer name is missing.</string>
+    <string name="creator_validate_no_lines">The invoice has no line items.</string>
+    <string name="creator_validate_line_no_desc">Line %1$d has no description.</string>
+    <string name="creator_validate_line_qty">Line %1$d has a quantity of zero or less.</string>
+    <string name="creator_validate_due_before_issue">Due date is before the invoice date.</string>
+    <string name="creator_validate_iban_missing">No IBAN in the company profile — the customer has no payment account.</string>
+    <string name="creator_validate_iban_invalid">The IBAN in the company profile looks invalid.</string>
+    <string name="creator_duplicate">Duplicate as draft</string>
 </resources>

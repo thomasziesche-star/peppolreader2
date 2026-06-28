@@ -20,8 +20,28 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
+# Keep line numbers for readable release crash reports; hide the original .kt file names.
+-keepattributes SourceFile,LineNumberTable
+-renamesourcefileattribute SourceFile
+
 # PDFBox-Android (ZUGFeRD/Factur-X embedded XML extraction)
 -keep class com.tom_roush.pdfbox.** { *; }
 -dontwarn com.tom_roush.pdfbox.**
 -dontwarn org.bouncycastle.**
 -keep class org.bouncycastle.** { *; }
+
+# Fragments are instantiated by name from res/navigation/nav_graph.xml via reflection,
+# so their classes and no-arg constructors must survive shrinking/obfuscation.
+-keep public class * extends androidx.fragment.app.Fragment
+
+# WorkManager instantiates the due-date worker by class name (default WorkerFactory).
+-keep class * extends androidx.work.ListenableWorker {
+    public <init>(android.content.Context, androidx.work.WorkerParameters);
+}
+
+# Room entities are populated reflectively by the generated DAO code; keep their members.
+-keep class com.ziesche.peppolreader.data.model.** { *; }
+-keep class com.ziesche.peppolreader.creator.model.** { *; }
+
+# org.json ships with the Android framework — never bundled, don't warn about it.
+-dontwarn org.json.**

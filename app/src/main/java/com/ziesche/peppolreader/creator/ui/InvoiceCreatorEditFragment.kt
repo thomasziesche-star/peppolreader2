@@ -22,6 +22,7 @@ import com.ziesche.peppolreader.creator.model.CompanyProfile
 import com.ziesche.peppolreader.creator.model.CreatorLine
 import com.ziesche.peppolreader.creator.model.CreatorTotals
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
+import com.ziesche.peppolreader.creator.xml.CreatorValidator
 import com.ziesche.peppolreader.databinding.FragmentInvoiceCreatorEditBinding
 import com.ziesche.peppolreader.databinding.ItemCreatorLineBinding
 import java.text.NumberFormat
@@ -217,29 +218,75 @@ class InvoiceCreatorEditFragment : Fragment() {
     // ----- generate -----------------------------------------------------------------------
 
     private fun onGenerateClicked() {
-        if (!profile.isComplete()) {
-            Snackbar.make(binding.root, R.string.creator_error_profile_required, Snackbar.LENGTH_LONG).show()
-            return
-        }
         syncLinesToViewModel()
-        val lines = viewModel.lines.value.orEmpty().filter { it.description.isNotBlank() }
-        if (lines.isEmpty()) {
-            Snackbar.make(binding.root, R.string.creator_error_no_lines, Snackbar.LENGTH_LONG).show()
-            return
-        }
-        if (binding.inputInvoiceNumber.text.str().isBlank() || binding.inputBuyerName.text.str().isBlank()) {
-            Snackbar.make(binding.root, R.string.creator_error_invalid, Snackbar.LENGTH_LONG).show()
-            return
-        }
-
         val draft = buildDraft()
+
+        // EN 16931 pre-flight: errors block generation, warnings let the user proceed knowingly.
+        val issues = CreatorValidator.validate(draft, profile)
+        val errors = issues.filter { it.severity == CreatorValidator.Severity.ERROR }
+        if (errors.isNotEmpty()) {
+            showIssuesDialog(R.string.creator_validation_errors_title, errors, proceedDraft = null)
+            return
+        }
+        val warnings = issues.filter { it.severity == CreatorValidator.Severity.WARNING }
+        if (warnings.isNotEmpty()) {
+            showIssuesDialog(R.string.creator_validation_warnings_title, warnings, proceedDraft = draft)
+            return
+        }
+        runGenerate(draft)
+    }
+
+    /**
+     * Shows the pre-flight findings. When [proceedDraft] is non-null (warnings only) the dialog
+     * offers a "generate anyway" action; for hard errors it is purely informational.
+     */
+    private fun showIssuesDialog(
+        titleRes: Int,
+        issues: List<CreatorValidator.Issue>,
+        proceedDraft: OutgoingInvoice?
+    ) {
+        val message = issues.joinToString("\n") { "•  " + issueMessage(it) }
+        val builder = MaterialAlertDialogBuilder(requireContext())
+            .setTitle(titleRes)
+            .setMessage(message)
+        if (proceedDraft != null) {
+            builder.setPositiveButton(R.string.creator_generate_anyway) { _, _ -> runGenerate(proceedDraft) }
+            builder.setNegativeButton(android.R.string.cancel, null)
+        } else {
+            builder.setPositiveButton(android.R.string.ok, null)
+        }
+        builder.show()
+    }
+
+    /** Maps a stable validator [CreatorValidator.Code] to a localized, actionable message. */
+    private fun issueMessage(issue: CreatorValidator.Issue): String {
+        val line = (issue.lineIndex ?: 0) + 1
+        return when (issue.code) {
+            CreatorValidator.Code.SELLER_PROFILE_INCOMPLETE -> getString(R.string.creator_validate_seller_incomplete)
+            CreatorValidator.Code.INVOICE_NUMBER_MISSING -> getString(R.string.creator_validate_number_missing)
+            CreatorValidator.Code.ISSUE_DATE_INVALID -> getString(R.string.creator_validate_date_invalid)
+            CreatorValidator.Code.BUYER_NAME_MISSING -> getString(R.string.creator_validate_buyer_missing)
+            CreatorValidator.Code.NO_LINES -> getString(R.string.creator_validate_no_lines)
+            CreatorValidator.Code.LINE_NO_DESCRIPTION -> getString(R.string.creator_validate_line_no_desc, line)
+            CreatorValidator.Code.LINE_NON_POSITIVE_QTY -> getString(R.string.creator_validate_line_qty, line)
+            CreatorValidator.Code.DUE_BEFORE_ISSUE -> getString(R.string.creator_validate_due_before_issue)
+            CreatorValidator.Code.IBAN_MISSING -> getString(R.string.creator_validate_iban_missing)
+            CreatorValidator.Code.IBAN_INVALID -> getString(R.string.creator_validate_iban_invalid)
+        }
+    }
+
+    private fun runGenerate(draft: OutgoingInvoice) {
         binding.btnGenerate.isEnabled = false
         viewLifecycleOwner.lifecycleScope.launch {
             when (val result = viewModel.generate(draft)) {
                 is InvoiceCreatorViewModel.GenerateResult.Success -> {
-                    val message = result.exportedTo
+                    val base = result.exportedTo
                         ?.let { getString(R.string.creator_pdf_created_at, it) }
                         ?: getString(R.string.creator_pdf_created)
+                    // Surface the in-app EN 16931 self-check that already runs during generate().
+                    val message = if (result.roundTripOk) {
+                        base + "\n" + getString(R.string.creator_validation_passed)
+                    } else base
                     Snackbar.make(binding.root, message, Snackbar.LENGTH_LONG)
                         .setAction(R.string.creator_share) { sharePdf(result.file) }
                         .show()

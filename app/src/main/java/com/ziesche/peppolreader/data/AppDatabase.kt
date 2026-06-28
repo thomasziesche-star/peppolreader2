@@ -15,7 +15,7 @@ import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 @Database(
     entities = [Invoice::class, OutgoingInvoice::class, CreatorCustomer::class],
     version = 10,
-    exportSchema = false
+    exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
 
@@ -143,6 +143,15 @@ abstract class AppDatabase : RoomDatabase() {
             }
         }
 
+        /**
+         * All schema migrations in order. Exposed (internal) so the migration test can
+         * exercise the exact same chain the app uses.
+         */
+        internal val ALL_MIGRATIONS = arrayOf(
+            MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7,
+            MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10
+        )
+
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -150,8 +159,13 @@ abstract class AppDatabase : RoomDatabase() {
                     AppDatabase::class.java,
                     "peppol_reader_database"
                 )
-                    .addMigrations(MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10)
-                    .fallbackToDestructiveMigration()
+                    .addMigrations(*ALL_MIGRATIONS)
+                    // No blanket destructive fallback: a missing/buggy migration from v4+ must
+                    // FAIL LOUDLY (crash on open, fixable) rather than silently wipe a user's
+                    // invoices and customer master. Only the unreachable pre-v4 schemas (which
+                    // never had a migration path) are allowed to be recreated destructively.
+                    .fallbackToDestructiveMigrationFrom(1, 2, 3)
+                    .fallbackToDestructiveMigrationOnDowngrade()
                     .build()
                 INSTANCE = instance
                 instance

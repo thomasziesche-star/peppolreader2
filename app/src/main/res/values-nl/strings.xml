@@ -377,4 +377,21 @@
     <string name="creator_error_no_lines">Voeg ten minste één regel toe.</string>
     <string name="creator_error_invalid">Vul de verplichte velden in.</string>
     <string name="creator_error_generate">Kan de PDF niet maken: %1$s</string>
+
+    <!-- Creator: EN 16931-controle vóór genereren + terugkerende facturen -->
+    <string name="creator_validation_errors_title">Factuur nog niet aanmaakbaar</string>
+    <string name="creator_validation_warnings_title">Even controleren</string>
+    <string name="creator_generate_anyway">Toch aanmaken</string>
+    <string name="creator_validation_passed">✓ EN 16931-controle geslaagd</string>
+    <string name="creator_validate_seller_incomplete">Bedrijfsprofiel onvolledig (adres en btw-nummer of fiscaal nummer vereist).</string>
+    <string name="creator_validate_number_missing">Factuurnummer ontbreekt.</string>
+    <string name="creator_validate_date_invalid">Factuurdatum ontbreekt of is geen geldige datum.</string>
+    <string name="creator_validate_buyer_missing">Klantnaam ontbreekt.</string>
+    <string name="creator_validate_no_lines">De factuur heeft geen regels.</string>
+    <string name="creator_validate_line_no_desc">Regel %1$d heeft geen omschrijving.</string>
+    <string name="creator_validate_line_qty">Regel %1$d heeft een aantal van nul of minder.</string>
+    <string name="creator_validate_due_before_issue">Vervaldatum ligt vóór de factuurdatum.</string>
+    <string name="creator_validate_iban_missing">Geen IBAN in het bedrijfsprofiel — de klant heeft geen betaalrekening.</string>
+    <string name="creator_validate_iban_invalid">De IBAN in het bedrijfsprofiel lijkt ongeldig.</string>
+    <string name="creator_duplicate">Dupliceren als concept</string>
 </resources>

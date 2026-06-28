@@ -15,11 +15,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.ziesche.peppolreader.R
+import com.ziesche.peppolreader.creator.data.CompanyProfileStore
 import com.ziesche.peppolreader.creator.data.OutgoingInvoiceRepository
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 import com.ziesche.peppolreader.databinding.FragmentInvoiceCreatorListBinding
 import kotlinx.coroutines.launch
 import java.io.File
+import java.time.LocalDate
 
 /**
  * Entry point of the separate "Invoice Creator" mode. Lists saved drafts and offers actions to
@@ -114,17 +116,50 @@ class InvoiceCreatorListFragment : Fragment() {
     // ----- generated invoices: view / share ------------------------------------------------
 
     private fun showGeneratedOptions(draft: OutgoingInvoice) {
-        val items = arrayOf(getString(R.string.creator_view_pdf), getString(R.string.creator_share))
+        val items = arrayOf(
+            getString(R.string.creator_view_pdf),
+            getString(R.string.creator_share),
+            getString(R.string.creator_duplicate)
+        )
         MaterialAlertDialogBuilder(requireContext())
             .setTitle(draft.invoiceNumber.ifBlank { getString(R.string.creator_status_generated) })
             .setItems(items) { _, which ->
                 when (which) {
                     0 -> viewPdf(draft)
                     1 -> sharePdf(draft)
+                    2 -> duplicateAsDraft(draft)
                 }
             }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
+    }
+
+    /**
+     * Recurring-invoice helper: clones a (final) generated invoice into a fresh editable draft —
+     * same buyer, lines and payment note, but a new number from the sequence and today's dates.
+     * The original stays untouched.
+     */
+    private fun duplicateAsDraft(source: OutgoingInvoice) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val profile = CompanyProfileStore(requireContext()).load()
+            val today = LocalDate.now()
+            val now = System.currentTimeMillis()
+            val copy = source.copy(
+                id = 0,
+                invoiceNumber = if (profile.autoNumbering) profile.suggestedNumber() else "",
+                issueDate = today.toString(),
+                dueDate = if (profile.defaultPaymentDays > 0) {
+                    today.plusDays(profile.defaultPaymentDays.toLong()).toString()
+                } else null,
+                status = OutgoingInvoice.STATUS_DRAFT,
+                generatedXml = null,
+                pdfPath = null,
+                createdAt = now,
+                updatedAt = now
+            )
+            val newId = repository.insert(copy)
+            openDraft(newId)
+        }
     }
 
     private fun pdfFile(draft: OutgoingInvoice): File? =
