@@ -1,53 +1,47 @@
-E-Invoice & Peppol Reader importuje i odczytuje faktury elektroniczne – Peppol BIS 3.0 (UBL), XRechnung, ZUGFeRD, Factur-X oraz polski KSeF FA(3). Idealny dla freelancerów, małych firm i wszystkich, którzy chcą przeglądać, zarządzać i przekazywać swoje cyfrowe dokumenty księgowemu bezpośrednio ze smartfona.
+ZUGFeRD & E-Invoice Reader czyta ORAZ tworzy faktury elektroniczne – i pomaga w pełni nimi zarządzać: sprawdzać faktury przychodzące, wystawiać własne, pilnować płatności, wysyłać wezwania do zapłaty i przygotowywać dane do rozliczeń podatkowych. Idealna dla freelancerów i małych firm, które chcą prowadzić całe zarządzanie fakturami na smartfonie – w pełni lokalnie, bez chmury.
 
-OBSŁUGIWANE FORMATY
-• Peppol BIS 3.0 (UBL 2.1)
-• XRechnung – w profilu UBL oraz CII
-• ZUGFeRD 1.x i 2.x – hybrydowe pliki PDF z osadzonym XML
-• Factur-X – hybrydowy PDF z XML
-• UN/CEFACT Cross Industry Invoice (CII)
-• KSeF FA(3) – polski format e-faktury wraz z fakturami korygującymi (KOR / KOR_ZAL / KOR_ROZ)
+CZYTANIE FAKTUR
+• Peppol BIS 3.0 (UBL 2.1), XRechnung (UBL i CII), ZUGFeRD 1.x/2.x, Factur-X, UN/CEFACT CII, KSeF FA(3) wraz z fakturami korygującymi (KOR / KOR_ZAL / KOR_ROZ)
+• Import plików XML lub hybrydowych PDF, wybór wielu plików, bezpośrednio z załączników e-mail
+• Widok szczegółowy z 3 zakładkami: czytelna faktura, surowy XML z wyszukiwaniem na żywo, oryginalny PDF
+• Korekty i faktury korygujące rozpoznawane automatycznie, kwoty z właściwym znakiem
 
-IMPORT
-• Pliki XML i hybrydowe PDF, możliwy wybór wielu naraz
-• Odbiór bezpośrednio z załączników e-mail przez funkcję Udostępnij
-• Pliki PDF ZUGFeRD i Factur-X są wykrywane automatycznie – osadzony XML jest wyodrębniany, a oryginalny PDF zachowywany jako załącznik
+TWORZENIE FAKTUR (ZUGFeRD)
+• Własne e-faktury i korekty jako hybrydowy ZUGFeRD PDF/A-3 (EN 16931)
+• Profil firmy z logo, automatyczna numeracja, domyślny termin płatności
+• Baza klientów z adresami e-mail i katalog artykułów dla powtarzalnych pozycji – faktura wypełniona w kilka sekund
+• Kontrola EN 16931 przed wygenerowaniem, wbudowany autotest utworzonego pliku
+• Faktury cykliczne: powiel dowolną fakturę jako nową wersję roboczą
 
-PRZEGLĄD I ZARZĄDZANIE
-• Przejrzysta lista faktur z kolorowym oznaczeniem formatu dla każdego dokumentu
-• Wyszukiwanie według firmy lub numeru faktury
-• Znaczniki filtra: Wszystkie / Nieopłacone / Przeterminowane
-• Filtr zakresu dat dla wybranego okresu
-• Oznaczanie każdej faktury jako opłaconej – wraz z oznaczeniem na liście
-• Przypomnienia o terminach: codzienne powiadomienia z konfigurowalnym wyprzedzeniem (0 / 3 / 7 / 14 dni)
-• Faktury korygujące i korekty KSeF są wykrywane automatycznie i wyróżniane, kwoty z prawidłowym znakiem
+ZARZĄDZANIE I PŁATNOŚCI
+• Status płatności dla faktur przychodzących ORAZ wystawionych
+• Zaległe dokumenty na pierwszy rzut oka: filtry i kolorowe oznaczenia na liście
+• Wezwania do zapłaty dla klientów: eskalujące monity (poziomy 1–3) jako przygotowany e-mail z fakturą PDF w załączniku
+• Przypomnienia o terminach: codzienne powiadomienia o zbliżających się płatnościach faktur przychodzących i zaległych fakturach wystawionych
+• Notatki i kategorie dla każdego dokumentu, wyszukiwanie i filtry okresów
 
-WIDOK SZCZEGÓŁÓW (3 ZAKŁADKI)
-• Faktura – wszystkie istotne dane w czytelnej formie: dostawca, odbiorca, pozycje, netto, VAT, suma, IBAN i dane płatności
-• Dane surowe – pełny XML z podświetlaniem składni i wyszukiwaniem na żywo
-• Oryginalny PDF – do obejrzenia bezpośrednio w aplikacji, jeśli jest załączony
+PANELE I PODATKI
+• Panel wydatków: status płatności, wydatki miesięcznie, najwięksi dostawcy
+• Panel przychodów: przychody z wystawionych faktur, kwoty otwarte i po terminie, najlepsi klienci
+• VAT kwartalnie – dane do deklaracji VAT na pierwszy rzut oka
 
-EKSPORT
-• Eksport PDF – zapis lub udostępnienie faktury jako czytelnego pliku PDF
-• Eksport CSV (UTF-8) dla księgowego
-• Paczka ZIP z plikiem CSV oraz oryginalnymi plikami XML/PDF, dowolnie według zakresu dat
+EKSPORT I KOPIA ZAPASOWA
+• Eksport CSV (UTF-8) dla księgowego, paczka ZIP z oryginalnymi plikami XML/PDF za wybrany okres
+• Eksport PDF pojedynczych dokumentów
+• Pełna kopia zapasowa w jednym pliku ZIP: baza danych, załączniki, wystawione faktury, profil firmy z logo i ustawienia – idealne przy zmianie urządzenia
 
-ASYSTENT AI (OPCJONALNIE)
-• Dodaj własnego dostawcę LLM: OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock lub generyczny endpoint zgodny z OpenAI
-• Wklej klucz API, załaduj modele, wybierz domyślnego
+ASYSTENT AI (OPCJONALNY)
+• Dodaj własnego dostawcę LLM: OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock lub dowolny endpoint zgodny z OpenAI
 • Zadawaj pytania o otwartą fakturę bezpośrednio w dokumencie
-• Uwaga: gdy korzystasz z asystenta AI, dane danej faktury są wysyłane do wybranego przez Ciebie dostawcy. Bez użycia AI nic nie opuszcza Twojego urządzenia.
-
-PULPIT
-• Graficzne zestawienie wydatków według miesiąca i dostawcy
+• Uwaga: tylko przy aktywnym korzystaniu z asystenta AI dane danej faktury są wysyłane do wybranego przez Ciebie dostawcy. W przeciwnym razie nic nie opuszcza Twojego urządzenia.
 
 WYGODA
-• Tryb ciemny
+• Tryb ciemny, pomoc kontekstowa na każdym ekranie
 • Wielojęzyczność: niemiecki, angielski, niderlandzki, francuski i polski
-• Projekt edge-to-edge (gotowy na Android 15)
+• Design edge-to-edge (gotowy na Androida 15)
 
 PRYWATNOŚĆ
-Wszystkie faktury są przechowywane wyłącznie lokalnie na Twoim urządzeniu. Bez chmury, bez telemetrii, bez śledzenia. Dane są przesyłane tylko wtedy, gdy aktywnie korzystasz z opcjonalnego asystenta AI – i wówczas wyłącznie do wybranego przez Ciebie dostawcy.
+Wszystkie faktury są przechowywane wyłącznie lokalnie na Twoim urządzeniu. Bez chmury, bez telemetrii, bez śledzenia. Dane są przesyłane tylko wtedy, gdy aktywnie korzystasz z opcjonalnego asystenta AI – i wyłącznie do wybranego przez Ciebie dostawcy.
 
 UWAGA
 To niezależny projekt hobbystyczny, a nie oficjalna aplikacja PEPPOL ani KSeF. Wyświetlane informacje nie zastępują oryginalnego dokumentu XML.

@@ -1,48 +1,42 @@
-E-Invoice & Peppol Reader importiert und liest elektronische Rechnungen – Peppol BIS 3.0 (UBL), XRechnung, ZUGFeRD, Factur-X und das polnische KSeF FA(3). Ideal für Selbständige, Kleinunternehmer und alle, die ihre digitalen Belege auf dem Smartphone sichten, verwalten und an den Steuerberater weitergeben möchten.
+ZUGFeRD & E-Invoice Reader liest UND erstellt elektronische Rechnungen – und hilft dir, sie komplett zu verwalten: Eingangsrechnungen prüfen, eigene Rechnungen schreiben, Zahlungen überwachen, Mahnungen versenden und Auswertungen für die Steuer erstellen. Ideal für Selbständige und Kleinunternehmer, die ihre Rechnungsverwaltung auf dem Smartphone erledigen möchten – komplett lokal, ohne Cloud.
 
-UNTERSTÜTZTE FORMATE
-• Peppol BIS 3.0 (UBL 2.1)
-• XRechnung – im UBL- und im CII-Profil
-• ZUGFeRD 1.x und 2.x – Hybrid-PDFs mit eingebettetem XML
-• Factur-X – Hybrid-PDF mit XML
-• UN/CEFACT Cross Industry Invoice (CII)
-• KSeF FA(3) – polnisches E-Rechnungsformat inkl. Korrekturrechnungen (KOR / KOR_ZAL / KOR_ROZ)
+RECHNUNGEN LESEN
+• Peppol BIS 3.0 (UBL 2.1), XRechnung (UBL & CII), ZUGFeRD 1.x/2.x, Factur-X, UN/CEFACT CII, KSeF FA(3) inkl. Korrekturrechnungen
+• Import als XML oder Hybrid-PDF, Mehrfachauswahl, direkt aus E-Mail-Anhängen
+• Detailansicht mit 3 Tabs: lesbare Rechnung, Roh-XML mit Live-Suche, Original-PDF
+• Gutschriften und Korrekturen automatisch erkannt, Beträge mit korrektem Vorzeichen
 
-IMPORT
-• XML- und Hybrid-PDF-Dateien, Mehrfachauswahl möglich
-• Direktes Empfangen aus E-Mail-Anhängen über die Teilen-Funktion
-• ZUGFeRD- und Factur-X-PDFs werden automatisch erkannt, das eingebettete XML extrahiert und das Original-PDF als Anhang behalten
+RECHNUNGEN ERSTELLEN (ZUGFeRD)
+• Eigene E-Rechnungen und Gutschriften als hybrides ZUGFeRD-PDF/A-3 (EN 16931)
+• Firmenprofil mit Logo, automatischer Nummernkreis, Standard-Zahlungsziel
+• Kundenstamm mit E-Mail-Adressen und Artikelstamm für wiederkehrende Positionen – Rechnungen in Sekunden ausfüllen
+• EN-16931-Prüfung vor dem Erstellen, integrierter Selbsttest der erzeugten Datei
+• Wiederkehrende Rechnungen einfach als Entwurf duplizieren
 
-ÜBERSICHT & VERWALTUNG
-• Übersichtliche Rechnungsliste mit farbiger Format-Markierung je Beleg
-• Durchsuchbar nach Firma oder Rechnungsnummer
-• Filter-Chips: Alle / Unbezahlt / Überfällig
-• Zeitraum-Filter für einen bestimmten Datumsbereich
-• Bezahlt-Status pro Rechnung setzen – inkl. Markierung in der Liste
-• Fälligkeits-Erinnerungen: tägliche Benachrichtigungen mit wählbarer Vorlaufzeit (0 / 3 / 7 / 14 Tage)
-• Gutschriften und KSeF-Korrekturen werden automatisch erkannt und farblich hervorgehoben, Beträge mit korrektem Vorzeichen
+VERWALTUNG & ZAHLUNGEN
+• Bezahlt-Status für Eingangs- UND Ausgangsrechnungen setzen
+• Überfällige Belege auf einen Blick: Filter, farbige Markierungen in der Liste
+• Mahnwesen für deine Kunden: eskalierende Mahnungen (Stufen 1–3) als vorbereitete E-Mail mit Rechnungs-PDF im Anhang
+• Fälligkeits-Erinnerungen: tägliche Benachrichtigungen für bald fällige Eingangsrechnungen und überfällige Ausgangsrechnungen
+• Notizen & Kategorien pro Beleg, Suche und Zeitraum-Filter
 
-DETAILANSICHT (3 TABS)
-• Rechnung – alle relevanten Daten lesbar: Lieferant, Empfänger, Positionen, Netto, MwSt., Gesamtbetrag, IBAN und Zahlungsinformationen
-• Rohdaten – das vollständige XML mit Syntax-Hervorhebung und Echtzeit-Suche
-• Original-PDF – direkt in der App ansehen, falls angehängt
+DASHBOARDS & STEUER
+• Ausgaben-Dashboard: Zahlungsstatus, Ausgaben pro Monat, Top-Lieferanten
+• Umsatz-Dashboard: Umsätze deiner erstellten Rechnungen, offene und überfällige Beträge, Top-Kunden
+• USt pro Quartal – die Zahlen für die Umsatzsteuervoranmeldung auf einen Blick
 
-EXPORT
-• PDF-Export – Rechnung als lesbares PDF speichern oder teilen
-• CSV-Export (UTF-8) für den Steuerberater
-• ZIP-Bündel mit CSV plus den originalen XML-/PDF-Dateien, frei nach Zeitraum
+EXPORT & DATENSICHERUNG
+• CSV-Export (UTF-8) für den Steuerberater, ZIP-Bündel mit Original-XML/PDF je Zeitraum
+• PDF-Export einzelner Belege
+• Komplett-Backup als eine ZIP-Datei: Datenbank, Anhänge, erstellte Rechnungen, Firmenprofil mit Logo und Einstellungen – ideal für den Gerätewechsel
 
 KI-ASSISTENT (OPTIONAL)
-• Eigenen LLM-Anbieter hinterlegen: OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock oder einen generischen OpenAI-kompatiblen Endpoint
-• API-Schlüssel eintragen, Modelle laden, Standard wählen
+• Eigenen LLM-Anbieter hinterlegen: OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock oder ein generischer OpenAI-kompatibler Endpoint
 • Fragen zu einer geöffneten Rechnung direkt im Beleg stellen
-• Hinweis: Wird der KI-Assistent genutzt, werden die Daten der jeweiligen Rechnung an den von dir gewählten Anbieter gesendet. Ohne KI-Nutzung verlässt nichts dein Gerät.
-
-DASHBOARD
-• Grafische Auswertung deiner Ausgaben nach Monat und Lieferant
+• Hinweis: Nur bei aktiver KI-Nutzung werden die Daten der jeweiligen Rechnung an den von dir gewählten Anbieter gesendet. Sonst verlässt nichts dein Gerät.
 
 KOMFORT
-• Dark Mode
+• Dark Mode, kontextabhängige Hilfe auf jedem Screen
 • Mehrsprachig: Deutsch, Englisch, Niederländisch, Französisch und Polnisch
 • Edge-to-Edge-Design (Android 15 ready)
 

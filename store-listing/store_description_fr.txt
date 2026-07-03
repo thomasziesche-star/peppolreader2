@@ -1,55 +1,49 @@
-E-Invoice & Peppol Reader importe et lit les factures électroniques – Peppol BIS 3.0 (UBL), XRechnung, ZUGFeRD, Factur-X et le format polonais KSeF FA(3). Idéal pour les indépendants, les petites entreprises et tous ceux qui souhaitent consulter, gérer et transmettre leurs justificatifs numériques à leur expert-comptable depuis leur smartphone.
+ZUGFeRD & E-Invoice Reader lit ET crée des factures électroniques – et vous aide à les gérer de bout en bout : contrôler les factures reçues, émettre vos propres factures, suivre les paiements, envoyer des relances et préparer les chiffres pour vos déclarations. Idéal pour les indépendants et petites entreprises qui veulent gérer toute leur facturation sur smartphone – entièrement en local, sans cloud.
 
-FORMATS PRIS EN CHARGE
-• Peppol BIS 3.0 (UBL 2.1)
-• XRechnung – profils UBL et CII
-• ZUGFeRD 1.x et 2.x – PDF hybrides avec XML intégré
-• Factur-X – PDF hybride avec XML
-• UN/CEFACT Cross Industry Invoice (CII)
-• KSeF FA(3) – format de facture électronique polonais, y compris les factures de correction (KOR / KOR_ZAL / KOR_ROZ)
+LIRE DES FACTURES
+• Peppol BIS 3.0 (UBL 2.1), XRechnung (UBL & CII), ZUGFeRD 1.x/2.x, Factur-X, UN/CEFACT CII, KSeF FA(3) avec factures rectificatives
+• Import XML ou PDF hybride, sélection multiple, directement depuis les pièces jointes d'e-mails
+• Vue détaillée à 3 onglets : facture lisible, XML brut avec recherche en direct, PDF original
+• Avoirs et corrections détectés automatiquement, montants avec le bon signe
 
-IMPORT
-• Fichiers XML et PDF hybrides, sélection multiple possible
-• Réception directe depuis les pièces jointes des e-mails via la fonction Partager
-• Les PDF ZUGFeRD et Factur-X sont détectés automatiquement : le XML intégré est extrait et le PDF d'origine est conservé en pièce jointe
+CRÉER DES FACTURES (ZUGFeRD)
+• Émettez vos propres factures et avoirs en PDF/A-3 hybride ZUGFeRD (EN 16931)
+• Profil d'entreprise avec logo, numérotation automatique, délai de paiement par défaut
+• Fichier clients avec adresses e-mail et catalogue d'articles pour les postes récurrents – factures remplies en quelques secondes
+• Contrôle EN 16931 avant la génération, auto-test intégré du fichier produit
+• Factures récurrentes : dupliquez une facture finale en nouveau brouillon
 
-VUE D'ENSEMBLE & GESTION
-• Liste de factures claire avec une étiquette de format colorée par document
-• Recherche par entreprise ou numéro de facture
-• Puces de filtre : Tout / Impayé / En retard
-• Filtre par plage de dates pour cibler une période
-• Marquer chaque facture comme payée – avec un repère dans la liste
-• Rappels d'échéance : notifications quotidiennes avec délai configurable (0 / 3 / 7 / 14 jours)
-• Les avoirs et les corrections KSeF sont détectés automatiquement et mis en évidence, montants affichés avec le bon signe
+GESTION & PAIEMENTS
+• Statut payé pour les factures reçues ET émises
+• Retards de paiement en un coup d'œil : filtres et marquages colorés dans la liste
+• Relances pour vos clients : rappels progressifs (niveaux 1–3) sous forme d'e-mail prérempli avec la facture PDF en pièce jointe
+• Rappels d'échéance : notifications quotidiennes pour les factures reçues bientôt dues et les factures émises en retard
+• Notes & catégories par document, recherche et filtres par période
 
-VUE DÉTAILLÉE (3 ONGLETS)
-• Facture – toutes les données utiles, lisibles : fournisseur, destinataire, lignes, net, TVA, total, IBAN et informations de paiement
-• Données brutes – le XML complet avec coloration syntaxique et recherche en direct
-• PDF d'origine – consultable directement dans l'application, s'il est joint
+TABLEAUX DE BORD & TVA
+• Tableau de bord des dépenses : statut de paiement, dépenses par mois, principaux fournisseurs
+• Tableau de bord des revenus : chiffre d'affaires de vos factures émises, montants ouverts et en retard, meilleurs clients
+• TVA par trimestre – les chiffres pour votre déclaration de TVA en un coup d'œil
 
-EXPORT
-• Export PDF – enregistrer ou partager une facture sous forme de PDF lisible
-• Export CSV (UTF-8) pour votre expert-comptable
-• Bundle ZIP avec le CSV et les fichiers XML/PDF d'origine, librement par plage de dates
+EXPORT & SAUVEGARDE
+• Export CSV (UTF-8) pour votre comptable, archive ZIP avec les fichiers XML/PDF originaux par période
+• Export PDF de documents individuels
+• Sauvegarde complète en un seul fichier ZIP : base de données, pièces jointes, factures créées, profil d'entreprise avec logo et réglages – idéal pour changer d'appareil
 
 ASSISTANT IA (OPTIONNEL)
 • Ajoutez votre propre fournisseur LLM : OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock ou un endpoint générique compatible OpenAI
-• Saisissez votre clé API, chargez les modèles, choisissez un fournisseur par défaut
-• Posez des questions sur une facture ouverte directement dans le document
-• Remarque : lorsque vous utilisez l'assistant IA, les données de la facture concernée sont envoyées au fournisseur que vous avez choisi. Sans utilisation de l'IA, rien ne quitte votre appareil.
-
-TABLEAU DE BORD
-• Analyse graphique de vos dépenses par mois et par fournisseur
+• Posez des questions sur une facture ouverte, directement dans le document
+• Remarque : ce n'est que lors de l'utilisation active de l'assistant IA que les données de la facture concernée sont envoyées au fournisseur choisi. Sinon, rien ne quitte votre appareil.
 
 CONFORT
-• Mode sombre
+• Mode sombre, aide contextuelle sur chaque écran
 • Multilingue : allemand, anglais, néerlandais, français et polonais
-• Design bord à bord (compatible Android 15)
+• Design bord à bord (Android 15 ready)
 
 CONFIDENTIALITÉ
-Toutes les factures sont stockées exclusivement sur votre appareil. Pas de cloud, pas de télémétrie, pas de suivi. Les données ne sont transmises que si vous utilisez activement l'assistant IA optionnel – et alors uniquement au fournisseur que vous avez sélectionné.
+Toutes les factures sont stockées exclusivement en local sur votre appareil. Pas de cloud, pas de télémétrie, pas de tracking. Des données ne sont transmises que si vous utilisez activement l'assistant IA optionnel – et alors exclusivement au fournisseur que vous avez choisi.
 
 REMARQUE
-Il s'agit d'un projet personnel indépendant et non d'une application officielle PEPPOL ou KSeF. Les informations affichées ne remplacent pas le document XML d'origine.
+Ceci est un projet indépendant à titre de loisir et non une application officielle PEPPOL ou KSeF. Les informations affichées ne remplacent pas le document XML original.
 
 Cordialement, Accountant with beard
