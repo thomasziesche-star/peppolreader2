@@ -1,0 +1,55 @@
+E-Invoice & Peppol Reader importe et lit les factures électroniques – Peppol BIS 3.0 (UBL), XRechnung, ZUGFeRD, Factur-X et le format polonais KSeF FA(3). Idéal pour les indépendants, les petites entreprises et tous ceux qui souhaitent consulter, gérer et transmettre leurs justificatifs numériques à leur expert-comptable depuis leur smartphone.
+
+FORMATS PRIS EN CHARGE
+• Peppol BIS 3.0 (UBL 2.1)
+• XRechnung – profils UBL et CII
+• ZUGFeRD 1.x et 2.x – PDF hybrides avec XML intégré
+• Factur-X – PDF hybride avec XML
+• UN/CEFACT Cross Industry Invoice (CII)
+• KSeF FA(3) – format de facture électronique polonais, y compris les factures de correction (KOR / KOR_ZAL / KOR_ROZ)
+
+IMPORT
+• Fichiers XML et PDF hybrides, sélection multiple possible
+• Réception directe depuis les pièces jointes des e-mails via la fonction Partager
+• Les PDF ZUGFeRD et Factur-X sont détectés automatiquement : le XML intégré est extrait et le PDF d'origine est conservé en pièce jointe
+
+VUE D'ENSEMBLE & GESTION
+• Liste de factures claire avec une étiquette de format colorée par document
+• Recherche par entreprise ou numéro de facture
+• Puces de filtre : Tout / Impayé / En retard
+• Filtre par plage de dates pour cibler une période
+• Marquer chaque facture comme payée – avec un repère dans la liste
+• Rappels d'échéance : notifications quotidiennes avec délai configurable (0 / 3 / 7 / 14 jours)
+• Les avoirs et les corrections KSeF sont détectés automatiquement et mis en évidence, montants affichés avec le bon signe
+
+VUE DÉTAILLÉE (3 ONGLETS)
+• Facture – toutes les données utiles, lisibles : fournisseur, destinataire, lignes, net, TVA, total, IBAN et informations de paiement
+• Données brutes – le XML complet avec coloration syntaxique et recherche en direct
+• PDF d'origine – consultable directement dans l'application, s'il est joint
+
+EXPORT
+• Export PDF – enregistrer ou partager une facture sous forme de PDF lisible
+• Export CSV (UTF-8) pour votre expert-comptable
+• Bundle ZIP avec le CSV et les fichiers XML/PDF d'origine, librement par plage de dates
+
+ASSISTANT IA (OPTIONNEL)
+• Ajoutez votre propre fournisseur LLM : OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock ou un endpoint générique compatible OpenAI
+• Saisissez votre clé API, chargez les modèles, choisissez un fournisseur par défaut
+• Posez des questions sur une facture ouverte directement dans le document
+• Remarque : lorsque vous utilisez l'assistant IA, les données de la facture concernée sont envoyées au fournisseur que vous avez choisi. Sans utilisation de l'IA, rien ne quitte votre appareil.
+
+TABLEAU DE BORD
+• Analyse graphique de vos dépenses par mois et par fournisseur
+
+CONFORT
+• Mode sombre
+• Multilingue : allemand, anglais, néerlandais, français et polonais
+• Design bord à bord (compatible Android 15)
+
+CONFIDENTIALITÉ
+Toutes les factures sont stockées exclusivement sur votre appareil. Pas de cloud, pas de télémétrie, pas de suivi. Les données ne sont transmises que si vous utilisez activement l'assistant IA optionnel – et alors uniquement au fournisseur que vous avez sélectionné.
+
+REMARQUE
+Il s'agit d'un projet personnel indépendant et non d'une application officielle PEPPOL ou KSeF. Les informations affichées ne remplacent pas le document XML d'origine.
+
+Cordialement, Accountant with beard

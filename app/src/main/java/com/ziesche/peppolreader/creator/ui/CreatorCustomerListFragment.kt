@@ -70,6 +70,7 @@ class CreatorCustomerListFragment : Fragment() {
             dialogBinding.inputCustomerCity.setText(c.city.orEmpty())
             dialogBinding.inputCustomerCountry.setText(c.country.orEmpty())
             dialogBinding.inputCustomerVatId.setText(c.vatId.orEmpty())
+            dialogBinding.inputCustomerEmail.setText(c.email.orEmpty())
         }
 
         MaterialAlertDialogBuilder(requireContext())
@@ -88,7 +89,8 @@ class CreatorCustomerListFragment : Fragment() {
                     zip = dialogBinding.inputCustomerZip.text.str().ifBlank { null },
                     city = dialogBinding.inputCustomerCity.text.str().ifBlank { null },
                     country = dialogBinding.inputCustomerCountry.text.str().ifBlank { null }?.uppercase(),
-                    vatId = dialogBinding.inputCustomerVatId.text.str().ifBlank { null }
+                    vatId = dialogBinding.inputCustomerVatId.text.str().ifBlank { null },
+                    email = dialogBinding.inputCustomerEmail.text.str().ifBlank { null }
                 )
                 viewLifecycleOwner.lifecycleScope.launch {
                     dao.upsert(customer)

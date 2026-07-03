@@ -68,6 +68,14 @@
             app:exitAnim="@anim/slide_out_left"
             app:popEnterAnim="@anim/slide_in_left"
             app:popExitAnim="@anim/slide_out_right" />
+
+        <action
+            android:id="@+id/action_creatorList_to_articles"
+            app:destination="@id/creatorArticleListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
     </fragment>
 
     <fragment
@@ -87,5 +95,17 @@
         android:name="com.ziesche.peppolreader.creator.ui.CreatorCustomerListFragment"
         android:label="@string/creator_customers_title"
         tools:layout="@layout/fragment_creator_customer_list" />
+
+    <fragment
+        android:id="@+id/creatorArticleListFragment"
+        android:name="com.ziesche.peppolreader.creator.ui.CreatorArticleListFragment"
+        android:label="@string/creator_articles_title"
+        tools:layout="@layout/fragment_creator_article_list" />
+
+    <fragment
+        android:id="@+id/creatorDashboardFragment"
+        android:name="com.ziesche.peppolreader.creator.ui.CreatorDashboardFragment"
+        android:label="@string/creator_dashboard_title"
+        tools:layout="@layout/fragment_creator_dashboard" />
 
 </navigation>

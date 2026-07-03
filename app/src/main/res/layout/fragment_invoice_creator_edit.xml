@@ -263,13 +263,30 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_add_line"
-            style="@style/Widget.Material3.Button.TonalButton"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/creator_add_line" />
+            android:orientation="horizontal">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_add_line"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:text="@string/creator_add_line" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_add_from_catalog"
+                style="@style/Widget.Material3.Button.TonalButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_weight="1"
+                android:text="@string/creator_add_from_catalog" />
+        </LinearLayout>
 
         <!-- ===== Payment note ===== -->
         <com.google.android.material.textfield.TextInputLayout

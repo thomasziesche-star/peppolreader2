@@ -13,11 +13,11 @@ import com.ziesche.peppolreader.creator.xml.InvoiceTotalsCalculator
 import java.util.Locale
 
 /**
- * Draws the human-readable invoice page(s) in a warm, editorial letterhead style (DIN-5008-like
- * structure): ivory paper, a serif company wordmark top left, the logo top right, sender line
+ * Draws the human-readable invoice page(s) in an editorial letterhead style (DIN-5008-like
+ * structure): white paper, a serif company wordmark top left, the logo top right, sender line
  * above the recipient address window, a key-data block on the right, a serif document title,
- * a hairline-ruled item table under a terracotta rule, a cream totals panel and a three-column
- * footer with master data on every page.
+ * a hairline-ruled item table under a terracotta rule, a light gray totals panel and a
+ * three-column footer with master data on every page.
  *
  * Pure layout — all PDF/A plumbing (fonts, OutputIntent, XMP, embedding) stays in
  * [ZugferdPdfA3Writer]. Page numbers are stamped in a second pass once the page count is known.
@@ -59,7 +59,7 @@ class InvoiceLayoutRenderer(
         doc.addPage(page)
         pages.add(page)
         cs = PDPageContentStream(doc, page)
-        // Ivory paper background under everything else on the page.
+        // White paper background under everything else on the page.
         fillRect(0f, 0f, PDRectangle.A4.width, PDRectangle.A4.height, PAPER)
         drawFooter()
         y = CONTENT_TOP
@@ -179,7 +179,7 @@ class InvoiceLayoutRenderer(
 
     private fun drawTotals() {
         val rows = 1 + totals.vatBreakdown.size
-        ensureSpace(rows * 15f + 46f)
+        ensureSpace(rows * 15f + 55f)
         y -= 4f
 
         textRight(regular, 10f, TOTALS_LABEL_X, y, "Zwischensumme (netto)", MUTED)
@@ -191,11 +191,12 @@ class InvoiceLayoutRenderer(
             y -= 15f
         }
 
-        // Grand total in a cream panel, set in terracotta serif.
-        fillRect(TOTALS_BOX_X, y - 8f, MARGIN_R - TOTALS_BOX_X, 24f, PANEL)
-        textRight(serif, 14f, TOTALS_LABEL_X, y - 1f, "Gesamtbetrag", ACCENT)
-        textRight(serif, 14f, COL_TOTAL - 10f, y - 1f, money(totals.grandTotal) + " " + currencySymbol(), ACCENT)
-        y -= 38f
+        // Grand total in a light gray panel, set in terracotta serif. The panel top must clear
+        // the descenders of the 10pt tax line above (baseline at y + 15).
+        fillRect(TOTALS_BOX_X, y - 17f, MARGIN_R - TOTALS_BOX_X, 26f, PANEL)
+        textRight(serif, 14f, TOTALS_LABEL_X, y - 10f, "Gesamtbetrag", ACCENT)
+        textRight(serif, 14f, COL_TOTAL - 10f, y - 10f, money(totals.grandTotal) + " " + currencySymbol(), ACCENT)
+        y -= 47f
     }
 
     private fun drawPaymentBlock() {
@@ -412,9 +413,9 @@ class InvoiceLayoutRenderer(
         private const val TOTALS_BOX_X = 330f
         private const val TOTALS_LABEL_X = 460f
 
-        // Warm editorial palette (0..255 RGB): ivory paper, terracotta accent, warm grays.
-        private val PAPER = intArrayOf(250, 249, 245)
-        private val PANEL = intArrayOf(240, 238, 229)
+        // Editorial palette (0..255 RGB): white paper, light gray panel, terracotta accent, warm grays.
+        private val PAPER = intArrayOf(255, 255, 255)
+        private val PANEL = intArrayOf(245, 245, 245)
         private val INK = intArrayOf(31, 30, 29)
         private val MUTED = intArrayOf(107, 106, 100)
         private val FAINT = intArrayOf(155, 154, 147)

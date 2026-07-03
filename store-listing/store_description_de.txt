@@ -1,0 +1,55 @@
+E-Invoice & Peppol Reader importiert und liest elektronische Rechnungen – Peppol BIS 3.0 (UBL), XRechnung, ZUGFeRD, Factur-X und das polnische KSeF FA(3). Ideal für Selbständige, Kleinunternehmer und alle, die ihre digitalen Belege auf dem Smartphone sichten, verwalten und an den Steuerberater weitergeben möchten.
+
+UNTERSTÜTZTE FORMATE
+• Peppol BIS 3.0 (UBL 2.1)
+• XRechnung – im UBL- und im CII-Profil
+• ZUGFeRD 1.x und 2.x – Hybrid-PDFs mit eingebettetem XML
+• Factur-X – Hybrid-PDF mit XML
+• UN/CEFACT Cross Industry Invoice (CII)
+• KSeF FA(3) – polnisches E-Rechnungsformat inkl. Korrekturrechnungen (KOR / KOR_ZAL / KOR_ROZ)
+
+IMPORT
+• XML- und Hybrid-PDF-Dateien, Mehrfachauswahl möglich
+• Direktes Empfangen aus E-Mail-Anhängen über die Teilen-Funktion
+• ZUGFeRD- und Factur-X-PDFs werden automatisch erkannt, das eingebettete XML extrahiert und das Original-PDF als Anhang behalten
+
+ÜBERSICHT & VERWALTUNG
+• Übersichtliche Rechnungsliste mit farbiger Format-Markierung je Beleg
+• Durchsuchbar nach Firma oder Rechnungsnummer
+• Filter-Chips: Alle / Unbezahlt / Überfällig
+• Zeitraum-Filter für einen bestimmten Datumsbereich
+• Bezahlt-Status pro Rechnung setzen – inkl. Markierung in der Liste
+• Fälligkeits-Erinnerungen: tägliche Benachrichtigungen mit wählbarer Vorlaufzeit (0 / 3 / 7 / 14 Tage)
+• Gutschriften und KSeF-Korrekturen werden automatisch erkannt und farblich hervorgehoben, Beträge mit korrektem Vorzeichen
+
+DETAILANSICHT (3 TABS)
+• Rechnung – alle relevanten Daten lesbar: Lieferant, Empfänger, Positionen, Netto, MwSt., Gesamtbetrag, IBAN und Zahlungsinformationen
+• Rohdaten – das vollständige XML mit Syntax-Hervorhebung und Echtzeit-Suche
+• Original-PDF – direkt in der App ansehen, falls angehängt
+
+EXPORT
+• PDF-Export – Rechnung als lesbares PDF speichern oder teilen
+• CSV-Export (UTF-8) für den Steuerberater
+• ZIP-Bündel mit CSV plus den originalen XML-/PDF-Dateien, frei nach Zeitraum
+
+KI-ASSISTENT (OPTIONAL)
+• Eigenen LLM-Anbieter hinterlegen: OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock oder einen generischen OpenAI-kompatiblen Endpoint
+• API-Schlüssel eintragen, Modelle laden, Standard wählen
+• Fragen zu einer geöffneten Rechnung direkt im Beleg stellen
+• Hinweis: Wird der KI-Assistent genutzt, werden die Daten der jeweiligen Rechnung an den von dir gewählten Anbieter gesendet. Ohne KI-Nutzung verlässt nichts dein Gerät.
+
+DASHBOARD
+• Grafische Auswertung deiner Ausgaben nach Monat und Lieferant
+
+KOMFORT
+• Dark Mode
+• Mehrsprachig: Deutsch, Englisch, Niederländisch, Französisch und Polnisch
+• Edge-to-Edge-Design (Android 15 ready)
+
+DATENSCHUTZ
+Alle Rechnungen werden ausschließlich lokal auf deinem Gerät gespeichert. Keine Cloud, keine Telemetrie, kein Tracking. Eine Datenübertragung findet nur statt, wenn du den optionalen KI-Assistenten aktiv nutzt – und dann ausschließlich an den von dir gewählten Anbieter.
+
+HINWEIS
+Dies ist ein unabhängiges Hobbyprojekt und keine offizielle PEPPOL- oder KSeF-Anwendung. Die dargestellten Informationen ersetzen nicht das originale XML-Dokument.
+
+VG Accountant with beard

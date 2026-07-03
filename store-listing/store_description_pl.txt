@@ -1,0 +1,55 @@
+E-Invoice & Peppol Reader importuje i odczytuje faktury elektroniczne – Peppol BIS 3.0 (UBL), XRechnung, ZUGFeRD, Factur-X oraz polski KSeF FA(3). Idealny dla freelancerów, małych firm i wszystkich, którzy chcą przeglądać, zarządzać i przekazywać swoje cyfrowe dokumenty księgowemu bezpośrednio ze smartfona.
+
+OBSŁUGIWANE FORMATY
+• Peppol BIS 3.0 (UBL 2.1)
+• XRechnung – w profilu UBL oraz CII
+• ZUGFeRD 1.x i 2.x – hybrydowe pliki PDF z osadzonym XML
+• Factur-X – hybrydowy PDF z XML
+• UN/CEFACT Cross Industry Invoice (CII)
+• KSeF FA(3) – polski format e-faktury wraz z fakturami korygującymi (KOR / KOR_ZAL / KOR_ROZ)
+
+IMPORT
+• Pliki XML i hybrydowe PDF, możliwy wybór wielu naraz
+• Odbiór bezpośrednio z załączników e-mail przez funkcję Udostępnij
+• Pliki PDF ZUGFeRD i Factur-X są wykrywane automatycznie – osadzony XML jest wyodrębniany, a oryginalny PDF zachowywany jako załącznik
+
+PRZEGLĄD I ZARZĄDZANIE
+• Przejrzysta lista faktur z kolorowym oznaczeniem formatu dla każdego dokumentu
+• Wyszukiwanie według firmy lub numeru faktury
+• Znaczniki filtra: Wszystkie / Nieopłacone / Przeterminowane
+• Filtr zakresu dat dla wybranego okresu
+• Oznaczanie każdej faktury jako opłaconej – wraz z oznaczeniem na liście
+• Przypomnienia o terminach: codzienne powiadomienia z konfigurowalnym wyprzedzeniem (0 / 3 / 7 / 14 dni)
+• Faktury korygujące i korekty KSeF są wykrywane automatycznie i wyróżniane, kwoty z prawidłowym znakiem
+
+WIDOK SZCZEGÓŁÓW (3 ZAKŁADKI)
+• Faktura – wszystkie istotne dane w czytelnej formie: dostawca, odbiorca, pozycje, netto, VAT, suma, IBAN i dane płatności
+• Dane surowe – pełny XML z podświetlaniem składni i wyszukiwaniem na żywo
+• Oryginalny PDF – do obejrzenia bezpośrednio w aplikacji, jeśli jest załączony
+
+EKSPORT
+• Eksport PDF – zapis lub udostępnienie faktury jako czytelnego pliku PDF
+• Eksport CSV (UTF-8) dla księgowego
+• Paczka ZIP z plikiem CSV oraz oryginalnymi plikami XML/PDF, dowolnie według zakresu dat
+
+ASYSTENT AI (OPCJONALNIE)
+• Dodaj własnego dostawcę LLM: OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock lub generyczny endpoint zgodny z OpenAI
+• Wklej klucz API, załaduj modele, wybierz domyślnego
+• Zadawaj pytania o otwartą fakturę bezpośrednio w dokumencie
+• Uwaga: gdy korzystasz z asystenta AI, dane danej faktury są wysyłane do wybranego przez Ciebie dostawcy. Bez użycia AI nic nie opuszcza Twojego urządzenia.
+
+PULPIT
+• Graficzne zestawienie wydatków według miesiąca i dostawcy
+
+WYGODA
+• Tryb ciemny
+• Wielojęzyczność: niemiecki, angielski, niderlandzki, francuski i polski
+• Projekt edge-to-edge (gotowy na Android 15)
+
+PRYWATNOŚĆ
+Wszystkie faktury są przechowywane wyłącznie lokalnie na Twoim urządzeniu. Bez chmury, bez telemetrii, bez śledzenia. Dane są przesyłane tylko wtedy, gdy aktywnie korzystasz z opcjonalnego asystenta AI – i wówczas wyłącznie do wybranego przez Ciebie dostawcy.
+
+UWAGA
+To niezależny projekt hobbystyczny, a nie oficjalna aplikacja PEPPOL ani KSeF. Wyświetlane informacje nie zastępują oryginalnego dokumentu XML.
+
+Pozdrawiam, Accountant with beard

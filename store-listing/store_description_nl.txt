@@ -1,0 +1,55 @@
+E-Invoice & Peppol Reader importeert en leest elektronische facturen – Peppol BIS 3.0 (UBL), XRechnung, ZUGFeRD, Factur-X en het Poolse KSeF FA(3). Ideaal voor zelfstandigen, kleine ondernemers en iedereen die zijn digitale bonnen op de smartphone wil bekijken, beheren en doorsturen naar de accountant.
+
+ONDERSTEUNDE FORMATEN
+• Peppol BIS 3.0 (UBL 2.1)
+• XRechnung – zowel het UBL- als het CII-profiel
+• ZUGFeRD 1.x en 2.x – hybride PDF's met ingesloten XML
+• Factur-X – hybride PDF met XML
+• UN/CEFACT Cross Industry Invoice (CII)
+• KSeF FA(3) – Pools e-factuurformaat incl. correctiefacturen (KOR / KOR_ZAL / KOR_ROZ)
+
+IMPORTEREN
+• XML- en hybride PDF-bestanden, meerdere tegelijk mogelijk
+• Bestanden rechtstreeks ontvangen uit e-mailbijlagen via de deelfunctie
+• ZUGFeRD- en Factur-X-PDF's worden automatisch herkend, de ingesloten XML wordt uitgelezen en de originele PDF blijft als bijlage bewaard
+
+OVERZICHT & BEHEER
+• Overzichtelijke factuurlijst met een gekleurde formaatlabel per document
+• Doorzoekbaar op bedrijf of factuurnummer
+• Filterchips: Alle / Onbetaald / Verlopen
+• Datumfilter voor een bepaalde periode
+• Betaalstatus per factuur instellen – inclusief markering in de lijst
+• Vervaldatum-herinneringen: dagelijkse meldingen met instelbare aanlooptijd (0 / 3 / 7 / 14 dagen)
+• Creditnota's en KSeF-correcties worden automatisch herkend en gemarkeerd, bedragen met het juiste teken
+
+DETAILWEERGAVE (3 TABBLADEN)
+• Factuur – alle relevante gegevens leesbaar: leverancier, ontvanger, regels, netto, btw, totaal, IBAN en betaalgegevens
+• Ruwe data – de volledige XML met syntaxismarkering en live zoeken
+• Originele PDF – direct in de app bekijken, indien bijgevoegd
+
+EXPORTEREN
+• PDF-export – een factuur als leesbare PDF opslaan of delen
+• CSV-export (UTF-8) voor je accountant
+• ZIP-bundel met de CSV plus de originele XML-/PDF-bestanden, vrij per periode
+
+AI-ASSISTENT (OPTIONEEL)
+• Voeg je eigen LLM-aanbieder toe: OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock of een generiek OpenAI-compatibel endpoint
+• Plak je API-sleutel, laad de modellen, kies een standaard
+• Stel vragen over een geopende factuur direct in het document
+• Let op: als je de AI-assistent gebruikt, worden de gegevens van die factuur naar de door jou gekozen aanbieder gestuurd. Zonder AI-gebruik verlaat er niets je apparaat.
+
+DASHBOARD
+• Grafisch overzicht van je uitgaven per maand en leverancier
+
+GEMAK
+• Donkere modus
+• Meertalig: Duits, Engels, Nederlands, Frans en Pools
+• Edge-to-edge ontwerp (Android 15 ready)
+
+PRIVACY
+Alle facturen worden uitsluitend lokaal op je apparaat opgeslagen. Geen cloud, geen telemetrie, geen tracking. Gegevens worden alleen verzonden als je de optionele AI-assistent actief gebruikt – en dan uitsluitend naar de door jou gekozen aanbieder.
+
+OPMERKING
+Dit is een onafhankelijk hobbyproject en geen officiële PEPPOL- of KSeF-toepassing. De getoonde informatie vervangt het originele XML-document niet.
+
+Met vriendelijke groet, Accountant with beard

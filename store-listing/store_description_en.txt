@@ -1,0 +1,55 @@
+E-Invoice & Peppol Reader imports and reads electronic invoices – Peppol BIS 3.0 (UBL), XRechnung, ZUGFeRD, Factur-X and the Polish KSeF FA(3). Ideal for freelancers, small businesses and anyone who wants to review, manage and forward their digital receipts to a tax advisor right from their phone.
+
+SUPPORTED FORMATS
+• Peppol BIS 3.0 (UBL 2.1)
+• XRechnung – both the UBL and the CII profile
+• ZUGFeRD 1.x and 2.x – hybrid PDFs with embedded XML
+• Factur-X – hybrid PDF with XML
+• UN/CEFACT Cross Industry Invoice (CII)
+• KSeF FA(3) – Polish e-invoice format incl. correction invoices (KOR / KOR_ZAL / KOR_ROZ)
+
+IMPORT
+• XML and hybrid PDF files, multi-select supported
+• Receive files directly from email attachments via the share function
+• ZUGFeRD and Factur-X PDFs are detected automatically – the embedded XML is extracted and the original PDF is kept as an attachment
+
+OVERVIEW & MANAGEMENT
+• Clear invoice list with a colour-coded format badge per document
+• Searchable by company or invoice number
+• Filter chips: All / Unpaid / Overdue
+• Date-range filter to focus on a specific period
+• Mark each invoice as paid – including a marker in the list
+• Due-date reminders: daily notifications with a configurable lead time (0 / 3 / 7 / 14 days)
+• Credit notes and KSeF corrections are detected automatically and highlighted, amounts shown with the correct sign
+
+DETAIL VIEW (3 TABS)
+• Invoice – all relevant data, easy to read: supplier, recipient, line items, net, VAT, total, IBAN and payment information
+• Raw data – the full XML with syntax highlighting and live search
+• Original PDF – view it right inside the app, if attached
+
+EXPORT
+• PDF export – save or share an invoice as a readable PDF
+• CSV export (UTF-8) for your tax advisor
+• ZIP bundle with the CSV plus the original XML/PDF files, freely by date range
+
+AI ASSISTANT (OPTIONAL)
+• Add your own LLM provider: OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock or a generic OpenAI-compatible endpoint
+• Paste your API key, load the models, pick a default
+• Ask questions about an open invoice right inside the document
+• Note: when you use the AI assistant, the data of that invoice is sent to the provider you chose. Without AI usage, nothing leaves your device.
+
+DASHBOARD
+• Visual breakdown of your expenses by month and supplier
+
+CONVENIENCE
+• Dark mode
+• Multilingual: German, English, Dutch, French and Polish
+• Edge-to-edge design (Android 15 ready)
+
+PRIVACY
+All invoices are stored exclusively on your device. No cloud, no telemetry, no tracking. Data is only transmitted if you actively use the optional AI assistant – and then exclusively to the provider you selected.
+
+NOTE
+This is an independent hobby project and not an official PEPPOL or KSeF application. The information shown does not replace the original XML document.
+
+Best regards, Accountant with beard

@@ -2,6 +2,9 @@ package com.ziesche.peppolreader.data
 
 import android.database.sqlite.SQLiteDatabase
 import androidx.room.Room
+import com.ziesche.peppolreader.creator.model.CreatorArticle
+import com.ziesche.peppolreader.creator.model.CreatorCustomer
+import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -123,9 +126,42 @@ class MigrationChainTest {
             assertNull(row.note)
             assertNull(row.category)
 
-            // 5. The creator tables added in v9/v10 are present and usable (no crash on query).
+            // 5. The creator tables added in v9/v10/v12 are present and usable (no crash on query).
             assertNull(db.outgoingInvoiceDao().getById(1))
             assertEquals(0, db.creatorCustomerDao().getAll().size)
+            assertEquals(0, db.creatorArticleDao().getAll().size)
+
+            // 6. The customer email column added in v12 defaults to null and round-trips.
+            db.creatorCustomerDao().upsert(CreatorCustomer(name = "Migrated Buyer"))
+            assertNull(db.creatorCustomerDao().getAll().single().email)
+
+            // 7. Article upsert respects the unique name index (REPLACE, no duplicate).
+            db.creatorArticleDao().upsert(CreatorArticle(name = "Consulting", unitPrice = 90.0))
+            db.creatorArticleDao().upsert(CreatorArticle(name = "Consulting", unitPrice = 95.0))
+            val articles = db.creatorArticleDao().getAll()
+            assertEquals(1, articles.size)
+            assertEquals(95.0, articles.single().unitPrice, 0.001)
+
+            // 8. Payment/dunning columns added in v13 default correctly and update as designed.
+            val outId = db.outgoingInvoiceDao().insert(
+                OutgoingInvoice(invoiceNumber = "RE-1", issueDate = "2026-01-01", sellerName = "Me", buyerName = "Buyer")
+            )
+            val fresh = db.outgoingInvoiceDao().getById(outId)!!
+            assertNull(fresh.paidAt)
+            assertEquals(0, fresh.dunningLevel)
+            assertNull(fresh.lastDunningAt)
+            assertNull(fresh.lastOverdueNotifiedAt)
+
+            db.outgoingInvoiceDao().setPaid(outId, 123L)
+            assertEquals(123L, db.outgoingInvoiceDao().getById(outId)!!.paidAt)
+            db.outgoingInvoiceDao().setPaid(outId, null)
+            assertNull(db.outgoingInvoiceDao().getById(outId)!!.paidAt)
+
+            // Dunning level caps at 3 no matter how often it is recorded.
+            repeat(4) { db.outgoingInvoiceDao().recordDunningSent(outId, 456L) }
+            val dunned = db.outgoingInvoiceDao().getById(outId)!!
+            assertEquals(3, dunned.dunningLevel)
+            assertEquals(456L, dunned.lastDunningAt)
         }
         db.close()
     }

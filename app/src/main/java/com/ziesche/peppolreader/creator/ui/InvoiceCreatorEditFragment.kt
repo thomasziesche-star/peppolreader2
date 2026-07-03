@@ -93,6 +93,8 @@ class InvoiceCreatorEditFragment : Fragment() {
             syncLinesToViewModel()
         }
 
+        binding.btnAddFromCatalog.setOnClickListener { showArticlePicker() }
+
         binding.btnPickCustomer.setOnClickListener { showCustomerPicker() }
 
         binding.btnGenerate.setOnClickListener { onGenerateClicked() }
@@ -327,6 +329,44 @@ class InvoiceCreatorEditFragment : Fragment() {
                     binding.inputBuyerCity.setText(c.city.orEmpty())
                     binding.inputBuyerCountry.setText(c.country.orEmpty())
                     binding.inputBuyerVatId.setText(c.vatId.orEmpty())
+                }
+                .setNegativeButton(android.R.string.cancel, null)
+                .show()
+        }
+    }
+
+    /** Lets the user pick an article from the catalog; the pick pre-fills a new line row. */
+    private fun showArticlePicker() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val articles = viewModel.articles()
+            if (articles.isEmpty()) {
+                Snackbar.make(binding.root, R.string.creator_no_articles, Snackbar.LENGTH_LONG).show()
+                return@launch
+            }
+            val labels = articles.map { a ->
+                "${a.name} · ${currencyFormat.format(a.unitPrice)} € / ${a.unit}"
+            }.toTypedArray()
+            MaterialAlertDialogBuilder(requireContext())
+                .setTitle(R.string.creator_pick_article)
+                .setItems(labels) { _, which ->
+                    val a = articles[which]
+                    val line = CreatorLine(
+                        description = a.name,
+                        quantity = 1.0,
+                        unit = a.unit,
+                        unitPrice = a.unitPrice,
+                        vatRate = a.vatRate
+                    )
+                    // A fresh draft starts with one empty row — fill that instead of appending.
+                    val onlyEmptyRow = rows.size == 1 &&
+                        rows[0].inputDescription.text.str().isBlank() &&
+                        rows[0].inputPrice.text.str().isBlank()
+                    if (onlyEmptyRow) {
+                        rows.removeAt(0)
+                        binding.containerLines.removeAllViews()
+                    }
+                    addRow(line)
+                    syncLinesToViewModel()
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()

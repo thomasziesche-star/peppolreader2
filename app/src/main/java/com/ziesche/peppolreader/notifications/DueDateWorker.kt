@@ -7,13 +7,18 @@ import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.ziesche.peppolreader.BuildConfig
 import com.ziesche.peppolreader.MainActivity
 import com.ziesche.peppolreader.R
+import com.ziesche.peppolreader.creator.data.OutgoingInvoiceRepository
+import com.ziesche.peppolreader.creator.model.OutgoingInvoice
+import com.ziesche.peppolreader.creator.xml.InvoiceTotalsCalculator
 import com.ziesche.peppolreader.data.InvoiceRepository
 import com.ziesche.peppolreader.data.model.Invoice
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Currency
 import java.util.Locale
 
 /**
@@ -52,14 +57,65 @@ class DueDateWorker(
         val repository = InvoiceRepository.from(ctx)
         val due = repository.getDueSoon(thresholdIso, startOfToday.timeInMillis)
 
-        if (due.isEmpty()) return Result.success()
-
         val currency = NumberFormat.getCurrencyInstance(Locale.getDefault())
         due.forEach { invoice ->
             postNotification(ctx, invoice, currency)
             repository.touchReminderShown(invoice.id, System.currentTimeMillis())
         }
+
+        // Outgoing invoices: notify about overdue, unpaid, generated invoices (no lead time —
+        // "overdue" only starts the day after the due date). Same enable gate as above.
+        if (BuildConfig.ENABLE_INVOICE_CREATOR) {
+            val todayIso = ISO.format(now.time)
+            val outgoingRepo = OutgoingInvoiceRepository.from(ctx)
+            outgoingRepo.getOverdueUnnotified(todayIso, startOfToday.timeInMillis).forEach { inv ->
+                postOutgoingNotification(ctx, inv)
+                outgoingRepo.touchOverdueNotified(inv.id, System.currentTimeMillis())
+            }
+        }
         return Result.success()
+    }
+
+    private fun postOutgoingNotification(ctx: Context, invoice: OutgoingInvoice) {
+        val intent = Intent(ctx, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            putExtra(MainActivity.EXTRA_OPEN_CREATOR, true)
+        }
+        val pendingFlags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        val pending = PendingIntent.getActivity(
+            ctx,
+            NOTIF_OUTGOING_BASE_ID + invoice.id.toInt(),
+            intent,
+            pendingFlags
+        )
+
+        val amount = NumberFormat.getCurrencyInstance(Locale.getDefault()).apply {
+            runCatching { currency = Currency.getInstance(invoice.currency) }
+        }.format(InvoiceTotalsCalculator.calculate(invoice.lines).grandTotal)
+
+        val title = ctx.getString(R.string.notif_outgoing_overdue_title)
+        val text = ctx.getString(
+            R.string.notif_outgoing_overdue_text,
+            invoice.buyerName,
+            invoice.invoiceNumber,
+            invoice.dueDate.orEmpty(),
+            amount
+        )
+
+        val builder = NotificationCompat.Builder(ctx, NotificationChannels.DUE_INVOICES)
+            .setSmallIcon(R.drawable.ic_info)
+            .setContentTitle(title)
+            .setContentText(text)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
+            .setContentIntent(pending)
+            .setAutoCancel(true)
+
+        try {
+            NotificationManagerCompat.from(ctx)
+                .notify(NOTIF_OUTGOING_BASE_ID + invoice.id.toInt(), builder.build())
+        } catch (e: SecurityException) {
+            // Android 13+ may throw if POST_NOTIFICATIONS got revoked mid-flight; ignore.
+        }
     }
 
     private fun postNotification(
@@ -112,5 +168,6 @@ class DueDateWorker(
     companion object {
         private val ISO = SimpleDateFormat("yyyy-MM-dd", Locale.US)
         private const val NOTIF_BASE_ID = 1000
+        private const val NOTIF_OUTGOING_BASE_ID = 5000 // disjoint from reader ids (1000+)
     }
 }

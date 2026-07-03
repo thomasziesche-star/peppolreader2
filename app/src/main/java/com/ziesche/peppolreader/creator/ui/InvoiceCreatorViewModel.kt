@@ -10,6 +10,7 @@ import com.ziesche.peppolreader.creator.data.CompanyProfileStore
 import com.ziesche.peppolreader.creator.data.OutgoingInvoiceRepository
 import com.ziesche.peppolreader.creator.data.PdfExporter
 import com.ziesche.peppolreader.creator.model.CompanyProfile
+import com.ziesche.peppolreader.creator.model.CreatorArticle
 import com.ziesche.peppolreader.creator.model.CreatorCustomer
 import com.ziesche.peppolreader.creator.model.CreatorLine
 import com.ziesche.peppolreader.creator.model.CreatorTotals
@@ -35,6 +36,7 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
     private val repository = OutgoingInvoiceRepository.from(app)
     private val profileStore = CompanyProfileStore(app)
     private val customerDao = AppDatabase.getDatabase(app).creatorCustomerDao()
+    private val articleDao = AppDatabase.getDatabase(app).creatorArticleDao()
 
     /** Id of the draft being edited, or null for a brand-new draft. */
     var editingId: Long? = null
@@ -53,6 +55,11 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
     /** Customer master, alphabetically sorted. */
     suspend fun customers(): List<CreatorCustomer> = withContext(Dispatchers.IO) {
         customerDao.getAll()
+    }
+
+    /** Article/service catalog, alphabetically sorted. */
+    suspend fun articles(): List<CreatorArticle> = withContext(Dispatchers.IO) {
+        articleDao.getAll()
     }
 
     // ----- line editing -------------------------------------------------------------------
@@ -177,6 +184,9 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
     private suspend fun rememberCustomer(invoice: OutgoingInvoice) {
         if (invoice.buyerName.isBlank()) return
         runCatching {
+            // The upsert REPLACEs the row on a name match, so master-data-only fields the
+            // invoice does not carry (email) must be copied over from the existing entry.
+            val existing = customerDao.getAll().firstOrNull { it.name == invoice.buyerName }
             customerDao.upsert(
                 CreatorCustomer(
                     name = invoice.buyerName,
@@ -184,7 +194,8 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
                     zip = invoice.buyerZip,
                     city = invoice.buyerCity,
                     country = invoice.buyerCountry,
-                    vatId = invoice.buyerVatId
+                    vatId = invoice.buyerVatId,
+                    email = existing?.email
                 )
             )
         }
