@@ -7,6 +7,12 @@ plugins {
 import java.util.Properties
 import java.io.FileInputStream
 
+// Export Room schemas (version 10 onward) into app/schemas so future migrations can be
+// validated by Room at compile time and by MigrationTestHelper in tests.
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
+
 android {
     namespace = "com.ziesche.peppolreader"
     compileSdk = 35
@@ -15,8 +21,8 @@ android {
         applicationId = "com.ziesche.peppolreader"
         minSdk = 28
         targetSdk = 35
-        versionCode = 17
-        versionName = "3.7"
+        versionCode = 18
+        versionName = "3.8"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -42,7 +48,8 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"

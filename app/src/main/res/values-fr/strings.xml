@@ -377,4 +377,21 @@
     <string name="creator_error_no_lines">Ajoutez au moins une ligne.</string>
     <string name="creator_error_invalid">Veuillez compléter les champs obligatoires.</string>
     <string name="creator_error_generate">Impossible de créer le PDF : %1$s</string>
+
+    <!-- Créateur : contrôle EN 16931 avant génération + factures récurrentes -->
+    <string name="creator_validation_errors_title">Facture pas encore créable</string>
+    <string name="creator_validation_warnings_title">À vérifier</string>
+    <string name="creator_generate_anyway">Créer quand même</string>
+    <string name="creator_validation_passed">✓ Contrôle EN 16931 réussi</string>
+    <string name="creator_validate_seller_incomplete">Profil d’entreprise incomplet (adresse et n° de TVA ou numéro fiscal requis).</string>
+    <string name="creator_validate_number_missing">Le numéro de facture est manquant.</string>
+    <string name="creator_validate_date_invalid">La date de facture est manquante ou invalide.</string>
+    <string name="creator_validate_buyer_missing">Le nom du client est manquant.</string>
+    <string name="creator_validate_no_lines">La facture ne comporte aucune ligne.</string>
+    <string name="creator_validate_line_no_desc">La ligne %1$d n’a pas de description.</string>
+    <string name="creator_validate_line_qty">La ligne %1$d a une quantité nulle ou négative.</string>
+    <string name="creator_validate_due_before_issue">La date d’échéance précède la date de facture.</string>
+    <string name="creator_validate_iban_missing">Aucun IBAN dans le profil — le client n’a pas de compte de paiement.</string>
+    <string name="creator_validate_iban_invalid">L’IBAN du profil d’entreprise semble invalide.</string>
+    <string name="creator_duplicate">Dupliquer en brouillon</string>
 </resources>

@@ -13,10 +13,11 @@ import com.ziesche.peppolreader.creator.xml.InvoiceTotalsCalculator
 import java.util.Locale
 
 /**
- * Draws the human-readable invoice page(s) in a clean, letterhead-style layout loosely based on
- * DIN 5008: company logo (or name) top right, sender line above the recipient address window,
- * a key-data block on the right, a ruled line-item table with a colored header row, a totals
- * box, the payment block and a three-column footer with master data on every page.
+ * Draws the human-readable invoice page(s) in a warm, editorial letterhead style (DIN-5008-like
+ * structure): ivory paper, a serif company wordmark top left, the logo top right, sender line
+ * above the recipient address window, a key-data block on the right, a serif document title,
+ * a hairline-ruled item table under a terracotta rule, a cream totals panel and a three-column
+ * footer with master data on every page.
  *
  * Pure layout — all PDF/A plumbing (fonts, OutputIntent, XMP, embedding) stays in
  * [ZugferdPdfA3Writer]. Page numbers are stamped in a second pass once the page count is known.
@@ -25,6 +26,7 @@ class InvoiceLayoutRenderer(
     private val doc: PDDocument,
     private val regular: PDFont,
     private val bold: PDFont,
+    private val serif: PDFont,
     private val invoice: OutgoingInvoice,
     private val logo: Bitmap?
 ) {
@@ -57,6 +59,8 @@ class InvoiceLayoutRenderer(
         doc.addPage(page)
         pages.add(page)
         cs = PDPageContentStream(doc, page)
+        // Ivory paper background under everything else on the page.
+        fillRect(0f, 0f, PDRectangle.A4.width, PDRectangle.A4.height, PAPER)
         drawFooter()
         y = CONTENT_TOP
     }
@@ -72,15 +76,14 @@ class InvoiceLayoutRenderer(
     // ----- letterhead (first page only) -------------------------------------------------------
 
     private fun drawLetterhead() {
-        // Logo (or company name as text mark) in the top-right corner.
+        // Serif company wordmark top left; logo (when present) top right.
+        text(serif, 17f, MARGIN_L, CONTENT_TOP - 14f, invoice.sellerName, ACCENT)
         if (logo != null && logo.width > 0 && logo.height > 0) {
             val image = LosslessFactory.createFromImage(doc, logo)
             val scale = minOf(LOGO_MAX_WIDTH / logo.width, LOGO_MAX_HEIGHT / logo.height)
             val w = logo.width * scale
             val h = logo.height * scale
             cs.drawImage(image, MARGIN_R - w, CONTENT_TOP - h, w, h)
-        } else {
-            textRight(bold, 14f, MARGIN_R, CONTENT_TOP - 12f, invoice.sellerName, ACCENT)
         }
 
         // Tiny sender line above the address window, as on a windowed envelope.
@@ -90,8 +93,8 @@ class InvoiceLayoutRenderer(
             listOfNotNull(invoice.sellerZip, invoice.sellerCity).joinToString(" ").takeIf { it.isNotBlank() }
         ).joinToString("  ·  ")
         y = 716f
-        text(regular, 7f, MARGIN_L, y, sender, GRAY)
-        rule(MARGIN_L, y - 4f, MARGIN_L + 240f, LIGHT)
+        text(regular, 7f, MARGIN_L, y, sender, FAINT)
+        rule(MARGIN_L, y - 4f, MARGIN_L + 240f, HAIRLINE)
         y -= 22f
 
         // Recipient address block (left).
@@ -120,31 +123,35 @@ class InvoiceLayoutRenderer(
             invoice.buyerVatId?.takeIf { it.isNotBlank() }?.let { add("USt-IdNr. Kunde" to it) }
         }
         for ((label, value) in info) {
-            text(regular, 8.5f, INFO_X, infoY, label, GRAY)
+            text(regular, 8.5f, INFO_X, infoY, label, FAINT)
             textRight(regular, 10f, MARGIN_R, infoY, value)
             infoY -= 15f
         }
 
-        // Document title.
-        y = minOf(recipientBottom, infoY) - 34f
+        // Editorial document title: large serif word, the number in terracotta beneath it.
+        y = minOf(recipientBottom, infoY) - 38f
         val title = if (isCreditNote) "Gutschrift" else "Rechnung"
-        text(bold, 16f, MARGIN_L, y, "$title ${invoice.invoiceNumber}", ACCENT)
-        y -= 26f
+        text(serif, 24f, MARGIN_L, y, title)
+        y -= 17f
+        text(regular, 12f, MARGIN_L, y, invoice.invoiceNumber, ACCENT)
+        y -= 20f
     }
 
     // ----- line-item table --------------------------------------------------------------------
 
     private fun drawTableHeader() {
         ensureSpace(60f)
-        // Filled header band with white column labels.
-        fillRect(MARGIN_L, y - 5.5f, MARGIN_R - MARGIN_L, 17f, ACCENT)
-        text(bold, 8.5f, COL_POS, y, "POS.", WHITE)
-        text(bold, 8.5f, COL_DESC, y, "BESCHREIBUNG", WHITE)
-        textRight(bold, 8.5f, COL_QTY, y, "MENGE", WHITE)
-        textRight(bold, 8.5f, COL_PRICE, y, "EINZELPREIS", WHITE)
-        textRight(bold, 8.5f, COL_VAT, y, "UST. %", WHITE)
-        textRight(bold, 8.5f, COL_TOTAL, y, "BETRAG", WHITE)
-        y -= 22f
+        // Terracotta rule on top, quiet uppercase column labels, hairline underneath.
+        fillRect(MARGIN_L, y + 8f, MARGIN_R - MARGIN_L, 1.8f, ACCENT)
+        y -= 6f
+        text(regular, 8.5f, COL_POS, y, "POS.", FAINT)
+        text(regular, 8.5f, COL_DESC, y, "BESCHREIBUNG", FAINT)
+        textRight(regular, 8.5f, COL_QTY, y, "MENGE", FAINT)
+        textRight(regular, 8.5f, COL_PRICE, y, "EINZELPREIS", FAINT)
+        textRight(regular, 8.5f, COL_VAT, y, "UST. %", FAINT)
+        textRight(regular, 8.5f, COL_TOTAL, y, "BETRAG", FAINT)
+        rule(MARGIN_L, y - 5f, MARGIN_R, HAIRLINE)
+        y -= 19f
     }
 
     private fun drawItemRow(position: Int, line: CreatorLine) {
@@ -154,7 +161,7 @@ class InvoiceLayoutRenderer(
         ensureSpace(rowHeight + 10f, repeatTableHeader = true)
 
         val net = line.quantity * line.unitPrice
-        text(regular, 9.5f, COL_POS, y, position.toString(), GRAY)
+        text(regular, 9.5f, COL_POS, y, position.toString(), FAINT)
         textRight(regular, 9.5f, COL_QTY, y, "${trimNum(line.quantity)} ${unitLabel(line.unit)}")
         textRight(regular, 9.5f, COL_PRICE, y, money(line.unitPrice))
         textRight(regular, 9.5f, COL_VAT, y, trimNum(line.vatRate))
@@ -164,7 +171,7 @@ class InvoiceLayoutRenderer(
             y -= 12f
         }
         y -= 6f
-        rule(MARGIN_L, y + 4f, MARGIN_R, LIGHT)
+        rule(MARGIN_L, y + 4f, MARGIN_R, HAIRLINE)
         y -= 8f
     }
 
@@ -175,20 +182,20 @@ class InvoiceLayoutRenderer(
         ensureSpace(rows * 15f + 46f)
         y -= 4f
 
-        textRight(regular, 10f, TOTALS_LABEL_X, y, "Zwischensumme (netto)", GRAY)
+        textRight(regular, 10f, TOTALS_LABEL_X, y, "Zwischensumme (netto)", MUTED)
         textRight(regular, 10f, COL_TOTAL, y, money(totals.lineTotal) + " " + currencySymbol())
         y -= 15f
         for (e in totals.vatBreakdown) {
-            textRight(regular, 10f, TOTALS_LABEL_X, y, "zzgl. ${trimNum(e.rate)} % USt.", GRAY)
-            textRight(regular, 10f, COL_TOTAL, y, money(e.tax) + " " + currencySymbol())
+            textRight(regular, 10f, TOTALS_LABEL_X, y, "zzgl. ${trimNum(e.rate)} % USt.", MUTED)
+            textRight(regular, 10f, COL_TOTAL, y, money(e.tax) + " " + currencySymbol(), MUTED)
             y -= 15f
         }
 
-        // Highlighted grand total band.
-        fillRect(TOTALS_BOX_X, y - 6.5f, MARGIN_R - TOTALS_BOX_X, 21f, ACCENT_SOFT)
-        textRight(bold, 11.5f, TOTALS_LABEL_X, y, "Gesamtbetrag", ACCENT)
-        textRight(bold, 11.5f, COL_TOTAL, y, money(totals.grandTotal) + " " + currencySymbol(), ACCENT)
-        y -= 34f
+        // Grand total in a cream panel, set in terracotta serif.
+        fillRect(TOTALS_BOX_X, y - 8f, MARGIN_R - TOTALS_BOX_X, 24f, PANEL)
+        textRight(serif, 14f, TOTALS_LABEL_X, y - 1f, "Gesamtbetrag", ACCENT)
+        textRight(serif, 14f, COL_TOTAL - 10f, y - 1f, money(totals.grandTotal) + " " + currencySymbol(), ACCENT)
+        y -= 38f
     }
 
     private fun drawPaymentBlock() {
@@ -215,7 +222,7 @@ class InvoiceLayoutRenderer(
 
     /** Three-column master-data footer; drawn on every page right after it is created. */
     private fun drawFooter() {
-        rule(MARGIN_L, FOOTER_RULE_Y, MARGIN_R, LIGHT)
+        rule(MARGIN_L, FOOTER_RULE_Y, MARGIN_R, HAIRLINE)
 
         val col1 = buildList {
             add(invoice.sellerName)
@@ -237,9 +244,9 @@ class InvoiceLayoutRenderer(
 
         var fy = FOOTER_RULE_Y - 11f
         for (i in 0 until maxOf(col1.size, col2.size, col3.size).coerceAtMost(4)) {
-            col1.getOrNull(i)?.let { text(regular, 7f, MARGIN_L, fy, it, GRAY) }
-            col2.getOrNull(i)?.let { text(regular, 7f, FOOTER_COL2_X, fy, it, GRAY) }
-            col3.getOrNull(i)?.let { text(regular, 7f, FOOTER_COL3_X, fy, it, GRAY) }
+            col1.getOrNull(i)?.let { text(regular, 7f, MARGIN_L, fy, it, FAINT) }
+            col2.getOrNull(i)?.let { text(regular, 7f, FOOTER_COL2_X, fy, it, FAINT) }
+            col3.getOrNull(i)?.let { text(regular, 7f, FOOTER_COL3_X, fy, it, FAINT) }
             fy -= 9.5f
         }
     }
@@ -251,7 +258,7 @@ class InvoiceLayoutRenderer(
             PDPageContentStream(doc, page, PDPageContentStream.AppendMode.APPEND, true).use { c ->
                 val label = "Seite ${index + 1} von ${pages.size}"
                 val width = regular.getStringWidth(label) / 1000f * 7f
-                c.setNonStrokingColor(GRAY[0], GRAY[1], GRAY[2])
+                c.setNonStrokingColor(FAINT[0], FAINT[1], FAINT[2])
                 c.beginText()
                 c.setFont(regular, 7f)
                 c.newLineAtOffset((PDRectangle.A4.width - width) / 2f, PAGE_NUMBER_Y)
@@ -405,12 +412,13 @@ class InvoiceLayoutRenderer(
         private const val TOTALS_BOX_X = 330f
         private const val TOTALS_LABEL_X = 460f
 
-        // Palette (0..255 RGB).
-        private val INK = intArrayOf(25, 28, 33)
-        private val ACCENT = intArrayOf(33, 56, 92)
-        private val ACCENT_SOFT = intArrayOf(232, 237, 244)
-        private val GRAY = intArrayOf(115, 119, 125)
-        private val LIGHT = intArrayOf(208, 211, 216)
-        private val WHITE = intArrayOf(255, 255, 255)
+        // Warm editorial palette (0..255 RGB): ivory paper, terracotta accent, warm grays.
+        private val PAPER = intArrayOf(250, 249, 245)
+        private val PANEL = intArrayOf(240, 238, 229)
+        private val INK = intArrayOf(31, 30, 29)
+        private val MUTED = intArrayOf(107, 106, 100)
+        private val FAINT = intArrayOf(155, 154, 147)
+        private val ACCENT = intArrayOf(193, 95, 60)
+        private val HAIRLINE = intArrayOf(217, 215, 206)
     }
 }

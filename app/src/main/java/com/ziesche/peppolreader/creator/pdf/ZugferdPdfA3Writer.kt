@@ -34,8 +34,9 @@ import java.util.Locale
  * Assets used:
  *  - the embeddable regular TTF ships *inside* pdfbox-android
  *    (`com/tom_roush/pdfbox/resources/ttf/LiberationSans-Regular.ttf`);
- *  - `assets/creator/LiberationSans-Bold.ttf` (same family, SIL OFL — license bundled alongside)
- *    for headings and totals;
+ *  - `assets/creator/LiberationSans-Bold.ttf` and `LiberationSerif-Regular.ttf` (same Liberation
+ *    family, SIL OFL — `Liberation-Fonts-LICENSE.txt` bundled alongside) for emphasis and the
+ *    editorial headline/totals styling;
  *  - `assets/creator/sRGB.icc` provides the PDF/A OutputIntent.
  */
 class ZugferdPdfA3Writer(private val context: Context) {
@@ -51,7 +52,8 @@ class ZugferdPdfA3Writer(private val context: Context) {
         PDDocument().use { doc ->
             val regular = loadFont(doc, FONT_REGULAR)
             val bold = loadFont(doc, FONT_BOLD)
-            InvoiceLayoutRenderer(doc, regular, bold, invoice, loadLogo(logoPath)).render()
+            val serif = loadFont(doc, FONT_SERIF)
+            InvoiceLayoutRenderer(doc, regular, bold, serif, invoice, loadLogo(logoPath)).render()
             addOutputIntent(doc)
             addXmpMetadata(doc, invoice)
             setDocumentInfo(doc, invoice)
@@ -228,6 +230,7 @@ class ZugferdPdfA3Writer(private val context: Context) {
     companion object {
         private const val FONT_REGULAR = "com/tom_roush/pdfbox/resources/ttf/LiberationSans-Regular.ttf"
         private const val FONT_BOLD = "creator/LiberationSans-Bold.ttf"
+        private const val FONT_SERIF = "creator/LiberationSerif-Regular.ttf"
         private const val ICC_ASSET = "creator/sRGB.icc"
         private const val EMBEDDED_NAME = "factur-x.xml"
         private const val PRODUCER = "PeppolReader Invoice Creator"

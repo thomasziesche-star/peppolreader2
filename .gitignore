@@ -24,3 +24,8 @@ release-archive/
 keystore.properties
 *.jks
 release.jks
+
+# Build / debug logs (transient, never commit)
+build_*.log
+build_out.log
+crash_capture.log
