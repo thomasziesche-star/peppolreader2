@@ -109,12 +109,14 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
             }
         }
 
-        // Text search
+        // Text search — supplier, number, and the user-entered note/category.
         if (!query.isNullOrBlank()) {
             val q = query.trim().lowercase()
             list = list.filter {
                 it.supplierName.lowercase().contains(q) ||
-                    it.invoiceId.lowercase().contains(q)
+                    it.invoiceId.lowercase().contains(q) ||
+                    it.note?.lowercase()?.contains(q) == true ||
+                    it.category?.lowercase()?.contains(q) == true
             }
         }
         return list
@@ -435,6 +437,26 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
             }
         }
     }
+
+    /**
+     * Persists the user-entered bookkeeping note/category for [invoice] and refreshes the
+     * cached selection so the detail view re-renders. Blank values are stored as null.
+     */
+    fun saveNoteAndCategory(invoice: Invoice, note: String?, category: String?) {
+        viewModelScope.launch {
+            val cleanNote = note?.trim()?.ifBlank { null }
+            val cleanCategory = category?.trim()?.ifBlank { null }
+            withContext(Dispatchers.IO) {
+                repository.setNoteAndCategory(invoice.id, cleanNote, cleanCategory)
+            }
+            val refreshed = withContext(Dispatchers.IO) { repository.getById(invoice.id) }
+            if (refreshed != null) _selectedInvoice.value = refreshed
+        }
+    }
+
+    /** Categories already used, for the edit dialog's suggestions. */
+    suspend fun usedCategories(): List<String> =
+        withContext(Dispatchers.IO) { repository.getUsedCategories() }
 
     /**
      * Delete an invoice

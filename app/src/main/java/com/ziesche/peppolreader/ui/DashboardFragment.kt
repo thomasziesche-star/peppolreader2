@@ -371,6 +371,21 @@ class DashboardFragment : Fragment() {
         binding.taxNetValue.text = currencyFormat.format(stats.taxTotals.net)
         binding.taxVatValue.text = currencyFormat.format(stats.taxTotals.tax)
         binding.taxGrossValue.text = currencyFormat.format(stats.taxTotals.gross)
+
+        // VAT per quarter — one line each, most recent first. Drives the Umsatzsteuervoranmeldung.
+        binding.taxQuarterly.text = if (stats.perQuarter.isEmpty()) {
+            getString(R.string.tax_quarterly_empty)
+        } else {
+            stats.perQuarter.joinToString("\n") { q ->
+                getString(
+                    R.string.tax_quarterly_row,
+                    q.label,
+                    currencyFormat.format(q.net),
+                    currencyFormat.format(q.tax),
+                    currencyFormat.format(q.gross)
+                )
+            }
+        }
     }
 
     private fun renderSuppliers(stats: DashboardStats.Result) {

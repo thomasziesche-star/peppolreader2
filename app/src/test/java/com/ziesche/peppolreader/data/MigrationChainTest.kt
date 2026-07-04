@@ -120,6 +120,8 @@ class MigrationChainTest {
             assertNull(row.formatLabel)
             assertNull(row.paidAt)
             assertNull(row.invoiceSubtype)
+            assertNull(row.note)
+            assertNull(row.category)
 
             // 5. The creator tables added in v9/v10 are present and usable (no crash on query).
             assertNull(db.outgoingInvoiceDao().getById(1))

@@ -28,6 +28,16 @@ class InvoiceRepository(private val dao: InvoiceDao) {
 
     suspend fun setPaid(id: Long, paidAtMs: Long?) = dao.setPaid(id, paidAtMs)
 
+    suspend fun setNoteAndCategory(id: Long, note: String?, category: String?) =
+        dao.setNoteAndCategory(id, note, category)
+
+    suspend fun getUsedCategories(): List<String> = dao.getUsedCategories()
+
+    suspend fun getInvoicesMissingMetadata(): List<Invoice> = dao.getInvoicesMissingMetadata()
+
+    suspend fun setDerivedMetadata(id: Long, formatLabel: String?, documentTypeCode: String?) =
+        dao.setDerivedMetadata(id, formatLabel, documentTypeCode)
+
     suspend fun getInDateRange(fromIso: String, toIso: String): List<Invoice> =
         dao.getInvoicesInDateRange(fromIso, toIso)
 

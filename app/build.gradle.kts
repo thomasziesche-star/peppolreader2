@@ -21,8 +21,8 @@ android {
         applicationId = "com.ziesche.peppolreader"
         minSdk = 28
         targetSdk = 35
-        versionCode = 18
-        versionName = "3.8"
+        versionCode = 20
+        versionName = "3.10"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 

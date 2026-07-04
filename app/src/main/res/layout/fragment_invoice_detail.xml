@@ -109,6 +109,22 @@
         tools:text="Anhang: document.pdf"
         tools:visibility="visible" />
 
+    <!-- Bookkeeping note/category — tap to edit. Always visible so it stays discoverable. -->
+    <TextView
+        android:id="@+id/detail_note_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="8dp"
+        android:background="?attr/selectableItemBackground"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="13sp"
+        android:maxLines="2"
+        android:ellipsize="end"
+        app:layout_constraintTop_toBottomOf="@+id/detail_attachment_label"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="🏷 Software · Jahreslizenz" />
+
     <!-- Tab content container -->
     <FrameLayout
         android:id="@+id/tab_content"
@@ -117,7 +133,7 @@
         app:layout_constraintBottom_toTopOf="@+id/button_bar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_attachment_label">
+        app:layout_constraintTop_toBottomOf="@+id/detail_note_label">
 
         <!-- Tab 1: rendered HTML invoice -->
         <WebView

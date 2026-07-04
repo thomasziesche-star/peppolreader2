@@ -41,6 +41,10 @@ class ReminderSettingsBottomSheet : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         val prefs = ReminderPrefs(requireContext())
 
+        binding.btnHelp.setOnClickListener {
+            com.ziesche.peppolreader.util.HelpDialog.show(requireContext(), R.string.help_reminders)
+        }
+
         binding.switchEnabled.isChecked = prefs.enabled
         applyChipFromValue(prefs.daysBefore)
         updateChipGroupEnabled(prefs.enabled)

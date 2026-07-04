@@ -64,6 +64,9 @@ class AiCredentialBottomSheet : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         store = AiCredentialStore(requireContext())
+        binding.btnHelp.setOnClickListener {
+            com.ziesche.peppolreader.util.HelpDialog.show(requireContext(), R.string.help_ai_credential)
+        }
         editingId = arguments?.getString(ARG_ID)
         val existing = editingId?.let { id -> store.list().firstOrNull { it.id == id } }
 

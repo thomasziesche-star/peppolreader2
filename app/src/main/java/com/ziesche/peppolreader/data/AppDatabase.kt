@@ -14,7 +14,7 @@ import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 
 @Database(
     entities = [Invoice::class, OutgoingInvoice::class, CreatorCustomer::class],
-    version = 10,
+    version = 11,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -144,13 +144,36 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         /**
+         * v10 → v11: adds [Invoice.note] and [Invoice.category] — user-entered bookkeeping
+         * metadata that is not part of the source XML.
+         */
+        private val MIGRATION_10_11 = object : Migration(10, 11) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE invoices ADD COLUMN note TEXT")
+                db.execSQL("ALTER TABLE invoices ADD COLUMN category TEXT")
+            }
+        }
+
+        /**
          * All schema migrations in order. Exposed (internal) so the migration test can
          * exercise the exact same chain the app uses.
          */
         internal val ALL_MIGRATIONS = arrayOf(
             MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7,
-            MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10
+            MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11
         )
+
+        /**
+         * Closes and clears the singleton so the underlying file can be replaced (used by
+         * [com.ziesche.peppolreader.data.BackupManager] during restore). The caller must restart
+         * the process afterwards — existing LiveData observers still reference the closed instance.
+         */
+        internal fun closeInstance() {
+            synchronized(this) {
+                INSTANCE?.close()
+                INSTANCE = null
+            }
+        }
 
         fun getDatabase(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {

@@ -26,6 +26,8 @@ import android.webkit.WebViewClient
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.tabs.TabLayout
 import com.ziesche.peppolreader.R
@@ -253,11 +255,61 @@ class InvoiceDetailFragment : Fragment() {
             AiChatBottomSheet().show(childFragmentManager, AiChatBottomSheet.TAG)
         }
 
+        binding.detailNoteLabel.setOnClickListener { showNoteDialog() }
+
         viewModel.selectedInvoice.observe(viewLifecycleOwner) { invoice ->
             updatePaidButtonStyle(invoice?.paidAt != null)
             updatePdfTabEnabledLook(invoice)
             updateCorrectionBlock(invoice)
+            updateNoteLabel(invoice)
         }
+    }
+
+    /** Shows the current note/category, or a faint prompt to add one. Always tappable. */
+    private fun updateNoteLabel(invoice: com.ziesche.peppolreader.data.model.Invoice?) {
+        val category = invoice?.category?.takeIf { it.isNotBlank() }
+        val note = invoice?.note?.takeIf { it.isNotBlank() }
+        binding.detailNoteLabel.text = when {
+            category != null && note != null -> getString(R.string.note_label_both, category, note)
+            category != null -> getString(R.string.note_label_category, category)
+            note != null -> getString(R.string.note_label_note, note)
+            else -> getString(R.string.note_add_prompt)
+        }
+    }
+
+    /** Edit dialog for the bookkeeping note + category, with suggestions from used categories. */
+    private fun showNoteDialog() {
+        val invoice = viewModel.selectedInvoice.value ?: return
+        val view = layoutInflater.inflate(R.layout.dialog_invoice_note, null)
+        val categoryInput = view.findViewById<android.widget.AutoCompleteTextView>(R.id.input_category)
+        val noteInput = view.findViewById<android.widget.EditText>(R.id.input_note)
+        categoryInput.setText(invoice.category.orEmpty())
+        noteInput.setText(invoice.note.orEmpty())
+
+        // Populate category autocomplete from already-used categories.
+        viewLifecycleOwner.lifecycleScope.launch {
+            val used = viewModel.usedCategories()
+            if (used.isNotEmpty()) {
+                categoryInput.setAdapter(
+                    android.widget.ArrayAdapter(
+                        requireContext(), android.R.layout.simple_list_item_1, used
+                    )
+                )
+            }
+        }
+
+        com.google.android.material.dialog.MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.note_dialog_title)
+            .setView(view)
+            .setPositiveButton(R.string.save) { _, _ ->
+                viewModel.saveNoteAndCategory(
+                    invoice,
+                    noteInput.text?.toString(),
+                    categoryInput.text?.toString()
+                )
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
     }
 
     /**

@@ -101,6 +101,28 @@ class DashboardStatsTest {
     }
 
     @Test
+    fun perQuarterAggregatesSignedAndSortsMostRecentFirst() {
+        val invoices = listOf(
+            invoice(issueDate = "2026-02-05", net = 100.0, tax = 19.0, gross = 119.0), // Q1
+            invoice(issueDate = "2026-03-20", net = 50.0, tax = 9.5, gross = 59.5),     // Q1
+            invoice(issueDate = "2026-04-10", net = 200.0, tax = 38.0, gross = 238.0,   // Q2, credit note
+                documentTypeCode = DocumentType.CREDIT_NOTE)
+        )
+
+        val perQuarter = DashboardStats.compute(invoices, todayIso = "2026-05-30").perQuarter
+
+        assertEquals(listOf("2026-Q2", "2026-Q1"), perQuarter.map { it.label })
+        // Q1 = 100+50 net, 19+9.5 tax
+        val q1 = perQuarter.first { it.label == "2026-Q1" }
+        assertEquals(150.0, q1.net, 0.001)
+        assertEquals(28.5, q1.tax, 0.001)
+        // Q2 is a credit note → signed negative
+        val q2 = perQuarter.first { it.label == "2026-Q2" }
+        assertEquals(-200.0, q2.net, 0.001)
+        assertEquals(-38.0, q2.tax, 0.001)
+    }
+
+    @Test
     fun emptyInput() {
         val result = DashboardStats.compute(emptyList(), todayIso = "2026-05-30")
 
