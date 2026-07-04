@@ -38,9 +38,12 @@ class CreatorCustomerAdapter(
         holder.binding.textCustomerAddress.visibility =
             if (address.isBlank()) View.GONE else View.VISIBLE
 
-        val vat = item.vatId.orEmpty()
-        holder.binding.textCustomerVat.text = vat
-        holder.binding.textCustomerVat.visibility = if (vat.isBlank()) View.GONE else View.VISIBLE
+        val details = listOfNotNull(
+            item.vatId?.takeIf { it.isNotBlank() },
+            item.email?.takeIf { it.isNotBlank() }
+        ).joinToString(" · ")
+        holder.binding.textCustomerVat.text = details
+        holder.binding.textCustomerVat.visibility = if (details.isBlank()) View.GONE else View.VISIBLE
 
         holder.binding.root.setOnClickListener { onClick(item) }
         holder.binding.btnDeleteCustomer.setOnClickListener { onDelete(item) }

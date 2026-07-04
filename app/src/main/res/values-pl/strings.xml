@@ -1,7 +1,10 @@
 <resources>
-    <string name="app_name">E-Invoice &amp; Peppol Reader</string>
-    <string name="app_title">E-Invoice &amp; Peppol Reader</string>
-    <string name="title_activity_main">E-Invoice &amp; Peppol Reader</string>
+    <string name="app_name">ZUGFeRD &amp; E-Invoice Reader</string>
+    <string name="app_title">ZUGFeRD &amp;\nE-Invoice Reader</string>
+    <string name="title_activity_main">ZUGFeRD &amp; E-Invoice Reader</string>
+    <string name="app_title_creator">ZUGFeRD &amp;\nE-Invoice Creator</string>
+    <string name="tab_read">Odczyt</string>
+    <string name="tab_create">Tworzenie</string>
     <string name="action_settings">Ustawienia</string>
     <string name="menu_settings">Ustawienia</string>
     <string name="import_file">Importuj plik</string>
@@ -147,7 +150,7 @@
 
     <!-- Pomoc -->
     <string name="help_title">Pomoc i obsługa</string>
-    <string name="help_message">Witaj, oto najważniejsze wskazówki…\n\n<b>Importowanie faktur:</b>\nDotknij + i wybierz pliki XML lub PDF (przytrzymaj, aby zaznaczyć kilka). Możesz też udostępnić pliki bezpośrednio z programu pocztowego do aplikacji.\n\n<b>PDF ZUGFeRD i Factur-X:</b>\nPDF hybrydowe są wykrywane automatycznie — osadzony XML jest wyodrębniany, a oryginalny PDF zachowywany jako załącznik.\n\n<b>Obsługiwane formaty:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL i CII), ZUGFeRD 1.x i 2.x, Factur-X oraz polski <b>KSeF FA(3)</b> dla faktur wystawianych w Polsce.\n\n<b>Faktury i korekty:</b>\nRozróżniane automatycznie — korekty (w tym KSeF KOR / KOR_ZAL / KOR_ROZ) są oznaczone czerwonym znacznikiem i wyświetlane z ujemną kwotą. Przy korektach KSeF widoczny jest oryginalny numer i powód.\n\n<b>Widok szczegółów:</b>\nTrzy zakładki: wyrenderowana faktura, surowy XML (z wyszukiwaniem na żywo) oraz oryginalny PDF, jeśli jest załączony. Przyciskiem <b>Otwarte / Opłacone</b> oznaczasz fakturę jako rozliczoną.\n\n<b>Filtrowanie listy:</b>\nZnaczniki nad listą filtrują <i>Wszystkie / Nieopłacone / Przeterminowane</i>, a filtr zakresu dat ogranicza widok do okresu.\n\n<b>Przypomnienia o terminach:</b>\nW <i>Przypomnienia…</i> włącz codzienne powiadomienia z konfigurowalnym wyprzedzeniem.\n\n<b>Eksport:</b>\nW <i>Eksportuj…</i> utworzysz plik CSV (UTF-8) dla księgowego — opcjonalnie jako paczkę ZIP z oryginalnymi XML/PDF.\n\n<b>Pulpit:</b>\nPulpit pokazuje wydatki miesięczne i największych dostawców.\n\n<b>Asystent AI:</b>\nW <i>Ustawieniach AI</i> dodaj dostawcę LLM (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock lub generyczny endpoint zgodny z OpenAI) — wklej klucz API, załaduj modele i wybierz domyślnego. Następnie otwórz fakturę i dotknij dymka, aby zadawać pytania. Uwaga: dane faktury są wysyłane do wybranego dostawcy.\n\n<b>Tworzenie faktur (ZUGFeRD Builder):</b>\nWyróżniona pozycja menu otwiera osobny tryb do wystawiania własnych faktur ZUGFeRD (EN 16931).\n\n<b>Notatki &amp; kategorie:</b>\nOtwórz fakturę i dotknij wiersza nad kartami, aby dodać notatkę księgową i kategorię — obie trafiają do eksportu CSV.\n\n<b>Kopia zapasowa:</b>\nW menu możesz utworzyć pełną kopię (baza danych + załączniki) lub ją przywrócić — zabezpieczenie na wypadek utraty urządzenia.\n\n<b>Usuwanie:</b>\nPrzytrzymaj wpis na liście.\n\n<i>Wskazówka: każdy ekran i panel ma własny przycisk pomocy ?.</i></string>
+    <string name="help_message">Witaj, oto najważniejsze wskazówki…\n\n<b>Importowanie faktur:</b>\nDotknij + i wybierz pliki XML lub PDF (przytrzymaj, aby zaznaczyć kilka). Możesz też udostępnić pliki bezpośrednio z programu pocztowego do aplikacji.\n\n<b>PDF ZUGFeRD i Factur-X:</b>\nPDF hybrydowe są wykrywane automatycznie — osadzony XML jest wyodrębniany, a oryginalny PDF zachowywany jako załącznik.\n\n<b>Obsługiwane formaty:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL i CII), ZUGFeRD 1.x i 2.x, Factur-X oraz polski <b>KSeF FA(3)</b> dla faktur wystawianych w Polsce.\n\n<b>Faktury i korekty:</b>\nRozróżniane automatycznie — korekty (w tym KSeF KOR / KOR_ZAL / KOR_ROZ) są oznaczone czerwonym znacznikiem i wyświetlane z ujemną kwotą. Przy korektach KSeF widoczny jest oryginalny numer i powód.\n\n<b>Widok szczegółów:</b>\nTrzy zakładki: wyrenderowana faktura, surowy XML (z wyszukiwaniem na żywo) oraz oryginalny PDF, jeśli jest załączony. Przyciskiem <b>Otwarte / Opłacone</b> oznaczasz fakturę jako rozliczoną.\n\n<b>Filtrowanie listy:</b>\nZnaczniki nad listą filtrują <i>Wszystkie / Nieopłacone / Przeterminowane</i>, a filtr zakresu dat ogranicza widok do okresu.\n\n<b>Przypomnienia o terminach:</b>\nW <i>Przypomnienia…</i> włącz codzienne powiadomienia z konfigurowalnym wyprzedzeniem.\n\n<b>Eksport:</b>\nW <i>Eksportuj…</i> utworzysz plik CSV (UTF-8) dla księgowego — opcjonalnie jako paczkę ZIP z oryginalnymi XML/PDF.\n\n<b>Pulpit:</b>\nPulpit pokazuje wydatki miesięczne i największych dostawców.\n\n<b>Asystent AI:</b>\nW <i>Ustawieniach AI</i> dodaj dostawcę LLM (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock lub generyczny endpoint zgodny z OpenAI) — wklej klucz API, załaduj modele i wybierz domyślnego. Następnie otwórz fakturę i dotknij dymka, aby zadawać pytania. Uwaga: dane faktury są wysyłane do wybranego dostawcy.\n\n<b>Tworzenie faktur (Creator):</b>\nZakładka <b>Tworzenie</b> na dolnym pasku otwiera tryb Creator do wystawiania własnych faktur ZUGFeRD (EN 16931).\n\n<b>Notatki &amp; kategorie:</b>\nOtwórz fakturę i dotknij wiersza nad kartami, aby dodać notatkę księgową i kategorię — obie trafiają do eksportu CSV.\n\n<b>Kopia zapasowa:</b>\nW menu możesz utworzyć pełną kopię (baza danych + załączniki) lub ją przywrócić — zabezpieczenie na wypadek utraty urządzenia.\n\n<b>Usuwanie:</b>\nPrzytrzymaj wpis na liście.\n\n<i>Wskazówka: każdy ekran i panel ma własny przycisk pomocy ?.</i></string>
 
     <!-- Informacje -->
     <string name="info_title">Informacje i zastrzeżenia</string>
@@ -329,6 +332,39 @@
     <string name="creator_delete_customer_confirm">Usunąć tego klienta?</string>
     <string name="creator_pick_customer">Z bazy klientów</string>
     <string name="creator_no_customers">Brak zapisanych klientów. Nabywcy są zapisywani automatycznie przy generowaniu faktury.</string>
+    <string name="creator_articles_title">Artykuły i usługi</string>
+    <string name="creator_articles_hint">Twórz i edytuj artykuły oraz usługi — do wyboru w edytorze faktur, aby wstępnie wypełnić pozycję.</string>
+    <string name="creator_new_article">Nowy artykuł</string>
+    <string name="creator_delete_article_confirm">Usunąć ten artykuł?</string>
+    <string name="creator_pick_article">Z katalogu</string>
+    <string name="creator_add_from_catalog">Z katalogu</string>
+    <string name="creator_no_articles">Brak zapisanych artykułów. Zarządzaj katalogiem w sekcji „Artykuły i usługi”.</string>
+    <string name="creator_article_name">Nazwa / opis</string>
+    <string name="creator_article_number">Nr artykułu (opcjonalnie)</string>
+
+    <!-- Status płatności + wezwania do zapłaty (faktury wystawione) -->
+    <string name="creator_option_mark_paid">Oznacz jako opłaconą</string>
+    <string name="creator_option_mark_unpaid">Oznacz jako nieopłaconą</string>
+    <string name="creator_option_send_dunning">Wyślij wezwanie do zapłaty</string>
+    <string name="creator_badge_overdue">Po terminie</string>
+    <string name="creator_badge_dunning">%1$d. wezwanie</string>
+    <string name="dunning_confirm_title">Wysłać %1$d. wezwanie do zapłaty?</string>
+    <string name="dunning_confirm_message">Zostanie przygotowany e-mail do %1$s z fakturą PDF w załączniku. Nowy termin płatności: %2$s.</string>
+    <string name="dunning_no_email_warning">Brak adresu e-mail dla tego klienta — wpisz odbiorcę w aplikacji pocztowej.</string>
+    <string name="dunning_email_subject">%1$d. wezwanie do zapłaty — Faktura %2$s</string>
+    <string name="dunning_email_body_1">Szanowni Państwo (%1$s),\n\nnasza faktura %2$s z dnia %3$s na kwotę %5$s była płatna do %4$s. Zapewne umknęło to Państwa uwadze.\n\nProsimy o przelanie kwoty do %6$s.\n\nJeżeli płatność została już dokonana, prosimy uznać to przypomnienie za bezprzedmiotowe.\n\nZ poważaniem\n%7$s</string>
+    <string name="dunning_email_body_2">Szanowni Państwo (%1$s),\n\npomimo wcześniejszego przypomnienia faktura %2$s z dnia %3$s na kwotę %5$s (termin %4$s) pozostaje nieopłacona.\n\nProsimy o uregulowanie zaległej kwoty najpóźniej do %6$s.\n\nJeżeli płatność została już dokonana, prosimy uznać to wezwanie za bezprzedmiotowe.\n\nZ poważaniem\n%7$s</string>
+    <string name="dunning_email_body_3">Szanowni Państwo (%1$s),\n\nfaktura %2$s z dnia %3$s na kwotę %5$s (termin %4$s) pozostaje nieopłacona pomimo dwóch wezwań.\n\nPo raz ostatni wzywamy do uregulowania zaległej kwoty do %6$s. W przeciwnym razie zastrzegamy sobie prawo do podjęcia dalszych kroków.\n\nJeżeli płatność została już dokonana, prosimy uznać to wezwanie za bezprzedmiotowe.\n\nZ poważaniem\n%7$s</string>
+    <string name="dunning_no_mail_app">Nie znaleziono aplikacji pocztowej.</string>
+    <string name="notif_outgoing_overdue_title">Faktura wystawiona po terminie</string>
+    <string name="notif_outgoing_overdue_text">%1$s — faktura %2$s była płatna do %3$s (%4$s)</string>
+
+    <!-- Panel twórcy -->
+    <string name="creator_dashboard_title">Panel przychodów</string>
+    <string name="kpi_total_revenue">Przychody ogółem</string>
+    <string name="chart_monthly_revenue_title">Przychody miesięcznie</string>
+    <string name="chart_label_revenue">Przychody (€)</string>
+    <string name="chart_customers_title">Najlepsi klienci</string>
     <string name="creator_view_pdf">Pokaż dokument</string>
     <string name="creator_view_error">Nie znaleziono aplikacji do wyświetlania plików PDF.</string>
     <string name="creator_pdf_missing">Plik PDF nie jest już dostępny.</string>
@@ -426,10 +462,12 @@
     <string name="help_detail"><b>Widok szczegółów</b>\n\nTrzy karty: wyrenderowana faktura, surowy XML (z wyszukiwaniem na żywo) i oryginalny PDF, jeśli dołączony.\n\n<b>Otwarta / Zapłacona:</b> oznacza fakturę jako rozliczoną.\n\n<b>Notatka &amp; kategoria:</b> dotknij wiersza nad kartami, aby dodać notatkę księgową i kategorię — pojawią się w eksporcie CSV i są przeszukiwalne.\n\n<b>Zapytaj AI:</b> dymek otwiera czat o tej fakturze (wymaga dostawcy AI w ustawieniach AI).</string>
     <string name="help_dashboard"><b>Pulpit</b>\n\nPrzegląd faktur w wybranym okresie (filtr u góry).\n\n<b>Wskaźniki:</b> suma, liczba, kwoty otwarte i przeterminowane.\n<b>Wykresy:</b> status płatności, wydatki na miesiąc, trend zapłacone/suma i najwięksi dostawcy.\n<b>VAT na kwartał:</b> netto/VAT/brutto na kwartał do deklaracji VAT.\n\nKorekty liczą się wszędzie na minus.</string>
     <string name="help_ai"><b>Ustawienia AI</b>\n\nDodaj jednego lub więcej dostawców AI (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock lub ogólny punkt zgodny z OpenAI).\n\nDodaj dostawcę, wklej klucz API, wczytaj modele i wybierz jeden — następnie oznacz wpis jako domyślny.\n\nNastępnie otwórz fakturę i dotknij dymka.\n\n<b>Prywatność:</b> treść faktury jest wysyłana do wybranego dostawcy.</string>
-    <string name="help_creator_list"><b>ZUGFeRD Builder</b>\n\nTwórz własne e-faktury jako hybrydowy PDF/A-3 ZUGFeRD (EN 16931).\n\n<b>Nowa faktura:</b> rozpoczyna wersję roboczą.\n<b>Profil firmy:</b> dane nadawcy — uzupełnij najpierw.\n<b>Klienci:</b> baza klientów do szybkiego użycia.\n\nWersje robocze można edytować; faktury <i>wygenerowane</i> są ostateczne — dotknij, aby wyświetlić, udostępnić lub powielić jako nową wersję roboczą (przydatne przy fakturach cyklicznych).</string>
+    <string name="help_creator_list"><b>ZUGFeRD &amp; E-Invoice Creator</b>\n\nTwórz własne e-faktury jako hybrydowy PDF/A-3 ZUGFeRD (EN 16931).\n\n<b>Nowa faktura:</b> rozpoczyna wersję roboczą.\n<b>Profil firmy:</b> dane nadawcy — uzupełnij najpierw.\n<b>Klienci:</b> baza klientów do szybkiego użycia.\n\nWersje robocze można edytować; faktury <i>wygenerowane</i> są ostateczne — dotknij, aby wyświetlić, udostępnić lub powielić jako nową wersję roboczą (przydatne przy fakturach cyklicznych).</string>
     <string name="help_creator_edit"><b>Edytor faktury</b>\n\nWprowadź numer, daty, klienta i pozycje (opis, ilość, jednostka, cena jednostkowa, stawka VAT). Sumy aktualizują się na żywo.\n\n<b>Z bazy klientów:</b> wypełnia pola nabywcy z zapisanego klienta.\n\n<b>Utwórz:</b> najpierw przeprowadza kontrolę EN 16931 — błędy blokują, ostrzeżenia można pominąć — a następnie tworzy hybrydowy PDF ZUGFeRD. Wygenerowanej faktury nie można już edytować.</string>
     <string name="help_company_profile"><b>Profil firmy</b>\n\nDane nadawcy używane na każdej tworzonej fakturze. EN 16931 wymaga co najmniej pełnego adresu oraz numeru VAT lub numeru podatkowego.\n\n<b>Logo:</b> opcjonalne, na PDF.\n<b>Numeracja:</b> proponuje kolejny numer (można edytować).\n<b>Termin płatności:</b> wstępnie wypełnia termin (data faktury + N dni).\n<b>Zapis:</b> gdzie zapisywane są wygenerowane pliki PDF.</string>
     <string name="help_creator_customers"><b>Baza klientów</b>\n\nZapisani klienci dla tworzonych faktur. Nowi klienci są dodawani automatycznie podczas generowania; tutaj możesz ich też dodawać, edytować lub usuwać.\n\nW edytorze <i>Z bazy klientów</i> wypełnia pola nabywcy jednym dotknięciem.</string>
+    <string name="help_creator_articles"><b>Artykuły i usługi</b>\n\nTwój katalog powtarzalnych artykułów i usług z jednostką, ceną jednostkową i stawką VAT. W edytorze faktur <i>Z katalogu</i> dodaje wstępnie wypełnioną pozycję — ilość i wszystkie pozostałe pola pozostają edytowalne.</string>
+    <string name="help_creator_dashboard"><b>Panel przychodów</b>\n\nKluczowe dane o wystawionych fakturach: przychody, kwoty otwarte i po terminie, status płatności, przychody miesięcznie, VAT kwartalnie i najlepsi klienci.\n\nLiczą się tylko faktury <i>wygenerowane</i> — wersje robocze nie, korekty liczą się ujemnie. Faktury oznaczysz jako opłacone na liście faktur.</string>
     <string name="help_export"><b>Eksport</b>\n\nUtwórz CSV (UTF-8, rozdzielany średnikami) faktur za wybrany okres — gotowy dla księgowego lub arkusza.\n\n<b>Spakuj jako ZIP:</b> dodatkowo zawiera oryginalne pliki XML i PDF dla każdej faktury.\n\nCSV zawiera kolumny kategorii i notatki. Korekty są eksportowane z kwotą ujemną.</string>
     <string name="help_reminders"><b>Przypomnienia o terminach</b>\n\nWłącz codzienną kontrolę, która powiadamia o zbliżających się terminach płatności.\n\n<b>Wyprzedzenie:</b> ile dni wcześniej przypominać (0/3/7/14).\n\n<b>Sprawdź teraz</b> uruchamia kontrolę natychmiast. W Androidzie 13+ aplikacja prosi o zgodę na powiadomienia przy włączaniu.</string>
     <string name="help_ai_credential"><b>Dostawca AI</b>\n\n<b>Dostawca:</b> wybierz usługę (lub <i>Ogólny</i> dla dowolnego punktu zgodnego z OpenAI).\n<b>Klucz API:</b> wklej klucz, wczytaj modele, wybierz jeden.\n<b>Etykieta:</b> nazwa do rozpoznania wpisu.\n\nKlucz jest przechowywany tylko na tym urządzeniu. Podczas czatu o fakturze jej treść jest wysyłana do tego dostawcy.</string>

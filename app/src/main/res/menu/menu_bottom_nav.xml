@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Item ids must match nav_graph destination ids so NavigationUI
+         handles tab switching with saved back stacks automatically. -->
+    <item
+        android:id="@+id/invoiceListFragment"
+        android:icon="@drawable/ic_tab_read"
+        android:title="@string/tab_read" />
+    <item
+        android:id="@+id/invoiceCreatorListFragment"
+        android:icon="@drawable/ic_tab_create"
+        android:title="@string/tab_create" />
+</menu>

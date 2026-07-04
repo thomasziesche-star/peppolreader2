@@ -1,0 +1,49 @@
+ZUGFeRD & E-Invoice Reader liest UND erstellt elektronische Rechnungen – und hilft dir, sie komplett zu verwalten: Eingangsrechnungen prüfen, eigene Rechnungen schreiben, Zahlungen überwachen, Mahnungen versenden und Auswertungen für die Steuer erstellen. Ideal für Selbständige und Kleinunternehmer, die ihre Rechnungsverwaltung auf dem Smartphone erledigen möchten – komplett lokal, ohne Cloud.
+
+RECHNUNGEN LESEN
+• Peppol BIS 3.0 (UBL 2.1), XRechnung (UBL & CII), ZUGFeRD 1.x/2.x, Factur-X, UN/CEFACT CII, KSeF FA(3) inkl. Korrekturrechnungen
+• Import als XML oder Hybrid-PDF, Mehrfachauswahl, direkt aus E-Mail-Anhängen
+• Detailansicht mit 3 Tabs: lesbare Rechnung, Roh-XML mit Live-Suche, Original-PDF
+• Gutschriften und Korrekturen automatisch erkannt, Beträge mit korrektem Vorzeichen
+
+RECHNUNGEN ERSTELLEN (ZUGFeRD)
+• Eigene E-Rechnungen und Gutschriften als hybrides ZUGFeRD-PDF/A-3 (EN 16931)
+• Firmenprofil mit Logo, automatischer Nummernkreis, Standard-Zahlungsziel
+• Kundenstamm mit E-Mail-Adressen und Artikelstamm für wiederkehrende Positionen – Rechnungen in Sekunden ausfüllen
+• EN-16931-Prüfung vor dem Erstellen, integrierter Selbsttest der erzeugten Datei
+• Wiederkehrende Rechnungen einfach als Entwurf duplizieren
+
+VERWALTUNG & ZAHLUNGEN
+• Bezahlt-Status für Eingangs- UND Ausgangsrechnungen setzen
+• Überfällige Belege auf einen Blick: Filter, farbige Markierungen in der Liste
+• Mahnwesen für deine Kunden: eskalierende Mahnungen (Stufen 1–3) als vorbereitete E-Mail mit Rechnungs-PDF im Anhang
+• Fälligkeits-Erinnerungen: tägliche Benachrichtigungen für bald fällige Eingangsrechnungen und überfällige Ausgangsrechnungen
+• Notizen & Kategorien pro Beleg, Suche und Zeitraum-Filter
+
+DASHBOARDS & STEUER
+• Ausgaben-Dashboard: Zahlungsstatus, Ausgaben pro Monat, Top-Lieferanten
+• Umsatz-Dashboard: Umsätze deiner erstellten Rechnungen, offene und überfällige Beträge, Top-Kunden
+• USt pro Quartal – die Zahlen für die Umsatzsteuervoranmeldung auf einen Blick
+
+EXPORT & DATENSICHERUNG
+• CSV-Export (UTF-8) für den Steuerberater, ZIP-Bündel mit Original-XML/PDF je Zeitraum
+• PDF-Export einzelner Belege
+• Komplett-Backup als eine ZIP-Datei: Datenbank, Anhänge, erstellte Rechnungen, Firmenprofil mit Logo und Einstellungen – ideal für den Gerätewechsel
+
+KI-ASSISTENT (OPTIONAL)
+• Eigenen LLM-Anbieter hinterlegen: OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock oder ein generischer OpenAI-kompatibler Endpoint
+• Fragen zu einer geöffneten Rechnung direkt im Beleg stellen
+• Hinweis: Nur bei aktiver KI-Nutzung werden die Daten der jeweiligen Rechnung an den von dir gewählten Anbieter gesendet. Sonst verlässt nichts dein Gerät.
+
+KOMFORT
+• Dark Mode, kontextabhängige Hilfe auf jedem Screen
+• Mehrsprachig: Deutsch, Englisch, Niederländisch, Französisch und Polnisch
+• Edge-to-Edge-Design (Android 15 ready)
+
+DATENSCHUTZ
+Alle Rechnungen werden ausschließlich lokal auf deinem Gerät gespeichert. Keine Cloud, keine Telemetrie, kein Tracking. Eine Datenübertragung findet nur statt, wenn du den optionalen KI-Assistenten aktiv nutzt – und dann ausschließlich an den von dir gewählten Anbieter.
+
+HINWEIS
+Dies ist ein unabhängiges Hobbyprojekt und keine offizielle PEPPOL- oder KSeF-Anwendung. Die dargestellten Informationen ersetzen nicht das originale XML-Dokument.
+
+VG Accountant with beard

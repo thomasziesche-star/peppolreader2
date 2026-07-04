@@ -7,14 +7,16 @@ import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.ziesche.peppolreader.data.model.Invoice
+import com.ziesche.peppolreader.creator.data.CreatorArticleDao
 import com.ziesche.peppolreader.creator.data.CreatorCustomerDao
 import com.ziesche.peppolreader.creator.data.OutgoingInvoiceDao
+import com.ziesche.peppolreader.creator.model.CreatorArticle
 import com.ziesche.peppolreader.creator.model.CreatorCustomer
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 
 @Database(
-    entities = [Invoice::class, OutgoingInvoice::class, CreatorCustomer::class],
-    version = 11,
+    entities = [Invoice::class, OutgoingInvoice::class, CreatorCustomer::class, CreatorArticle::class],
+    version = 13,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -24,6 +26,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun outgoingInvoiceDao(): OutgoingInvoiceDao
 
     abstract fun creatorCustomerDao(): CreatorCustomerDao
+
+    abstract fun creatorArticleDao(): CreatorArticleDao
 
     companion object {
         @Volatile
@@ -155,12 +159,54 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         /**
+         * v11 → v12: adds the `creator_articles` table (article/service catalog for the
+         * Invoice Creator, unique name index like the customer master) and
+         * [CreatorCustomer.email] so an invoice recipient address can be kept on file.
+         */
+        private val MIGRATION_11_12 = object : Migration(11, 12) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS creator_articles (
+                        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        name TEXT NOT NULL,
+                        articleNumber TEXT,
+                        unit TEXT NOT NULL,
+                        unitPrice REAL NOT NULL,
+                        vatRate REAL NOT NULL,
+                        updatedAt INTEGER NOT NULL
+                    )
+                    """.trimIndent()
+                )
+                db.execSQL(
+                    "CREATE UNIQUE INDEX IF NOT EXISTS index_creator_articles_name ON creator_articles (name)"
+                )
+                db.execSQL("ALTER TABLE creator_customers ADD COLUMN email TEXT")
+            }
+        }
+
+        /**
+         * v12 → v13: payment tracking + dunning lifecycle for outgoing invoices —
+         * [OutgoingInvoice.paidAt], [OutgoingInvoice.dunningLevel],
+         * [OutgoingInvoice.lastDunningAt] and [OutgoingInvoice.lastOverdueNotifiedAt].
+         */
+        private val MIGRATION_12_13 = object : Migration(12, 13) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE outgoing_invoices ADD COLUMN paidAt INTEGER")
+                db.execSQL("ALTER TABLE outgoing_invoices ADD COLUMN dunningLevel INTEGER NOT NULL DEFAULT 0")
+                db.execSQL("ALTER TABLE outgoing_invoices ADD COLUMN lastDunningAt INTEGER")
+                db.execSQL("ALTER TABLE outgoing_invoices ADD COLUMN lastOverdueNotifiedAt INTEGER")
+            }
+        }
+
+        /**
          * All schema migrations in order. Exposed (internal) so the migration test can
          * exercise the exact same chain the app uses.
          */
         internal val ALL_MIGRATIONS = arrayOf(
             MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7,
-            MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11
+            MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12,
+            MIGRATION_12_13
         )
 
         /**

@@ -51,10 +51,22 @@ data class OutgoingInvoice(
     val status: String = STATUS_DRAFT,     // DRAFT | GENERATED
     val generatedXml: String? = null,
     val pdfPath: String? = null,
+
+    // Payment / dunning lifecycle (only meaningful once status == GENERATED)
+    val paidAt: Long? = null,               // ms epoch, null = unpaid
+    val dunningLevel: Int = 0,              // 0 = none, 1..3 = "1./2./3. Mahnung" sent
+    val lastDunningAt: Long? = null,        // ms epoch of the last dunning email launch
+    val lastOverdueNotifiedAt: Long? = null, // anti-spam stamp for the overdue notification
+
     val createdAt: Long = System.currentTimeMillis(),
     val updatedAt: Long = System.currentTimeMillis()
 ) {
     val lines: List<CreatorLine> get() = CreatorLine.listFromJson(lineItemsJson)
+
+    /** Overdue = generated, unpaid, due date strictly before [todayIso] (lexical ISO compare). */
+    fun isOverdue(todayIso: String): Boolean =
+        status == STATUS_GENERATED && paidAt == null &&
+            !dueDate.isNullOrBlank() && dueDate < todayIso
 
     companion object {
         const val STATUS_DRAFT = "DRAFT"

@@ -1,6 +1,7 @@
 package com.ziesche.peppolreader.creator.ui
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.DiffUtil
@@ -10,6 +11,7 @@ import com.google.android.material.color.MaterialColors
 import com.ziesche.peppolreader.R
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 import com.ziesche.peppolreader.databinding.ItemOutgoingInvoiceBinding
+import java.time.LocalDate
 
 /**
  * Lists invoice drafts. Tapping a row opens it for editing; the delete button removes it.
@@ -56,6 +58,24 @@ class OutgoingInvoiceAdapter(
             else
                 ContextCompat.getColor(ctx, R.color.badge_neutral_fg)
         )
+        // Payment chips: paid wins; otherwise overdue, escalating to the dunning level.
+        val overdue = item.isOverdue(LocalDate.now().toString())
+        val paid = item.status == OutgoingInvoice.STATUS_GENERATED && item.paidAt != null
+        holder.binding.chipPaid.visibility = if (paid) View.VISIBLE else View.GONE
+        holder.binding.chipOverdue.visibility =
+            if (overdue && item.dunningLevel == 0) View.VISIBLE else View.GONE
+        holder.binding.chipDunning.visibility =
+            if (overdue && item.dunningLevel > 0) View.VISIBLE else View.GONE
+        if (overdue && item.dunningLevel > 0) {
+            holder.binding.chipDunning.text =
+                ctx.getString(R.string.creator_badge_dunning, item.dunningLevel)
+        }
+        val onErrorContainer = MaterialColors.getColor(
+            holder.binding.chipOverdue, com.google.android.material.R.attr.colorOnErrorContainer
+        )
+        holder.binding.chipOverdue.setTextColor(onErrorContainer)
+        holder.binding.chipDunning.setTextColor(onErrorContainer)
+
         holder.binding.root.setOnClickListener { onClick(item) }
         holder.binding.btnDelete.setOnClickListener { onDelete(item) }
     }

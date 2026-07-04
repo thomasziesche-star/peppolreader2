@@ -17,6 +17,9 @@ interface CreatorCustomerDao {
     @Query("SELECT * FROM creator_customers ORDER BY name COLLATE NOCASE")
     fun getAllLiveData(): LiveData<List<CreatorCustomer>>
 
+    @Query("SELECT * FROM creator_customers WHERE name = :name LIMIT 1")
+    suspend fun getByName(name: String): CreatorCustomer?
+
     /** The unique name index makes this an update for an already-known customer. */
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun upsert(customer: CreatorCustomer)

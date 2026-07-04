@@ -1,0 +1,49 @@
+ZUGFeRD & E-Invoice Reader czyta ORAZ tworzy faktury elektroniczne – i pomaga w pełni nimi zarządzać: sprawdzać faktury przychodzące, wystawiać własne, pilnować płatności, wysyłać wezwania do zapłaty i przygotowywać dane do rozliczeń podatkowych. Idealna dla freelancerów i małych firm, które chcą prowadzić całe zarządzanie fakturami na smartfonie – w pełni lokalnie, bez chmury.
+
+CZYTANIE FAKTUR
+• Peppol BIS 3.0 (UBL 2.1), XRechnung (UBL i CII), ZUGFeRD 1.x/2.x, Factur-X, UN/CEFACT CII, KSeF FA(3) wraz z fakturami korygującymi (KOR / KOR_ZAL / KOR_ROZ)
+• Import plików XML lub hybrydowych PDF, wybór wielu plików, bezpośrednio z załączników e-mail
+• Widok szczegółowy z 3 zakładkami: czytelna faktura, surowy XML z wyszukiwaniem na żywo, oryginalny PDF
+• Korekty i faktury korygujące rozpoznawane automatycznie, kwoty z właściwym znakiem
+
+TWORZENIE FAKTUR (ZUGFeRD)
+• Własne e-faktury i korekty jako hybrydowy ZUGFeRD PDF/A-3 (EN 16931)
+• Profil firmy z logo, automatyczna numeracja, domyślny termin płatności
+• Baza klientów z adresami e-mail i katalog artykułów dla powtarzalnych pozycji – faktura wypełniona w kilka sekund
+• Kontrola EN 16931 przed wygenerowaniem, wbudowany autotest utworzonego pliku
+• Faktury cykliczne: powiel dowolną fakturę jako nową wersję roboczą
+
+ZARZĄDZANIE I PŁATNOŚCI
+• Status płatności dla faktur przychodzących ORAZ wystawionych
+• Zaległe dokumenty na pierwszy rzut oka: filtry i kolorowe oznaczenia na liście
+• Wezwania do zapłaty dla klientów: eskalujące monity (poziomy 1–3) jako przygotowany e-mail z fakturą PDF w załączniku
+• Przypomnienia o terminach: codzienne powiadomienia o zbliżających się płatnościach faktur przychodzących i zaległych fakturach wystawionych
+• Notatki i kategorie dla każdego dokumentu, wyszukiwanie i filtry okresów
+
+PANELE I PODATKI
+• Panel wydatków: status płatności, wydatki miesięcznie, najwięksi dostawcy
+• Panel przychodów: przychody z wystawionych faktur, kwoty otwarte i po terminie, najlepsi klienci
+• VAT kwartalnie – dane do deklaracji VAT na pierwszy rzut oka
+
+EKSPORT I KOPIA ZAPASOWA
+• Eksport CSV (UTF-8) dla księgowego, paczka ZIP z oryginalnymi plikami XML/PDF za wybrany okres
+• Eksport PDF pojedynczych dokumentów
+• Pełna kopia zapasowa w jednym pliku ZIP: baza danych, załączniki, wystawione faktury, profil firmy z logo i ustawienia – idealne przy zmianie urządzenia
+
+ASYSTENT AI (OPCJONALNY)
+• Dodaj własnego dostawcę LLM: OpenAI, Google Gemini, Anthropic Claude, Mistral, OpenRouter, Langdock lub dowolny endpoint zgodny z OpenAI
+• Zadawaj pytania o otwartą fakturę bezpośrednio w dokumencie
+• Uwaga: tylko przy aktywnym korzystaniu z asystenta AI dane danej faktury są wysyłane do wybranego przez Ciebie dostawcy. W przeciwnym razie nic nie opuszcza Twojego urządzenia.
+
+WYGODA
+• Tryb ciemny, pomoc kontekstowa na każdym ekranie
+• Wielojęzyczność: niemiecki, angielski, niderlandzki, francuski i polski
+• Design edge-to-edge (gotowy na Androida 15)
+
+PRYWATNOŚĆ
+Wszystkie faktury są przechowywane wyłącznie lokalnie na Twoim urządzeniu. Bez chmury, bez telemetrii, bez śledzenia. Dane są przesyłane tylko wtedy, gdy aktywnie korzystasz z opcjonalnego asystenta AI – i wyłącznie do wybranego przez Ciebie dostawcy.
+
+UWAGA
+To niezależny projekt hobbystyczny, a nie oficjalna aplikacja PEPPOL ani KSeF. Wyświetlane informacje nie zastępują oryginalnego dokumentu XML.
+
+Pozdrawiam, Accountant with beard

@@ -21,5 +21,6 @@ data class CreatorCustomer(
     val city: String? = null,
     val country: String? = null,
     val vatId: String? = null,
+    val email: String? = null,
     val updatedAt: Long = System.currentTimeMillis()
 )

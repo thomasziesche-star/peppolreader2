@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">E-Invoice &amp; Peppol Reader</string>
+    <string name="app_name">ZUGFeRD &amp; E-Invoice Reader</string>
     <string name="import_file">Import File</string>
-    <string name="app_title">E-Invoice &amp; Peppol Reader</string>
-    <string name="title_activity_main">E-Invoice &amp; Peppol Reader</string>
+    <string name="app_title">ZUGFeRD &amp;\nE-Invoice Reader</string>
+    <string name="title_activity_main">ZUGFeRD &amp; E-Invoice Reader</string>
+    <string name="tab_read">Read</string>
+    <string name="tab_create">Create</string>
     <string name="action_settings">Settings</string>
     <string name="menu_settings">Settings</string>
     <string name="cd_upload_button">Upload XML Invoice</string>
@@ -147,7 +149,7 @@
 
     <!-- Help Manual -->
     <string name="help_title">Help &amp; Usage</string>
-    <string name="help_message">Hi there, a few quick pointers…\n\n<b>Import invoices:</b>\nTap + and pick XML or PDF files (long-press for multi-select). You can also share files straight from your mail app into E-Invoice &amp; Peppol Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded XML is extracted, and the original PDF is kept as an attachment.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X, and Polish <b>KSeF FA(3)</b> for invoices issued in Poland.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes (incl. KSeF KOR / KOR_ZAL / KOR_ROZ) are flagged with a red chip and shown with a negative amount. KSeF correction invoices also display the original number and reason.\n\n<b>Detail view:</b>\nThree tabs: rendered invoice, raw XML (with live search), and the original PDF if attached. Use <b>Open / Paid</b> to mark an invoice as settled.\n\n<b>Filter the list:</b>\nUse the chips above the list for <i>All / Unpaid / Overdue</i>, and the date range picker to limit to a period.\n\n<b>Due-date reminders:</b>\nUnder <i>Reminders…</i> you can switch on daily notifications and choose how many days ahead.\n\n<b>Export:</b>\nUnder <i>Export…</i> create a CSV (UTF-8) for your tax advisor — optionally as a ZIP bundle including the original XML/PDF files.\n\n<b>Dashboard:</b>\nThe Dashboard menu shows expenses per month and your top suppliers.\n\n<b>AI assistant:</b>\nUnder <i>AI Settings</i> add an LLM provider (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock or a generic OpenAI-compatible endpoint) — paste your API key, load the models and pick a default. Then open an invoice and tap the speech bubble to ask questions about it. Note: the invoice data is sent to the provider you chose.\n\n<b>Create invoices (ZUGFeRD Builder):</b>\nThe highlighted menu entry opens a separate mode to issue your own ZUGFeRD invoices (EN 16931).\n\n<b>Notes &amp; categories:</b>\nOpen an invoice and tap the line above the tabs to add a bookkeeping note and category — both go into the CSV export.\n\n<b>Backup:</b>\nUnder the menu you can create a full backup (database + attachments) or restore one — your safety net against device loss.\n\n<b>Delete:</b>\nLong-press a row in the list.\n\n<i>Tip: every screen and panel has its own ? help button.</i></string>
+    <string name="help_message">Hi there, a few quick pointers…\n\n<b>Import invoices:</b>\nTap + and pick XML or PDF files (long-press for multi-select). You can also share files straight from your mail app into ZUGFeRD &amp; E-Invoice Reader.\n\n<b>ZUGFeRD &amp; Factur-X PDFs:</b>\nHybrid PDFs are detected automatically — the embedded XML is extracted, and the original PDF is kept as an attachment.\n\n<b>Supported formats:</b>\nUBL / Peppol BIS 3.0, XRechnung (UBL and CII), ZUGFeRD 1.x and 2.x, Factur-X, and Polish <b>KSeF FA(3)</b> for invoices issued in Poland.\n\n<b>Invoices vs. credit notes:</b>\nTold apart automatically — credit notes (incl. KSeF KOR / KOR_ZAL / KOR_ROZ) are flagged with a red chip and shown with a negative amount. KSeF correction invoices also display the original number and reason.\n\n<b>Detail view:</b>\nThree tabs: rendered invoice, raw XML (with live search), and the original PDF if attached. Use <b>Open / Paid</b> to mark an invoice as settled.\n\n<b>Filter the list:</b>\nUse the chips above the list for <i>All / Unpaid / Overdue</i>, and the date range picker to limit to a period.\n\n<b>Due-date reminders:</b>\nUnder <i>Reminders…</i> you can switch on daily notifications and choose how many days ahead.\n\n<b>Export:</b>\nUnder <i>Export…</i> create a CSV (UTF-8) for your tax advisor — optionally as a ZIP bundle including the original XML/PDF files.\n\n<b>Dashboard:</b>\nThe Dashboard menu shows expenses per month and your top suppliers.\n\n<b>AI assistant:</b>\nUnder <i>AI Settings</i> add an LLM provider (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock or a generic OpenAI-compatible endpoint) — paste your API key, load the models and pick a default. Then open an invoice and tap the speech bubble to ask questions about it. Note: the invoice data is sent to the provider you chose.\n\n<b>Create invoices (Creator):</b>\nUse the <b>Create</b> tab in the bottom bar to switch to Creator mode and issue your own ZUGFeRD invoices (EN 16931).\n\n<b>Notes &amp; categories:</b>\nOpen an invoice and tap the line above the tabs to add a bookkeeping note and category — both go into the CSV export.\n\n<b>Backup:</b>\nUnder the menu you can create a full backup (database + attachments) or restore one — your safety net against device loss.\n\n<b>Delete:</b>\nLong-press a row in the list.\n\n<i>Tip: every screen and panel has its own ? help button.</i></string>
 
     <!-- Info Menu -->
     <string name="info_title">Info &amp; Disclaimer</string>
@@ -318,7 +320,7 @@
     <string name="creator_numbering_next">Next no.</string>
     <string name="creator_payment_days">Default payment term (days)</string>
     <string name="creator_payment_days_hint">New invoices suggest the due date automatically; it stays editable. Empty = no suggestion.</string>
-    <string name="app_title_creator">ZUGFeRD Builder</string>
+    <string name="app_title_creator">ZUGFeRD &amp;\nE-Invoice Creator</string>
     <string name="creator_search_hint">Search (no., customer, date)</string>
     <string name="creator_customers_title">Customers</string>
     <string name="creator_customers_hint">Create and edit customers — buyers are also added automatically when an invoice is generated.</string>
@@ -326,6 +328,39 @@
     <string name="creator_delete_customer_confirm">Delete this customer?</string>
     <string name="creator_pick_customer">From customers</string>
     <string name="creator_no_customers">No saved customers yet. Buyers are stored automatically when an invoice is generated.</string>
+    <string name="creator_articles_title">Articles &amp; services</string>
+    <string name="creator_articles_hint">Create and edit articles and services — pick them in the invoice editor to pre-fill a line item.</string>
+    <string name="creator_new_article">New article</string>
+    <string name="creator_delete_article_confirm">Delete this article?</string>
+    <string name="creator_pick_article">From catalog</string>
+    <string name="creator_add_from_catalog">From catalog</string>
+    <string name="creator_no_articles">No saved articles yet. Maintain your catalog under “Articles &amp; services”.</string>
+    <string name="creator_article_name">Name / description</string>
+    <string name="creator_article_number">Article no. (optional)</string>
+
+    <!-- Paid status + dunning (outgoing invoices) -->
+    <string name="creator_option_mark_paid">Mark as paid</string>
+    <string name="creator_option_mark_unpaid">Mark as unpaid</string>
+    <string name="creator_option_send_dunning">Send payment reminder</string>
+    <string name="creator_badge_overdue">Overdue</string>
+    <string name="creator_badge_dunning">Reminder %1$d</string>
+    <string name="dunning_confirm_title">Send payment reminder %1$d?</string>
+    <string name="dunning_confirm_message">An email to %1$s will be prepared with the invoice PDF attached. New payment deadline: %2$s.</string>
+    <string name="dunning_no_email_warning">No email address on file for this customer — please enter the recipient in your mail app.</string>
+    <string name="dunning_email_subject">Payment reminder %1$d — Invoice %2$s</string>
+    <string name="dunning_email_body_1">Dear %1$s,\n\nour invoice %2$s dated %3$s for %5$s was due on %4$s. Perhaps this has escaped your attention.\n\nPlease transfer the amount by %6$s.\n\nIf payment has already been made, please disregard this reminder.\n\nKind regards\n%7$s</string>
+    <string name="dunning_email_body_2">Dear %1$s,\n\ndespite our previous reminder, invoice %2$s dated %3$s for %5$s (due %4$s) remains unpaid.\n\nPlease settle the outstanding amount by %6$s at the latest.\n\nIf payment has already been made, please disregard this reminder.\n\nKind regards\n%7$s</string>
+    <string name="dunning_email_body_3">Dear %1$s,\n\ninvoice %2$s dated %3$s for %5$s (due %4$s) is still unpaid despite two reminders.\n\nWe ask you one final time to pay the outstanding amount by %6$s. Otherwise we reserve the right to take further steps.\n\nIf payment has already been made, please disregard this reminder.\n\nKind regards\n%7$s</string>
+    <string name="dunning_no_mail_app">No email app found.</string>
+    <string name="notif_outgoing_overdue_title">Outgoing invoice overdue</string>
+    <string name="notif_outgoing_overdue_text">%1$s — invoice %2$s was due on %3$s (%4$s)</string>
+
+    <!-- Creator dashboard -->
+    <string name="creator_dashboard_title">Revenue dashboard</string>
+    <string name="kpi_total_revenue">Total revenue</string>
+    <string name="chart_monthly_revenue_title">Revenue per month</string>
+    <string name="chart_label_revenue">Revenue (€)</string>
+    <string name="chart_customers_title">Top customers</string>
     <string name="creator_view_pdf">View document</string>
     <string name="creator_view_error">No app found to display PDFs.</string>
     <string name="creator_pdf_missing">The PDF file is no longer available.</string>
@@ -426,10 +461,12 @@
     <string name="help_detail"><b>Detail view</b>\n\nThree tabs: the rendered invoice, the raw XML (with live search) and the original PDF if one is attached.\n\n<b>Open / Paid:</b> toggle whether the invoice is settled.\n\n<b>Note &amp; category:</b> tap the line above the tabs to add a bookkeeping note and a category — both appear in the CSV export and are searchable.\n\n<b>Ask AI:</b> the speech bubble opens a chat about this invoice (needs an AI provider in AI Settings).</string>
     <string name="help_dashboard"><b>Dashboard</b>\n\nOverview of your invoices for the selected period (use the filter at the top).\n\n<b>KPIs:</b> total, count, open and overdue amounts.\n<b>Charts:</b> payment status, expenses per month, a paid-vs-total trend and your top suppliers.\n<b>VAT per quarter:</b> net/VAT/gross per quarter for your VAT return.\n\nCredit notes count negatively everywhere.</string>
     <string name="help_ai"><b>AI settings</b>\n\nAdd one or more AI providers (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock or a generic OpenAI-compatible endpoint).\n\nAdd a provider, paste your API key, load the models and pick one — then mark an entry as the default.\n\nAfterwards open any invoice and tap the speech bubble to ask about it.\n\n<b>Privacy:</b> the invoice content is sent to the provider you choose.</string>
-    <string name="help_creator_list"><b>ZUGFeRD Builder</b>\n\nCreate your own e-invoices as hybrid ZUGFeRD PDF/A-3 (EN 16931).\n\n<b>New invoice:</b> starts a draft.\n<b>Company profile:</b> your sender data — fill it in first.\n<b>Customers:</b> your customer master for quick reuse.\n\nDrafts can be edited; <i>generated</i> invoices are final — tap one to view, share or duplicate it as a new draft (handy for recurring invoices).</string>
+    <string name="help_creator_list"><b>ZUGFeRD &amp; E-Invoice Creator</b>\n\nCreate your own e-invoices as hybrid ZUGFeRD PDF/A-3 (EN 16931).\n\n<b>New invoice:</b> starts a draft.\n<b>Company profile:</b> your sender data — fill it in first.\n<b>Customers:</b> your customer master for quick reuse.\n\nDrafts can be edited; <i>generated</i> invoices are final — tap one to view, share or duplicate it as a new draft (handy for recurring invoices).</string>
     <string name="help_creator_edit"><b>Invoice editor</b>\n\nEnter the number, dates, your customer and the line items (description, quantity, unit, unit price, VAT rate). Totals update live.\n\n<b>From customer master:</b> fills the buyer fields from a saved customer.\n\n<b>Create:</b> runs an EN 16931 check first — errors block, warnings can be skipped — then produces the hybrid ZUGFeRD PDF. A generated invoice can no longer be edited.</string>
     <string name="help_company_profile"><b>Company profile</b>\n\nYour sender data, used on every invoice you create. EN 16931 needs at least a full address plus a VAT ID or tax number.\n\n<b>Logo:</b> optional, shown on the PDF.\n<b>Numbering:</b> auto-suggests the next number (still editable).\n<b>Payment term:</b> pre-fills the due date (issue date + N days).\n<b>Storage:</b> where generated PDFs are saved.</string>
     <string name="help_creator_customers"><b>Customer master</b>\n\nSaved customers for your created invoices. New customers are added automatically when you generate an invoice; you can also add, edit or delete them here.\n\nIn the editor, <i>From customer master</i> fills the buyer fields with one tap.</string>
+    <string name="help_creator_articles"><b>Articles &amp; services</b>\n\nYour catalog of recurring articles and services with unit, unit price and VAT rate. In the invoice editor, <i>From catalog</i> adds a pre-filled line item — quantity and all other fields stay editable.</string>
+    <string name="help_creator_dashboard"><b>Revenue dashboard</b>\n\nKey figures for your created invoices: revenue, open and overdue amounts, payment status, revenue per month, VAT per quarter and top customers.\n\nOnly <i>generated</i> invoices count — drafts are excluded, credit notes count negatively. Mark invoices as paid via the invoice list.</string>
     <string name="help_export"><b>Export</b>\n\nCreate a CSV (UTF-8, semicolon-separated) of your invoices for the chosen period — ready for your tax advisor or spreadsheet.\n\n<b>Bundle as ZIP:</b> additionally includes the original XML and PDF files per invoice.\n\nThe CSV includes category and note columns. Credit notes are exported with a negative amount.</string>
     <string name="help_reminders"><b>Due-date reminders</b>\n\nSwitch on a daily check that notifies you about invoices coming due.\n\n<b>Lead time:</b> how many days ahead to be reminded (0/3/7/14).\n\n<b>Check now</b> runs the check immediately. On Android 13+ the app asks for notification permission when you enable this.</string>
     <string name="help_ai_credential"><b>AI provider</b>\n\n<b>Provider:</b> pick your service (or <i>Generic</i> for any OpenAI-compatible endpoint).\n<b>API key:</b> paste your key, load the models, then pick one.\n<b>Label:</b> a name to recognise this entry.\n\nThe key is stored only on this device. When you chat about an invoice, its content is sent to this provider.</string>

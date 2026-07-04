@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,6 +25,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
+import androidx.navigation.ui.setupWithNavController
 import com.ziesche.peppolreader.databinding.ActivityMainBinding
 import com.ziesche.peppolreader.export.CsvExporter
 import com.ziesche.peppolreader.ui.ExportBottomSheetFragment
@@ -46,6 +48,19 @@ class MainActivity : AppCompatActivity(),
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private val viewModel: InvoiceViewModel by viewModels()
+
+    /**
+     * All Invoice Creator destinations: they hide the FAB, rebrand the toolbar headline and
+     * route the "Dashboard" menu action to the revenue dashboard.
+     */
+    private val creatorDestinations = setOf(
+        R.id.invoiceCreatorListFragment,
+        R.id.invoiceCreatorEditFragment,
+        R.id.companyProfileFragment,
+        R.id.creatorCustomerListFragment,
+        R.id.creatorArticleListFragment,
+        R.id.creatorDashboardFragment
+    )
     // SharedPreferences keys are defined centrally in [AppPreferences].
 
     /**
@@ -124,9 +139,12 @@ class MainActivity : AppCompatActivity(),
         setContentView(binding.root)
 
         ViewCompat.setOnApplyWindowInsetsListener(binding.fab) { view, insets ->
+            // With the bottom nav visible the CoordinatorLayout already ends above
+            // the navigation bar, so the FAB only needs its fixed margin then.
             val navInsets = insets.getInsets(WindowInsetsCompat.Type.navigationBars())
+            val extraBottom = if (BuildConfig.ENABLE_INVOICE_CREATOR) 0 else navInsets.bottom
             view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                bottomMargin = (16 * resources.displayMetrics.density).toInt() + navInsets.bottom
+                bottomMargin = (16 * resources.displayMetrics.density).toInt() + extraBottom
             }
             insets
         }
@@ -138,8 +156,20 @@ class MainActivity : AppCompatActivity(),
             .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
         val navController = navHostFragment.navController
         
-        appBarConfiguration = AppBarConfiguration(navController.graph)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(R.id.invoiceListFragment, R.id.invoiceCreatorListFragment)
+        )
         setupActionBarWithNavController(navController, appBarConfiguration)
+
+        // Reader/Creator mode switch. The menu item ids match the destination ids,
+        // so NavigationUI keeps a saved back stack per tab.
+        binding.bottomNav.setupWithNavController(navController)
+        binding.bottomNav.setOnItemReselectedListener { item ->
+            navController.popBackStack(item.itemId, false)
+        }
+        if (!BuildConfig.ENABLE_INVOICE_CREATOR) {
+            binding.bottomNav.visibility = View.GONE
+        }
 
         // FAB click - open file picker
         binding.fab.setOnClickListener {
@@ -150,14 +180,6 @@ class MainActivity : AppCompatActivity(),
         binding.fab.setImageResource(R.drawable.ic_file_upload)
         binding.fab.contentDescription = getString(R.string.import_file)
         
-        // Hide FAB on detail screen/settings (and on all Invoice Creator screens).
-        // The Invoice Creator screens also rebrand the toolbar headline.
-        val creatorDestinations = setOf(
-            R.id.invoiceCreatorListFragment,
-            R.id.invoiceCreatorEditFragment,
-            R.id.companyProfileFragment,
-            R.id.creatorCustomerListFragment
-        )
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.invoiceListFragment -> binding.fab.show()
@@ -210,6 +232,13 @@ class MainActivity : AppCompatActivity(),
     private fun handleIncomingIntent(intent: Intent?) {
         if (intent == null) return
 
+        // Notification deep-link: overdue outgoing invoice → bring the Create tab up.
+        if (intent.getBooleanExtra(EXTRA_OPEN_CREATOR, false)) {
+            intent.removeExtra(EXTRA_OPEN_CREATOR)
+            if (BuildConfig.ENABLE_INVOICE_CREATOR) switchToCreatorTab()
+            return
+        }
+
         // Notification deep-link
         val deepLinkId = intent.getLongExtra(EXTRA_OPEN_INVOICE_ID, -1L)
         if (deepLinkId != -1L) {
@@ -230,6 +259,32 @@ class MainActivity : AppCompatActivity(),
             current.importExternalUri(uri)
         } else {
             pendingImportUri = uri
+            // Imports belong to the reader: bring the list fragment up so it
+            // drains the pending URI (e.g. when the Creator tab is active).
+            switchToReaderTab()
+        }
+    }
+
+    /** Brings the Create tab's list fragment to the front (tab switch + pop if needed). */
+    private fun switchToCreatorTab() {
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        if (navController.currentDestination?.id != R.id.invoiceCreatorListFragment) {
+            binding.bottomNav.selectedItemId = R.id.invoiceCreatorListFragment
+        }
+        if (navController.currentDestination?.id != R.id.invoiceCreatorListFragment) {
+            navController.popBackStack(R.id.invoiceCreatorListFragment, false)
+        }
+    }
+
+    /** Brings the Read tab's list fragment to the front (tab switch + pop if needed). */
+    private fun switchToReaderTab() {
+        val navController = findNavController(R.id.nav_host_fragment_content_main)
+        if (navController.currentDestination?.id != R.id.invoiceListFragment) {
+            binding.bottomNav.selectedItemId = R.id.invoiceListFragment
+        }
+        // Restoring the tab may land on a saved deep screen (e.g. detail).
+        if (navController.currentDestination?.id != R.id.invoiceListFragment) {
+            navController.popBackStack(R.id.invoiceListFragment, false)
         }
     }
 
@@ -237,8 +292,14 @@ class MainActivity : AppCompatActivity(),
         viewModel.selectInvoiceById(invoiceId)
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         // Already on detail? Don't push again.
-        if (navController.currentDestination?.id != R.id.invoiceDetailFragment) {
+        if (navController.currentDestination?.id == R.id.invoiceDetailFragment) return
+        // The action only exists on the list destination; make sure we are there
+        // (the Creator tab could be active) before pushing the detail screen.
+        switchToReaderTab()
+        if (navController.currentDestination?.id == R.id.invoiceListFragment) {
             navController.navigate(R.id.action_invoiceList_to_invoiceDetail)
+        } else {
+            navController.navigate(R.id.invoiceDetailFragment)
         }
     }
 
@@ -309,20 +370,6 @@ class MainActivity : AppCompatActivity(),
         }
         menu.findItem(activeLangItemId)?.isChecked = true
 
-        // Hide the Invoice Creator entry entirely when the feature flag is off.
-        // When visible, set it apart from the other overflow entries: primary color + bold.
-        menu.findItem(R.id.action_invoice_creator)?.let { creatorItem ->
-            creatorItem.isVisible = BuildConfig.ENABLE_INVOICE_CREATOR
-            if (creatorItem.isVisible) {
-                val tv = android.util.TypedValue()
-                theme.resolveAttribute(androidx.appcompat.R.attr.colorPrimary, tv, true)
-                val styled = android.text.SpannableString(getString(R.string.creator_title))
-                styled.setSpan(android.text.style.ForegroundColorSpan(tv.data), 0, styled.length, 0)
-                styled.setSpan(android.text.style.StyleSpan(android.graphics.Typeface.BOLD), 0, styled.length, 0)
-                creatorItem.title = styled
-            }
-        }
-
         // Update theme toggle icon based on current mode
         val currentNightMode = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
         val isNightMode = currentNightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -387,8 +434,15 @@ class MainActivity : AppCompatActivity(),
                 true
             }
             R.id.action_dashboard -> {
+                // "Dashboard" means the dashboard of the mode the user is in: the revenue
+                // dashboard on Create-tab screens, the expense dashboard everywhere else.
                 val navController = findNavController(R.id.nav_host_fragment_content_main)
-                navController.navigate(R.id.dashboardFragment)
+                val target = if (navController.currentDestination?.id in creatorDestinations) {
+                    R.id.creatorDashboardFragment
+                } else {
+                    R.id.dashboardFragment
+                }
+                navController.navigate(target)
                 true
             }
             R.id.action_export -> {
@@ -408,13 +462,6 @@ class MainActivity : AppCompatActivity(),
             R.id.action_ai_settings -> {
                 val navController = findNavController(R.id.nav_host_fragment_content_main)
                 navController.navigate(R.id.aiSettingsFragment)
-                true
-            }
-            R.id.action_invoice_creator -> {
-                if (BuildConfig.ENABLE_INVOICE_CREATOR) {
-                    val navController = findNavController(R.id.nav_host_fragment_content_main)
-                    navController.navigate(R.id.invoiceCreatorListFragment)
-                }
                 true
             }
             R.id.action_backup -> {
@@ -458,6 +505,8 @@ class MainActivity : AppCompatActivity(),
             R.id.invoiceCreatorEditFragment -> R.string.help_creator_edit
             R.id.companyProfileFragment -> R.string.help_company_profile
             R.id.creatorCustomerListFragment -> R.string.help_creator_customers
+            R.id.creatorArticleListFragment -> R.string.help_creator_articles
+            R.id.creatorDashboardFragment -> R.string.help_creator_dashboard
             else -> R.string.help_message
         }
         MaterialAlertDialogBuilder(this)
@@ -563,10 +612,13 @@ class MainActivity : AppCompatActivity(),
     }
 
     private fun launchOpenBackup() {
-        // ZIPs are reported under various MIME types by different providers, so accept any file.
+        // Filter to ZIP-ish files. Providers report ZIPs under various MIME types, so keep the
+        // broad base type and narrow via EXTRA_MIME_TYPES (octet-stream covers generic providers).
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
             .addCategory(Intent.CATEGORY_OPENABLE)
             .setType("*/*")
+            .putExtra(Intent.EXTRA_MIME_TYPES, arrayOf(
+                "application/zip", "application/x-zip-compressed", "application/octet-stream"))
         openBackupLauncher.launch(intent)
     }
 
@@ -667,5 +719,8 @@ class MainActivity : AppCompatActivity(),
     companion object {
         /** Intent extra used by [com.ziesche.peppolreader.notifications.DueDateWorker] for the deep-link tap. */
         const val EXTRA_OPEN_INVOICE_ID = "com.ziesche.peppolreader.OPEN_INVOICE_ID"
+
+        /** Intent extra (Boolean): overdue outgoing-invoice notification → open the Create tab. */
+        const val EXTRA_OPEN_CREATOR = "com.ziesche.peppolreader.OPEN_CREATOR"
     }
 }

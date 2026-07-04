@@ -77,12 +77,6 @@
         android:title="@string/backup_restore"
         app:showAsAction="never" />
 
-    <!-- Visibility toggled at runtime in MainActivity via BuildConfig.ENABLE_INVOICE_CREATOR. -->
-    <item
-        android:id="@+id/action_invoice_creator"
-        android:title="@string/creator_title"
-        app:showAsAction="never" />
-
     <item
         android:id="@+id/action_info"
         android:icon="@drawable/ic_info"

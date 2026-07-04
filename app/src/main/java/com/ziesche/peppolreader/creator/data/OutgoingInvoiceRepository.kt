@@ -24,6 +24,16 @@ class OutgoingInvoiceRepository(private val dao: OutgoingInvoiceDao) {
 
     suspend fun deleteById(id: Long) = dao.deleteById(id)
 
+    suspend fun setPaid(id: Long, paidAtMs: Long?) = dao.setPaid(id, paidAtMs)
+
+    suspend fun recordDunningSent(id: Long, nowMs: Long) = dao.recordDunningSent(id, nowMs)
+
+    suspend fun getOverdueUnnotified(todayIso: String, startOfTodayMs: Long): List<OutgoingInvoice> =
+        dao.getOverdueUnnotified(todayIso, startOfTodayMs)
+
+    suspend fun touchOverdueNotified(id: Long, timestamp: Long) =
+        dao.touchOverdueNotified(id, timestamp)
+
     companion object {
         fun from(context: Context): OutgoingInvoiceRepository =
             OutgoingInvoiceRepository(AppDatabase.getDatabase(context).outgoingInvoiceDao())
