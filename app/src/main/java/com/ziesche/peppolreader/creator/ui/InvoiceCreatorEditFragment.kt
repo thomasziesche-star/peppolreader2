@@ -19,11 +19,13 @@ import com.ziesche.peppolreader.R
 import kotlinx.coroutines.launch
 import java.io.File
 import com.ziesche.peppolreader.creator.model.CompanyProfile
+import com.ziesche.peppolreader.creator.model.CreatorAllowanceCharge
 import com.ziesche.peppolreader.creator.model.CreatorLine
 import com.ziesche.peppolreader.creator.model.CreatorTotals
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 import com.ziesche.peppolreader.creator.xml.CreatorValidator
 import com.ziesche.peppolreader.databinding.FragmentInvoiceCreatorEditBinding
+import com.ziesche.peppolreader.databinding.ItemCreatorAllowanceBinding
 import com.ziesche.peppolreader.databinding.ItemCreatorLineBinding
 import java.text.NumberFormat
 import java.time.Instant
@@ -44,6 +46,8 @@ class InvoiceCreatorEditFragment : Fragment() {
 
     /** Parallel to the line cards currently shown; index = position. */
     private val rows = mutableListOf<ItemCreatorLineBinding>()
+    /** Parallel to the allowance/charge cards; index = position. */
+    private val allowanceRows = mutableListOf<ItemCreatorAllowanceBinding>()
     /** Guards against TextWatcher feedback while we populate fields programmatically. */
     private var building = false
 
@@ -93,6 +97,23 @@ class InvoiceCreatorEditFragment : Fragment() {
             syncLinesToViewModel()
         }
 
+        // Tax mode: §19 profile switch wins (banner, no reverse-charge choice, VAT forced to 0);
+        // otherwise the per-document reverse-charge checkbox decides.
+        if (profile.smallBusiness) {
+            binding.checkReverseCharge.visibility = View.GONE
+            binding.textSmallBusinessBanner.visibility = View.VISIBLE
+        } else {
+            binding.checkReverseCharge.setOnCheckedChangeListener { _, _ ->
+                viewModel.setTaxMode(currentTaxMode())
+            }
+        }
+        viewModel.setTaxMode(currentTaxMode())
+
+        binding.btnAddAllowance.setOnClickListener {
+            addAllowanceRow(CreatorAllowanceCharge())
+            syncAllowancesToViewModel()
+        }
+
         binding.btnAddFromCatalog.setOnClickListener { showArticlePicker() }
 
         binding.btnPickCustomer.setOnClickListener { showCustomerPicker() }
@@ -118,11 +139,20 @@ class InvoiceCreatorEditFragment : Fragment() {
                 }
                 draft?.let { bindDraft(it) }
                 buildRowsFromViewModel()
+                buildAllowanceRowsFromViewModel()
                 binding.btnGenerate.isEnabled = true
             }
         } else {
             buildRowsFromViewModel()
+            buildAllowanceRowsFromViewModel()
         }
+    }
+
+    /** The document-wide tax mode derived from the profile switch / reverse-charge checkbox. */
+    private fun currentTaxMode(): String = when {
+        profile.smallBusiness -> OutgoingInvoice.TAX_MODE_EXEMPT
+        binding.checkReverseCharge.isChecked -> OutgoingInvoice.TAX_MODE_REVERSE_CHARGE
+        else -> OutgoingInvoice.TAX_MODE_STANDARD
     }
 
     /** Rebuilds the line cards from the ViewModel (one empty line for a fresh draft). */
@@ -132,6 +162,14 @@ class InvoiceCreatorEditFragment : Fragment() {
         initial.forEach { addRow(it) }
         building = false
         syncLinesToViewModel()
+    }
+
+    /** Rebuilds the allowance/charge cards from the ViewModel (none for a fresh draft). */
+    private fun buildAllowanceRowsFromViewModel() {
+        building = true
+        viewModel.allowances.value.orEmpty().forEach { addAllowanceRow(it) }
+        building = false
+        syncAllowancesToViewModel()
     }
 
     /** Fills the header + buyer fields from a loaded draft (lines come via the ViewModel). */
@@ -147,6 +185,9 @@ class InvoiceCreatorEditFragment : Fragment() {
         inputBuyerCountry.setText(draft.buyerCountry.orEmpty())
         inputBuyerVatId.setText(draft.buyerVatId.orEmpty())
         inputPaymentNote.setText(draft.paymentTermsNote.orEmpty())
+        if (!profile.smallBusiness) {
+            checkReverseCharge.isChecked = draft.taxMode == OutgoingInvoice.TAX_MODE_REVERSE_CHARGE
+        }
     }
 
     // ----- seller / totals rendering ------------------------------------------------------
@@ -165,8 +206,21 @@ class InvoiceCreatorEditFragment : Fragment() {
     }
 
     private fun renderTotals(t: CreatorTotals) {
+        val hasDocLevel = t.allowanceTotal != 0.0 || t.chargeTotal != 0.0
         binding.textTotals.text = buildString {
             append(getString(R.string.creator_net)).append("\t").append(currencyFormat.format(t.lineTotal)).append('\n')
+            if (t.allowanceTotal != 0.0) {
+                append(getString(R.string.creator_allowance_discount)).append("\t−")
+                    .append(currencyFormat.format(t.allowanceTotal)).append('\n')
+            }
+            if (t.chargeTotal != 0.0) {
+                append(getString(R.string.creator_allowance_charge)).append("\t+")
+                    .append(currencyFormat.format(t.chargeTotal)).append('\n')
+            }
+            if (hasDocLevel) {
+                append(getString(R.string.creator_tax_basis)).append("\t")
+                    .append(currencyFormat.format(t.taxBasisTotal)).append('\n')
+            }
             append(getString(R.string.creator_vat)).append("\t").append(currencyFormat.format(t.taxTotal)).append('\n')
             append(getString(R.string.creator_gross)).append("\t").append(currencyFormat.format(t.grandTotal))
         }
@@ -181,6 +235,11 @@ class InvoiceCreatorEditFragment : Fragment() {
         row.inputUnit.setText(line.unit)
         row.inputPrice.setText(if (line.unitPrice == 0.0) "" else trimNumber(line.unitPrice))
         row.inputVat.setText(trimNumber(line.vatRate))
+        if (profile.smallBusiness) {
+            // §19: everything is VAT-exempt — the rate is fixed at 0.
+            row.inputVat.setText("0")
+            row.inputVat.isEnabled = false
+        }
 
         val watcher = object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
@@ -217,10 +276,62 @@ class InvoiceCreatorEditFragment : Fragment() {
         viewModel.setLines(lines)
     }
 
+    // ----- dynamic allowance/charge rows ----------------------------------------------------
+
+    private fun addAllowanceRow(entry: CreatorAllowanceCharge) {
+        val row = ItemCreatorAllowanceBinding.inflate(layoutInflater, binding.containerAllowances, false)
+        row.toggleAllowanceType.check(
+            if (entry.isCharge) R.id.btn_allowance_charge else R.id.btn_allowance_discount
+        )
+        row.inputAllowanceReason.setText(entry.reason)
+        row.inputAllowanceAmount.setText(if (entry.amount == 0.0) "" else trimNumber(entry.amount))
+        row.inputAllowanceVat.setText(trimNumber(entry.vatRate))
+        if (profile.smallBusiness) {
+            row.inputAllowanceVat.setText("0")
+            row.inputAllowanceVat.isEnabled = false
+        }
+
+        val watcher = object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun onTextChanged(s: CharSequence?, a: Int, b: Int, c: Int) {}
+            override fun afterTextChanged(s: Editable?) { if (!building) syncAllowancesToViewModel() }
+        }
+        listOf(row.inputAllowanceReason, row.inputAllowanceAmount, row.inputAllowanceVat)
+            .forEach { it.addTextChangedListener(watcher) }
+        row.toggleAllowanceType.addOnButtonCheckedListener { _, _, _ ->
+            if (!building) syncAllowancesToViewModel()
+        }
+
+        row.btnRemoveAllowance.setOnClickListener {
+            val idx = allowanceRows.indexOf(row)
+            if (idx >= 0) {
+                allowanceRows.removeAt(idx)
+                binding.containerAllowances.removeView(row.root)
+                syncAllowancesToViewModel()
+            }
+        }
+
+        allowanceRows.add(row)
+        binding.containerAllowances.addView(row.root)
+    }
+
+    private fun syncAllowancesToViewModel() {
+        val entries = allowanceRows.map { row ->
+            CreatorAllowanceCharge(
+                isCharge = row.toggleAllowanceType.checkedButtonId == R.id.btn_allowance_charge,
+                reason = row.inputAllowanceReason.text.str(),
+                amount = parseDecimal(row.inputAllowanceAmount.text.str()),
+                vatRate = parseDecimal(row.inputAllowanceVat.text.str())
+            )
+        }
+        viewModel.setAllowances(entries)
+    }
+
     // ----- generate -----------------------------------------------------------------------
 
     private fun onGenerateClicked() {
         syncLinesToViewModel()
+        syncAllowancesToViewModel()
         val draft = buildDraft()
 
         // EN 16931 pre-flight: errors block generation, warnings let the user proceed knowingly.
@@ -274,6 +385,11 @@ class InvoiceCreatorEditFragment : Fragment() {
             CreatorValidator.Code.DUE_BEFORE_ISSUE -> getString(R.string.creator_validate_due_before_issue)
             CreatorValidator.Code.IBAN_MISSING -> getString(R.string.creator_validate_iban_missing)
             CreatorValidator.Code.IBAN_INVALID -> getString(R.string.creator_validate_iban_invalid)
+            CreatorValidator.Code.RC_BUYER_VAT_ID_MISSING -> getString(R.string.creator_validate_rc_buyer_vat)
+            CreatorValidator.Code.EXEMPTION_REASON_MISSING -> getString(R.string.creator_validate_exemption_missing)
+            CreatorValidator.Code.EXEMPT_LINE_HAS_VAT -> getString(R.string.creator_validate_exempt_line_vat)
+            CreatorValidator.Code.ALLOWANCE_REASON_MISSING -> getString(R.string.creator_validate_allowance_reason)
+            CreatorValidator.Code.ALLOWANCE_NON_POSITIVE -> getString(R.string.creator_validate_allowance_amount)
         }
     }
 
@@ -414,7 +530,16 @@ class InvoiceCreatorEditFragment : Fragment() {
             buyerCountry = binding.inputBuyerCountry.text.str().ifBlank { null }?.uppercase(),
             buyerVatId = binding.inputBuyerVatId.text.str().ifBlank { null },
             lineItemsJson = CreatorLine.listToJson(viewModel.lines.value.orEmpty()),
-            paymentTermsNote = binding.inputPaymentNote.text.str().ifBlank { null }
+            paymentTermsNote = binding.inputPaymentNote.text.str().ifBlank { null },
+            taxMode = currentTaxMode(),
+            exemptionReason = when (currentTaxMode()) {
+                OutgoingInvoice.TAX_MODE_EXEMPT ->
+                    profile.exemptionText.ifBlank { getString(R.string.creator_exemption_default_19) }
+                OutgoingInvoice.TAX_MODE_REVERSE_CHARGE ->
+                    getString(R.string.creator_reverse_charge_reason)
+                else -> null
+            },
+            allowancesJson = CreatorAllowanceCharge.listToJson(viewModel.allowances.value.orEmpty())
         )
     }
 
@@ -445,6 +570,7 @@ class InvoiceCreatorEditFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         rows.clear()
+        allowanceRows.clear()
         _binding = null
     }
 

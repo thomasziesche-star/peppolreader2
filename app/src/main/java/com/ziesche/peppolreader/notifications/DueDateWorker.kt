@@ -91,7 +91,7 @@ class DueDateWorker(
 
         val amount = NumberFormat.getCurrencyInstance(Locale.getDefault()).apply {
             runCatching { currency = Currency.getInstance(invoice.currency) }
-        }.format(InvoiceTotalsCalculator.calculate(invoice.lines).grandTotal)
+        }.format(InvoiceTotalsCalculator.calculate(invoice).grandTotal)
 
         val title = ctx.getString(R.string.notif_outgoing_overdue_title)
         val text = ctx.getString(

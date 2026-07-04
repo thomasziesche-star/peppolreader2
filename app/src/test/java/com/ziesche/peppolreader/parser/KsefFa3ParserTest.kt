@@ -21,6 +21,18 @@ class KsefFa3ParserTest {
 
     private val namespace = "http://crd.gov.pl/wzor/2025/06/25/13775/"
 
+    /** Same contract as PeppolParserTest: broken XML must surface as XmlPullParserException. */
+    @Test
+    fun malformedXmlThrowsXmlPullParserException() {
+        val truncated = """<?xml version="1.0"?><Faktura xmlns="$namespace"><Fa><P_2>FK/2026"""
+        try {
+            KsefFa3Parser(truncated, RuntimeEnvironment.getApplication()).parse()
+            org.junit.Assert.fail("expected XmlPullParserException")
+        } catch (expected: org.xmlpull.v1.XmlPullParserException) {
+            // categorized as ImportError.XML_MALFORMED
+        }
+    }
+
     private fun invoiceXml(
         rodzaj: String = "VAT",
         correctionBlock: String = ""

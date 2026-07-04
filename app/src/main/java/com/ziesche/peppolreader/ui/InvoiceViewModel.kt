@@ -11,6 +11,7 @@ import com.ziesche.peppolreader.data.InvoiceRepository
 import java.io.File
 import java.io.FileOutputStream
 import android.util.Base64
+import android.util.Log
 import androidx.core.content.FileProvider
 import android.content.Intent
 import android.content.Context
@@ -178,18 +179,20 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     )
 
     /**
-     * Import multiple invoices
+     * Import multiple invoices. [pickErrors] are files that already failed while being read
+     * or unpacked in the fragment (unreadable, PDF without XML, …) — they count towards the
+     * total and the error tally so the summary reflects everything the user selected.
      */
-    fun importInvoices(files: List<ImportItem>) {
+    fun importInvoices(files: List<ImportItem>, pickErrors: List<ImportError> = emptyList()) {
         viewModelScope.launch {
             _isLoading.value = true
             _error.value = null
 
             var successCount = 0
             var duplicateCount = 0
-            var errorCount = 0
+            val errors = pickErrors.toMutableList()
 
-            val total = files.size
+            val total = files.size + pickErrors.size
 
             // If only one file, we want compatible behavior (open it)
             // If multiple, just summary.
@@ -197,7 +200,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
             val results = withContext(Dispatchers.IO) {
                 files.map { item -> processSingleInvoice(item) }
             }
-            
+
             var lastSuccessInvoice: Invoice? = null
             var lastDuplicateInvoice: Invoice? = null
 
@@ -212,13 +215,13 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                         lastDuplicateInvoice = result.invoice
                     }
                     is ImportResult.Error -> {
-                        errorCount++
+                        errors.add(result.error)
                     }
                 }
             }
-            
+
             _isLoading.value = false
-            
+
             if (total == 1) {
                 // Single file behavior
                 if (successCount == 1) {
@@ -230,15 +233,17 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
                     _message.value = str(R.string.invoice_exists)
                     _importNavigationId.value = lastDuplicateInvoice!!.id
                 } else {
-                    _error.value = str(R.string.error_import_general)
+                    _error.value = str((errors.firstOrNull() ?: ImportError.STORAGE).messageRes)
                 }
             } else {
-                // Batch summary – pieced together so each language only has to translate
-                // 3 short strings (main + duplicates suffix + errors suffix).
-                val sb = StringBuilder(str(R.string.import_batch_summary, successCount, total))
-                if (duplicateCount > 0) sb.append(str(R.string.import_batch_duplicates, duplicateCount))
-                if (errorCount > 0) sb.append(str(R.string.import_batch_errors, errorCount))
-                _message.value = sb.toString()
+                _message.value = ImportSummaryFormatter.format(
+                    getApplication<Application>().resources,
+                    successCount = successCount,
+                    total = total,
+                    duplicateCount = duplicateCount,
+                    errorCount = errors.size,
+                    singleError = errors.singleOrNull()
+                )
                 // Staying on list is better for batch.
             }
         }
@@ -253,7 +258,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
     private sealed class ImportResult {
         data class Success(val invoice: Invoice) : ImportResult()
         data class Duplicate(val invoice: Invoice) : ImportResult()
-        data class Error(val message: String) : ImportResult()
+        data class Error(val error: ImportError) : ImportResult()
     }
 
     private suspend fun processSingleInvoice(item: ImportItem): ImportResult {
@@ -261,7 +266,7 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
         val fileName = item.fileName
         return try {
             val parsed = parseByFormat(xmlContent)
-                ?: return ImportResult.Error("Unknown invoice format")
+                ?: return ImportResult.Error(ImportError.UNKNOWN_XML_FORMAT)
 
             // Check for duplicate
             val existing = repository.findDuplicate(parsed.invoice.id, parsed.supplier.name)
@@ -328,7 +333,8 @@ class InvoiceViewModel(application: Application) : AndroidViewModel(application)
             ImportResult.Success(invoice)
 
         } catch (e: Exception) {
-            ImportResult.Error(e.message ?: "Unknown error")
+            Log.w("InvoiceViewModel", "Import of '$fileName' failed", e)
+            ImportResult.Error(ImportError.from(e))
         }
     }
 

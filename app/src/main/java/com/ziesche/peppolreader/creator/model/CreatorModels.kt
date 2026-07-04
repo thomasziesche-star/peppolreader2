@@ -61,6 +61,54 @@ data class CreatorLine(
     }
 }
 
+/**
+ * A document-level allowance (discount) or charge (surcharge), EN 16931 BG-20/BG-21.
+ * [amount] is always the positive magnitude; [isCharge] decides the direction.
+ * Serialized to [OutgoingInvoice.allowancesJson] the same way [CreatorLine] is.
+ */
+data class CreatorAllowanceCharge(
+    val isCharge: Boolean = false,
+    val reason: String = "",
+    val amount: Double = 0.0,
+    val vatRate: Double = 19.0
+) {
+    fun toJson(): JSONObject = JSONObject().apply {
+        put(KEY_IS_CHARGE, isCharge)
+        put(KEY_REASON, reason)
+        put(KEY_AMOUNT, amount)
+        put(KEY_VAT_RATE, vatRate)
+    }
+
+    companion object {
+        private const val KEY_IS_CHARGE = "isCharge"
+        private const val KEY_REASON = "reason"
+        private const val KEY_AMOUNT = "amount"
+        private const val KEY_VAT_RATE = "vatRate"
+
+        fun fromJson(o: JSONObject): CreatorAllowanceCharge = CreatorAllowanceCharge(
+            isCharge = o.optBoolean(KEY_IS_CHARGE, false),
+            reason = o.optString(KEY_REASON),
+            amount = o.optDouble(KEY_AMOUNT, 0.0),
+            vatRate = o.optDouble(KEY_VAT_RATE, 0.0)
+        )
+
+        fun listToJson(entries: List<CreatorAllowanceCharge>): String {
+            val arr = JSONArray()
+            entries.forEach { arr.put(it.toJson()) }
+            return arr.toString()
+        }
+
+        /** Inverse of [listToJson]; returns an empty list on any parse error. */
+        fun listFromJson(json: String?): List<CreatorAllowanceCharge> {
+            if (json.isNullOrBlank()) return emptyList()
+            return runCatching {
+                val arr = JSONArray(json)
+                (0 until arr.length()).map { fromJson(arr.getJSONObject(it)) }
+            }.getOrDefault(emptyList())
+        }
+    }
+}
+
 /** One VAT-rate group of the breakdown EN 16931 requires (BG-23). */
 data class VatBreakdownEntry(
     val rate: Double,
@@ -75,5 +123,8 @@ data class CreatorTotals(
     val taxTotal: Double,
     val grandTotal: Double,
     val payable: Double,
-    val vatBreakdown: List<VatBreakdownEntry>
+    val vatBreakdown: List<VatBreakdownEntry>,
+    /** Sum of document-level allowances (BT-107) and charges (BT-108); 0.0 when unused. */
+    val allowanceTotal: Double = 0.0,
+    val chargeTotal: Double = 0.0
 )

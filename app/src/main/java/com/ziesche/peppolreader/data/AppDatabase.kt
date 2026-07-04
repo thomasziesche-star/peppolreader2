@@ -16,7 +16,7 @@ import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 
 @Database(
     entities = [Invoice::class, OutgoingInvoice::class, CreatorCustomer::class, CreatorArticle::class],
-    version = 13,
+    version = 14,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -200,13 +200,26 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         /**
+         * v13 → v14: document-wide tax handling for the creator — [OutgoingInvoice.taxMode]
+         * (§19 exemption / reverse charge), the frozen [OutgoingInvoice.exemptionReason] and
+         * document-level allowances/charges in [OutgoingInvoice.allowancesJson].
+         */
+        private val MIGRATION_13_14 = object : Migration(13, 14) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE outgoing_invoices ADD COLUMN taxMode TEXT NOT NULL DEFAULT 'STANDARD'")
+                db.execSQL("ALTER TABLE outgoing_invoices ADD COLUMN exemptionReason TEXT")
+                db.execSQL("ALTER TABLE outgoing_invoices ADD COLUMN allowancesJson TEXT NOT NULL DEFAULT '[]'")
+            }
+        }
+
+        /**
          * All schema migrations in order. Exposed (internal) so the migration test can
          * exercise the exact same chain the app uses.
          */
         internal val ALL_MIGRATIONS = arrayOf(
             MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7,
             MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12,
-            MIGRATION_12_13
+            MIGRATION_12_13, MIGRATION_13_14
         )
 
         /**

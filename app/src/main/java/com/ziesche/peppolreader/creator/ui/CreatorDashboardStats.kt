@@ -64,9 +64,11 @@ object CreatorDashboardStats {
         val entries = invoices
             .filter { it.status == OutgoingInvoice.STATUS_GENERATED }
             .map { inv ->
-                val totals = InvoiceTotalsCalculator.calculate(inv.lines)
+                val totals = InvoiceTotalsCalculator.calculate(inv)
                 val sign = if (inv.documentTypeCode == "381") -1.0 else 1.0
-                Entry(inv, totals.lineTotal * sign, totals.taxTotal * sign, totals.grandTotal * sign)
+                // taxBasisTotal = net after document-level allowances/charges (equals
+                // lineTotal when there are none).
+                Entry(inv, totals.taxBasisTotal * sign, totals.taxTotal * sign, totals.grandTotal * sign)
             }
 
         val total = entries.sumOf { it.gross }

@@ -171,7 +171,7 @@ class InvoiceCreatorListFragment : Fragment() {
 
             val amount = NumberFormat.getCurrencyInstance(Locale.getDefault()).apply {
                 runCatching { currency = Currency.getInstance(draft.currency) }
-            }.format(InvoiceTotalsCalculator.calculate(draft.lines).grandTotal)
+            }.format(InvoiceTotalsCalculator.calculate(draft).grandTotal)
             val mail = DunningTextBuilder.build(resources, draft, amount)
 
             val recipientInfo = email
@@ -180,7 +180,12 @@ class InvoiceCreatorListFragment : Fragment() {
                     getString(R.string.dunning_confirm_message, draft.buyerName, mail.newDeadlineIso))
 
             MaterialAlertDialogBuilder(requireContext())
-                .setTitle(getString(R.string.dunning_confirm_title, mail.level))
+                .setTitle(
+                    getString(
+                        R.string.dunning_confirm_title,
+                        getString(DunningTextBuilder.levelLabelRes(mail.level))
+                    )
+                )
                 .setMessage(recipientInfo)
                 .setPositiveButton(R.string.creator_option_send_dunning) { _, _ ->
                     launchDunningIntent(draft, file, email, mail)
@@ -243,6 +248,11 @@ class InvoiceCreatorListFragment : Fragment() {
                 status = OutgoingInvoice.STATUS_DRAFT,
                 generatedXml = null,
                 pdfPath = null,
+                // Payment/dunning history belongs to the source invoice, not the clone.
+                paidAt = null,
+                dunningLevel = 0,
+                lastDunningAt = null,
+                lastOverdueNotifiedAt = null,
                 createdAt = now,
                 updatedAt = now
             )

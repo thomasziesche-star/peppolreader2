@@ -28,6 +28,20 @@ object DunningTextBuilder {
     /** The level this dunning will have: one above the current, capped at [MAX_LEVEL]. */
     fun nextLevel(current: Int): Int = (current + 1).coerceAtMost(MAX_LEVEL)
 
+    /** Full label for subject/dialog: payment reminder → first reminder → final reminder. */
+    fun levelLabelRes(level: Int): Int = when (level) {
+        1 -> R.string.dunning_level_1
+        2 -> R.string.dunning_level_2
+        else -> R.string.dunning_level_3
+    }
+
+    /** Short label for the list chip (same escalation, chip-sized wording). */
+    fun badgeLabelRes(level: Int): Int = when (level) {
+        1 -> R.string.creator_badge_dunning_1
+        2 -> R.string.creator_badge_dunning_2
+        else -> R.string.creator_badge_dunning_3
+    }
+
     /** [amount] arrives pre-formatted with currency; [today] is injectable for tests. */
     fun build(
         res: Resources,
@@ -44,7 +58,11 @@ object DunningTextBuilder {
         }
         return DunningMail(
             level = level,
-            subject = res.getString(R.string.dunning_email_subject, level, invoice.invoiceNumber),
+            subject = res.getString(
+                R.string.dunning_email_subject,
+                res.getString(levelLabelRes(level)),
+                invoice.invoiceNumber
+            ),
             body = res.getString(
                 bodyRes,
                 invoice.buyerName,

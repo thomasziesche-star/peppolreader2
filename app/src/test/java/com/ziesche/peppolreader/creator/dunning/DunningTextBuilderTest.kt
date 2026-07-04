@@ -64,6 +64,18 @@ class DunningTextBuilderTest {
         assertFalse(second.body == third.body)
     }
 
+    @Test
+    fun `subjects carry the escalating level label, not a bare number`() {
+        val subjects = (0..2).map { level ->
+            DunningTextBuilder.build(res, invoice(dunningLevel = level), "1 €", LocalDate.of(2026, 7, 3)).subject
+        }
+        // Default locale (EN): payment reminder -> first reminder -> final reminder.
+        assertTrue(subjects[0].startsWith("Payment reminder"))
+        assertTrue(subjects[1].startsWith("First reminder"))
+        assertTrue(subjects[2].startsWith("Final reminder"))
+        assertEquals(3, subjects.distinct().size)
+    }
+
     // ----- overdue predicate (OutgoingInvoice.isOverdue) --------------------------------------
 
     @Test

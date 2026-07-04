@@ -39,7 +39,11 @@ data class CompanyProfile(
     /** Next running number; incremented when a suggested number is actually used. */
     val nextNumber: Int = 1,
     /** Default payment term in days: new drafts suggest due date = issue date + this. 0 = off. */
-    val defaultPaymentDays: Int = 14
+    val defaultPaymentDays: Int = 14,
+    /** German §19 UStG small business: all invoices are VAT-exempt (category E, 0 %). */
+    val smallBusiness: Boolean = false,
+    /** Exemption note printed on the invoice and carried as BT-120; blank = localized default. */
+    val exemptionText: String = ""
 ) {
     /** Minimal set of fields a valid EN 16931 seller needs to be expressible. */
     fun isComplete(): Boolean =
@@ -72,6 +76,8 @@ data class CompanyProfile(
         put(KEY_NUMBER_PREFIX, numberPrefix)
         put(KEY_NEXT_NUMBER, nextNumber)
         put(KEY_PAYMENT_DAYS, defaultPaymentDays)
+        put(KEY_SMALL_BUSINESS, smallBusiness)
+        put(KEY_EXEMPTION_TEXT, exemptionText)
     }
 
     companion object {
@@ -96,6 +102,8 @@ data class CompanyProfile(
         private const val KEY_NUMBER_PREFIX = "numberPrefix"
         private const val KEY_NEXT_NUMBER = "nextNumber"
         private const val KEY_PAYMENT_DAYS = "defaultPaymentDays"
+        private const val KEY_SMALL_BUSINESS = "smallBusiness"
+        private const val KEY_EXEMPTION_TEXT = "exemptionText"
 
         fun fromJson(o: JSONObject): CompanyProfile = CompanyProfile(
             name = o.optString(KEY_NAME),
@@ -115,7 +123,9 @@ data class CompanyProfile(
             autoNumbering = o.optBoolean(KEY_AUTO_NUMBERING, true),
             numberPrefix = o.optString(KEY_NUMBER_PREFIX, "RE-"),
             nextNumber = o.optInt(KEY_NEXT_NUMBER, 1),
-            defaultPaymentDays = o.optInt(KEY_PAYMENT_DAYS, 14)
+            defaultPaymentDays = o.optInt(KEY_PAYMENT_DAYS, 14),
+            smallBusiness = o.optBoolean(KEY_SMALL_BUSINESS, false),
+            exemptionText = o.optString(KEY_EXEMPTION_TEXT)
         )
     }
 }

@@ -413,6 +413,32 @@
                 android:inputType="number" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- §19 UStG small business: all invoices become VAT-exempt (category E, 0 %) -->
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/switch_small_business"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="@string/creator_small_business" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/layout_exemption_text"
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/creator_exemption_text"
+            android:visibility="gone"
+            app:helperText="@string/creator_small_business_hint">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_exemption_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine|textCapSentences"
+                android:minLines="2" />
+        </com.google.android.material.textfield.TextInputLayout>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save"
             style="@style/Widget.Material3.Button"

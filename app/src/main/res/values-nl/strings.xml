@@ -60,8 +60,16 @@
     <string name="error_unknown_format">Onbekend factuurformaat</string>
     <string name="error_import_general">Importeren mislukt</string>
     <string name="import_batch_summary">%1$d van %2$d facturen geïmporteerd</string>
-    <string name="import_batch_duplicates">, %1$d duplicaten</string>
-    <string name="import_batch_errors">, %1$d fouten</string>
+    <plurals name="import_batch_duplicates">
+        <item quantity="one">, %1$d duplicaat</item>
+        <item quantity="other">, %1$d duplicaten</item>
+    </plurals>
+    <plurals name="import_batch_errors">
+        <item quantity="one">, %1$d fout</item>
+        <item quantity="other">, %1$d fouten</item>
+    </plurals>
+    <string name="error_xml_malformed">XML-bestand is niet correct opgebouwd</string>
+    <string name="error_file_read">Bestand kon niet worden gelezen</string>
     <string name="parse_error">Parseerfout: %1$s</string>
     <string name="subtitle_attribution">(by accountant with beard)</string>
 
@@ -343,14 +351,19 @@
     <string name="creator_option_mark_unpaid">Markeren als onbetaald</string>
     <string name="creator_option_send_dunning">Aanmaning versturen</string>
     <string name="creator_badge_overdue">Achterstallig</string>
-    <string name="creator_badge_dunning">%1$de aanmaning</string>
-    <string name="dunning_confirm_title">%1$de aanmaning versturen?</string>
+    <string name="creator_badge_dunning_1">Herinnering</string>
+    <string name="creator_badge_dunning_2">1e aanmaning</string>
+    <string name="creator_badge_dunning_3">Laatste aanmaning</string>
+    <string name="dunning_level_1">Betalingsherinnering</string>
+    <string name="dunning_level_2">Eerste aanmaning</string>
+    <string name="dunning_level_3">Laatste aanmaning</string>
+    <string name="dunning_confirm_title">%1$s versturen?</string>
     <string name="dunning_confirm_message">Er wordt een e-mail aan %1$s voorbereid met de factuur-PDF als bijlage. Nieuwe betalingstermijn: %2$s.</string>
     <string name="dunning_no_email_warning">Voor deze klant is geen e-mailadres opgeslagen — voer de ontvanger in je mail-app in.</string>
-    <string name="dunning_email_subject">%1$de aanmaning — Factuur %2$s</string>
+    <string name="dunning_email_subject">%1$s — Factuur %2$s</string>
     <string name="dunning_email_body_1">Beste %1$s,\n\nonze factuur %2$s van %3$s ten bedrage van %5$s was verschuldigd op %4$s. Dit is u wellicht ontgaan.\n\nGelieve het bedrag uiterlijk %6$s over te maken.\n\nIndien de betaling al is verricht, kunt u deze herinnering als niet verzonden beschouwen.\n\nMet vriendelijke groet\n%7$s</string>
     <string name="dunning_email_body_2">Beste %1$s,\n\nondanks onze eerdere herinnering is factuur %2$s van %3$s ten bedrage van %5$s (vervaldatum %4$s) nog niet voldaan.\n\nGelieve het openstaande bedrag uiterlijk %6$s te voldoen.\n\nIndien de betaling al is verricht, kunt u deze aanmaning als niet verzonden beschouwen.\n\nMet vriendelijke groet\n%7$s</string>
-    <string name="dunning_email_body_3">Beste %1$s,\n\nfactuur %2$s van %3$s ten bedrage van %5$s (vervaldatum %4$s) is ondanks twee aanmaningen nog steeds niet voldaan.\n\nWij verzoeken u voor de laatste maal het openstaande bedrag uiterlijk %6$s te voldoen. Anders behouden wij ons verdere stappen voor.\n\nIndien de betaling al is verricht, kunt u deze aanmaning als niet verzonden beschouwen.\n\nMet vriendelijke groet\n%7$s</string>
+    <string name="dunning_email_body_3">Beste %1$s,\n\nfactuur %2$s van %3$s ten bedrage van %5$s (vervaldatum %4$s) is ondanks onze betalingsherinnering en aanmaning nog steeds niet voldaan.\n\nWij verzoeken u voor de laatste maal het openstaande bedrag uiterlijk %6$s te voldoen. Anders behouden wij ons verdere stappen voor.\n\nIndien de betaling al is verricht, kunt u deze aanmaning als niet verzonden beschouwen.\n\nMet vriendelijke groet\n%7$s</string>
     <string name="dunning_no_mail_app">Geen e-mailapp gevonden.</string>
     <string name="notif_outgoing_overdue_title">Uitgaande factuur achterstallig</string>
     <string name="notif_outgoing_overdue_text">%1$s — factuur %2$s was verschuldigd op %3$s (%4$s)</string>
@@ -431,6 +444,25 @@
     <string name="creator_validate_due_before_issue">Vervaldatum ligt vóór de factuurdatum.</string>
     <string name="creator_validate_iban_missing">Geen IBAN in het bedrijfsprofiel — de klant heeft geen betaalrekening.</string>
     <string name="creator_validate_iban_invalid">De IBAN in het bedrijfsprofiel lijkt ongeldig.</string>
+    <string name="creator_validate_rc_buyer_vat">Verleggingsregeling vereist het btw-nummer van de klant.</string>
+    <string name="creator_validate_exemption_missing">Een reden voor btw-vrijstelling is vereist (bedrijfsprofiel → vrijstellingsvermelding).</string>
+    <string name="creator_validate_exempt_line_vat">Ingevoerde btw-tarieven worden op 0 % gezet (vrijgestelde factuur).</string>
+    <string name="creator_validate_allowance_reason">Elke korting/toeslag heeft een reden nodig.</string>
+    <string name="creator_validate_allowance_amount">Het bedrag van een korting/toeslag moet groter zijn dan 0.</string>
+    <string name="creator_small_business">Kleineondernemersregeling — zonder btw</string>
+    <string name="creator_small_business_hint">Deze vermelding wordt op elke factuur afgedrukt en als vrijstellingsreden in de e-factuur opgenomen.</string>
+    <string name="creator_small_business_banner">Kleineondernemersregeling: deze factuur wordt zonder btw opgesteld.</string>
+    <string name="creator_exemption_text">Vrijstellingsvermelding</string>
+    <string name="creator_exemption_default_19">Op grond van de kleineondernemersregeling wordt geen btw in rekening gebracht.</string>
+    <string name="creator_reverse_charge">Btw verlegd (verleggingsregeling)</string>
+    <string name="creator_reverse_charge_reason">Btw verlegd naar de afnemer (verleggingsregeling).</string>
+    <string name="creator_allowances_title">Kortingen &amp; toeslagen</string>
+    <string name="creator_add_allowance">+ Korting/Toeslag</string>
+    <string name="creator_allowance_discount">Korting</string>
+    <string name="creator_allowance_charge">Toeslag</string>
+    <string name="creator_allowance_reason">Reden</string>
+    <string name="creator_allowance_amount">Bedrag (netto)</string>
+    <string name="creator_tax_basis">Nettobedrag</string>
     <string name="creator_duplicate">Dupliceren als concept</string>
 
     <!-- Notitie + boekhoudcategorie -->

@@ -60,8 +60,16 @@
     <string name="error_unknown_format">Unbekanntes Rechnungsformat</string>
     <string name="error_import_general">Fehler beim Import</string>
     <string name="import_batch_summary">%1$d von %2$d Rechnungen importiert</string>
-    <string name="import_batch_duplicates">, %1$d Duplikate</string>
-    <string name="import_batch_errors">, %1$d Fehler</string>
+    <plurals name="import_batch_duplicates">
+        <item quantity="one">, %1$d Duplikat</item>
+        <item quantity="other">, %1$d Duplikate</item>
+    </plurals>
+    <plurals name="import_batch_errors">
+        <item quantity="one">, %1$d Fehler</item>
+        <item quantity="other">, %1$d Fehler</item>
+    </plurals>
+    <string name="error_xml_malformed">XML-Datei ist fehlerhaft aufgebaut</string>
+    <string name="error_file_read">Datei konnte nicht gelesen werden</string>
     <string name="parse_error">Fehler beim Parsen: %1$s</string>
     <string name="subtitle_attribution">(by accountant with beard)</string>
 
@@ -343,14 +351,19 @@
     <string name="creator_option_mark_unpaid">Als unbezahlt markieren</string>
     <string name="creator_option_send_dunning">Mahnung senden</string>
     <string name="creator_badge_overdue">Überfällig</string>
-    <string name="creator_badge_dunning">%1$d. Mahnung</string>
-    <string name="dunning_confirm_title">%1$d. Mahnung senden?</string>
+    <string name="creator_badge_dunning_1">Erinnerung</string>
+    <string name="creator_badge_dunning_2">1. Mahnung</string>
+    <string name="creator_badge_dunning_3">Letzte Mahnung</string>
+    <string name="dunning_level_1">Zahlungserinnerung</string>
+    <string name="dunning_level_2">1. Mahnung</string>
+    <string name="dunning_level_3">Letzte Mahnung</string>
+    <string name="dunning_confirm_title">%1$s senden?</string>
     <string name="dunning_confirm_message">Eine E-Mail an %1$s wird mit angehängter Rechnungs-PDF vorbereitet. Neue Zahlungsfrist: %2$s.</string>
     <string name="dunning_no_email_warning">Für diesen Kunden ist keine E-Mail-Adresse hinterlegt — Empfänger bitte in der Mail-App eintragen.</string>
-    <string name="dunning_email_subject">%1$d. Mahnung — Rechnung %2$s</string>
+    <string name="dunning_email_subject">%1$s — Rechnung %2$s</string>
     <string name="dunning_email_body_1">Guten Tag %1$s,\n\nunsere Rechnung %2$s vom %3$s über %5$s war am %4$s fällig. Sicher ist dies Ihrer Aufmerksamkeit entgangen.\n\nBitte überweisen Sie den Betrag bis zum %6$s.\n\nSollte die Zahlung bereits erfolgt sein, betrachten Sie diese Erinnerung bitte als gegenstandslos.\n\nMit freundlichen Grüßen\n%7$s</string>
     <string name="dunning_email_body_2">Guten Tag %1$s,\n\ntrotz unserer Zahlungserinnerung ist die Rechnung %2$s vom %3$s über %5$s (fällig am %4$s) weiterhin offen.\n\nBitte begleichen Sie den offenen Betrag spätestens bis zum %6$s.\n\nSollte die Zahlung bereits erfolgt sein, betrachten Sie diese Mahnung bitte als gegenstandslos.\n\nMit freundlichen Grüßen\n%7$s</string>
-    <string name="dunning_email_body_3">Guten Tag %1$s,\n\ndie Rechnung %2$s vom %3$s über %5$s (fällig am %4$s) ist trotz zweifacher Mahnung weiterhin offen.\n\nWir fordern Sie letztmalig auf, den offenen Betrag bis zum %6$s zu begleichen. Andernfalls behalten wir uns weitere Schritte vor.\n\nSollte die Zahlung bereits erfolgt sein, betrachten Sie diese Mahnung bitte als gegenstandslos.\n\nMit freundlichen Grüßen\n%7$s</string>
+    <string name="dunning_email_body_3">Guten Tag %1$s,\n\ndie Rechnung %2$s vom %3$s über %5$s (fällig am %4$s) ist trotz Zahlungserinnerung und Mahnung weiterhin offen.\n\nWir fordern Sie letztmalig auf, den offenen Betrag bis zum %6$s zu begleichen. Andernfalls behalten wir uns weitere Schritte vor.\n\nSollte die Zahlung bereits erfolgt sein, betrachten Sie diese Mahnung bitte als gegenstandslos.\n\nMit freundlichen Grüßen\n%7$s</string>
     <string name="dunning_no_mail_app">Keine E-Mail-App gefunden.</string>
     <string name="notif_outgoing_overdue_title">Ausgangsrechnung überfällig</string>
     <string name="notif_outgoing_overdue_text">%1$s — Rechnung %2$s war fällig am %3$s (%4$s)</string>
@@ -431,6 +444,25 @@
     <string name="creator_validate_due_before_issue">Fälligkeitsdatum liegt vor dem Rechnungsdatum.</string>
     <string name="creator_validate_iban_missing">Keine IBAN im Firmenprofil — der Kunde hat kein Zahlungskonto.</string>
     <string name="creator_validate_iban_invalid">Die IBAN im Firmenprofil sieht ungültig aus.</string>
+    <string name="creator_validate_rc_buyer_vat">Reverse Charge erfordert die USt-IdNr. des Kunden.</string>
+    <string name="creator_validate_exemption_missing">Ein Steuerbefreiungsgrund ist erforderlich (Firmenprofil → Befreiungshinweis).</string>
+    <string name="creator_validate_exempt_line_vat">Eingegebene USt-Sätze werden auf 0 % gesetzt (steuerbefreite Rechnung).</string>
+    <string name="creator_validate_allowance_reason">Jeder Rabatt/Zuschlag braucht einen Grund.</string>
+    <string name="creator_validate_allowance_amount">Der Betrag eines Rabatts/Zuschlags sollte größer als 0 sein.</string>
+    <string name="creator_small_business">Kleinunternehmer (§ 19 UStG) — ohne USt</string>
+    <string name="creator_small_business_hint">Dieser Hinweis wird auf jede Rechnung gedruckt und als Befreiungsgrund in die E-Rechnung eingebettet.</string>
+    <string name="creator_small_business_banner">Kleinunternehmerregelung (§ 19 UStG): Diese Rechnung wird ohne Umsatzsteuer erstellt.</string>
+    <string name="creator_exemption_text">Befreiungshinweis</string>
+    <string name="creator_exemption_default_19">Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.</string>
+    <string name="creator_reverse_charge">Reverse Charge (Steuerschuldnerschaft des Leistungsempfängers)</string>
+    <string name="creator_reverse_charge_reason">Steuerschuldnerschaft des Leistungsempfängers (Reverse Charge).</string>
+    <string name="creator_allowances_title">Rabatte &amp; Zuschläge</string>
+    <string name="creator_add_allowance">+ Rabatt/Zuschlag</string>
+    <string name="creator_allowance_discount">Rabatt</string>
+    <string name="creator_allowance_charge">Zuschlag</string>
+    <string name="creator_allowance_reason">Grund</string>
+    <string name="creator_allowance_amount">Betrag (netto)</string>
+    <string name="creator_tax_basis">Nettobetrag</string>
     <string name="creator_duplicate">Als Entwurf duplizieren</string>
 
     <!-- Beleg-Notiz + Kategorie -->

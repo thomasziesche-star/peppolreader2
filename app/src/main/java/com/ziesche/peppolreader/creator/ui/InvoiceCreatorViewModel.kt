@@ -3,13 +3,14 @@ package com.ziesche.peppolreader.creator.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.map
 import com.ziesche.peppolreader.R
 import com.ziesche.peppolreader.creator.data.CompanyProfileStore
 import com.ziesche.peppolreader.creator.data.OutgoingInvoiceRepository
 import com.ziesche.peppolreader.creator.data.PdfExporter
 import com.ziesche.peppolreader.creator.model.CompanyProfile
+import com.ziesche.peppolreader.creator.model.CreatorAllowanceCharge
 import com.ziesche.peppolreader.creator.model.CreatorArticle
 import com.ziesche.peppolreader.creator.model.CreatorCustomer
 import com.ziesche.peppolreader.creator.model.CreatorLine
@@ -48,7 +49,24 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
     private val _lines = MutableLiveData<List<CreatorLine>>(emptyList())
     val lines: LiveData<List<CreatorLine>> = _lines
 
-    val totals: LiveData<CreatorTotals> = _lines.map { InvoiceTotalsCalculator.calculate(it) }
+    private val _allowances = MutableLiveData<List<CreatorAllowanceCharge>>(emptyList())
+    val allowances: LiveData<List<CreatorAllowanceCharge>> = _allowances
+
+    private val _taxMode = MutableLiveData(OutgoingInvoice.TAX_MODE_STANDARD)
+
+    /** Live totals over lines + document-level allowances/charges + the tax mode. */
+    val totals: LiveData<CreatorTotals> = MediatorLiveData<CreatorTotals>().apply {
+        fun recompute() {
+            value = InvoiceTotalsCalculator.calculate(
+                _lines.value ?: emptyList(),
+                _allowances.value ?: emptyList(),
+                _taxMode.value ?: OutgoingInvoice.TAX_MODE_STANDARD
+            )
+        }
+        addSource(_lines) { recompute() }
+        addSource(_allowances) { recompute() }
+        addSource(_taxMode) { recompute() }
+    }
 
     fun profile(): CompanyProfile = profileStore.load()
 
@@ -65,6 +83,13 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
     // ----- line editing -------------------------------------------------------------------
 
     fun setLines(lines: List<CreatorLine>) { _lines.value = lines }
+
+    fun setAllowances(entries: List<CreatorAllowanceCharge>) { _allowances.value = entries }
+
+    /** One of the [OutgoingInvoice] TAX_MODE_* constants; drives the live totals. */
+    fun setTaxMode(mode: String) {
+        if (_taxMode.value != mode) _taxMode.value = mode
+    }
 
     fun addLine() {
         _lines.value = (_lines.value ?: emptyList()) + CreatorLine()
@@ -94,6 +119,8 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
         editingId = draft.id
         loadedStatus = draft.status
         _lines.value = draft.lines
+        _allowances.value = draft.allowances
+        _taxMode.value = draft.taxMode
         return draft
     }
 
@@ -102,6 +129,7 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
         val toSave = invoice.copy(
             id = editingId ?: 0,
             lineItemsJson = CreatorLine.listToJson(_lines.value ?: emptyList()),
+            allowancesJson = CreatorAllowanceCharge.listToJson(_allowances.value ?: emptyList()),
             updatedAt = System.currentTimeMillis()
         )
         val id = if (editingId != null) {
@@ -138,7 +166,8 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
         runCatching {
             val app = getApplication<Application>()
             val withLines = draft.copy(
-                lineItemsJson = CreatorLine.listToJson(_lines.value ?: emptyList())
+                lineItemsJson = CreatorLine.listToJson(_lines.value ?: emptyList()),
+                allowancesJson = CreatorAllowanceCharge.listToJson(_allowances.value ?: emptyList())
             )
             val xml = ZugferdXmlBuilder(withLines).build()
             val profile = profileStore.load()

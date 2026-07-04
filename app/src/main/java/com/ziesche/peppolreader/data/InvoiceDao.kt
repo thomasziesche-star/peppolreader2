@@ -22,7 +22,12 @@ interface InvoiceDao {
     @Query("SELECT * FROM invoices WHERE invoiceId = :invoiceId LIMIT 1")
     suspend fun getInvoiceByInvoiceId(invoiceId: String): Invoice?
 
-    @Query("SELECT * FROM invoices WHERE invoiceId = :invoiceId AND supplierName = :supplierName LIMIT 1")
+    // TRIM + NOCASE: the same invoice re-exported from another mail client often differs only
+    // in stray whitespace or letter case — treat those as duplicates, not new documents.
+    @Query(
+        "SELECT * FROM invoices WHERE TRIM(invoiceId) = TRIM(:invoiceId) COLLATE NOCASE " +
+            "AND TRIM(supplierName) = TRIM(:supplierName) COLLATE NOCASE LIMIT 1"
+    )
     suspend fun getInvoiceByNumberAndSupplier(invoiceId: String, supplierName: String): Invoice?
     
     @Insert(onConflict = OnConflictStrategy.REPLACE)

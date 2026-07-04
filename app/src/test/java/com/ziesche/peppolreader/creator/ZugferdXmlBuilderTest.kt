@@ -103,4 +103,130 @@ class ZugferdXmlBuilderTest {
         assertEquals(1, totals.vatBreakdown.size)
         assertTrue(totals.vatBreakdown.first().rate == 19.0)
     }
+
+    // ----- tax modes (§19 exemption / reverse charge) -------------------------------------------
+
+    @Test
+    fun smallBusinessRoundTrip() {
+        val draft = sampleDraft().copy(
+            taxMode = OutgoingInvoice.TAX_MODE_EXEMPT,
+            exemptionReason = "Gemäß § 19 UStG wird keine Umsatzsteuer berechnet."
+        )
+        val xml = ZugferdXmlBuilder(draft).build()
+
+        assertTrue(xml.contains("<ram:CategoryCode>E</ram:CategoryCode>"))
+        assertTrue(xml.contains("<ram:ExemptionReason>Gemäß § 19 UStG wird keine Umsatzsteuer berechnet.</ram:ExemptionReason>"))
+        // CII sequence inside BG-23: ExemptionReason before BasisAmount, CategoryCode before Rate.
+        assertTrue(xml.indexOf("<ram:ExemptionReason>") < xml.indexOf("<ram:BasisAmount>"))
+        assertTrue(xml.indexOf("<ram:CategoryCode>E<") < xml.indexOf("<ram:RateApplicablePercent>", xml.indexOf("ApplicableHeaderTradeSettlement")))
+        // No positive rate anywhere despite the 19/7 % entered on the lines.
+        assertTrue(!xml.contains("<ram:RateApplicablePercent>19.00</ram:RateApplicablePercent>"))
+
+        val parsed = CiiParser(xml, RuntimeEnvironment.getApplication()).parse()
+        assertEquals(1050.0, parsed.totals.lineExtension, 0.001)
+        assertEquals(0.0, parsed.totals.taxAmount, 0.001)
+        assertEquals(1050.0, parsed.totals.grossAmount, 0.001)
+    }
+
+    @Test
+    fun reverseChargeEmitsAeAndVatex() {
+        val draft = sampleDraft().copy(
+            taxMode = OutgoingInvoice.TAX_MODE_REVERSE_CHARGE,
+            exemptionReason = "Steuerschuldnerschaft des Leistungsempfängers (Reverse Charge)."
+        )
+        val xml = ZugferdXmlBuilder(draft).build()
+
+        assertTrue(xml.contains("<ram:CategoryCode>AE</ram:CategoryCode>"))
+        assertTrue(xml.contains("<ram:ExemptionReasonCode>VATEX-EU-AE</ram:ExemptionReasonCode>"))
+        // BT-121 sits between CategoryCode and RateApplicablePercent.
+        val cat = xml.indexOf("<ram:CategoryCode>AE<", xml.indexOf("ApplicableHeaderTradeSettlement"))
+        val code = xml.indexOf("<ram:ExemptionReasonCode>")
+        val rate = xml.indexOf("<ram:RateApplicablePercent>", cat)
+        assertTrue(cat in 1 until code)
+        assertTrue(code < rate)
+
+        val parsed = CiiParser(xml, RuntimeEnvironment.getApplication()).parse()
+        assertEquals(0.0, parsed.totals.taxAmount, 0.001)
+    }
+
+    // ----- document-level allowances/charges (BG-20/21) -----------------------------------------
+
+    @Test
+    fun documentAllowanceChargeRoundTrip() {
+        val draft = sampleDraft().copy(
+            allowancesJson = com.ziesche.peppolreader.creator.model.CreatorAllowanceCharge.listToJson(
+                listOf(
+                    com.ziesche.peppolreader.creator.model.CreatorAllowanceCharge(
+                        isCharge = false, reason = "Treuerabatt", amount = 50.0, vatRate = 19.0
+                    ),
+                    com.ziesche.peppolreader.creator.model.CreatorAllowanceCharge(
+                        isCharge = true, reason = "Versandkosten", amount = 20.0, vatRate = 19.0
+                    )
+                )
+            )
+        )
+        val xml = ZugferdXmlBuilder(draft).build()
+
+        // Position: after the last ApplicableTradeTax, before SpecifiedTradePaymentTerms.
+        val lastTax = xml.lastIndexOf("<ram:ApplicableTradeTax>")
+        val allowance = xml.indexOf("<ram:SpecifiedTradeAllowanceCharge>")
+        val terms = xml.indexOf("<ram:SpecifiedTradePaymentTerms>")
+        assertTrue(lastTax in 1 until allowance)
+        assertTrue(allowance < terms)
+        // BG-22: ChargeTotalAmount before AllowanceTotalAmount (CII order, reverse of UBL).
+        assertTrue(xml.indexOf("<ram:ChargeTotalAmount>") in 1 until xml.indexOf("<ram:AllowanceTotalAmount>"))
+        assertTrue(xml.contains("<ram:ChargeTotalAmount>20.00</ram:ChargeTotalAmount>"))
+        assertTrue(xml.contains("<ram:AllowanceTotalAmount>50.00</ram:AllowanceTotalAmount>"))
+
+        val parsed = CiiParser(xml, RuntimeEnvironment.getApplication()).parse()
+        // 1050 lines − 50 + 20 = 1020 basis; VAT: 19% group 1000−50+20=970 → 184.30, 7% on 50 → 3.50
+        assertEquals(1050.0, parsed.totals.lineExtension, 0.001)
+        assertEquals(1020.0, parsed.totals.netAmount, 0.001)
+        assertEquals(187.80, parsed.totals.taxAmount, 0.001)
+        assertEquals(1207.80, parsed.totals.grossAmount, 0.001)
+        assertEquals(2, parsed.allowanceCharges.size)
+        val discount = parsed.allowanceCharges.first { !it.isCharge }
+        assertEquals(50.0, discount.amount, 0.001)
+        assertEquals("Treuerabatt", discount.reason)
+    }
+
+    @Test
+    fun calculatorAppliesAllowancesPerRateGroup() {
+        val lines = listOf(
+            CreatorLine("A", quantity = 1.0, unitPrice = 1000.0, vatRate = 19.0),
+            CreatorLine("B", quantity = 1.0, unitPrice = 50.0, vatRate = 7.0)
+        )
+        val totals = InvoiceTotalsCalculator.calculate(
+            lines,
+            listOf(
+                com.ziesche.peppolreader.creator.model.CreatorAllowanceCharge(
+                    isCharge = false, reason = "Rabatt", amount = 100.0, vatRate = 19.0
+                )
+            )
+        )
+        // The discount only reduces the 19% group: basis 900 → tax 171; 7% group stays 50 → 3.50.
+        assertEquals(1050.0, totals.lineTotal, 0.001)
+        assertEquals(950.0, totals.taxBasisTotal, 0.001)
+        assertEquals(174.50, totals.taxTotal, 0.001)
+        assertEquals(1124.50, totals.grandTotal, 0.001)
+        assertEquals(100.0, totals.allowanceTotal, 0.001)
+        assertEquals(0.0, totals.chargeTotal, 0.001)
+        val g19 = totals.vatBreakdown.first { it.rate == 19.0 }
+        assertEquals(900.0, g19.basis, 0.001)
+        // BR-CO-13 identity.
+        assertEquals(totals.lineTotal - totals.allowanceTotal + totals.chargeTotal, totals.taxBasisTotal, 0.001)
+    }
+
+    @Test
+    fun calculatorForcesZeroRatesWhenExempt() {
+        val totals = InvoiceTotalsCalculator.calculate(
+            listOf(CreatorLine("A", quantity = 1.0, unitPrice = 100.0, vatRate = 19.0)),
+            emptyList(),
+            OutgoingInvoice.TAX_MODE_EXEMPT
+        )
+        assertEquals(0.0, totals.taxTotal, 0.001)
+        assertEquals(100.0, totals.grandTotal, 0.001)
+        assertEquals(1, totals.vatBreakdown.size)
+        assertEquals(0.0, totals.vatBreakdown.first().rate, 0.001)
+    }
 }

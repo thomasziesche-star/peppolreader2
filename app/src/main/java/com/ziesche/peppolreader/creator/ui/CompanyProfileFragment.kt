@@ -100,6 +100,13 @@ class CompanyProfileFragment : Fragment() {
             binding.containerNumbering.visibility = if (checked) View.VISIBLE else View.GONE
         }
 
+        binding.switchSmallBusiness.setOnCheckedChangeListener { _, checked ->
+            binding.layoutExemptionText.visibility = if (checked) View.VISIBLE else View.GONE
+            if (checked && binding.inputExemptionText.text.isNullOrBlank()) {
+                binding.inputExemptionText.setText(R.string.creator_exemption_default_19)
+            }
+        }
+
         binding.btnSave.setOnClickListener {
             store.save(collect())
             Snackbar.make(binding.root, R.string.creator_saved, Snackbar.LENGTH_SHORT).show()
@@ -134,6 +141,12 @@ class CompanyProfileFragment : Fragment() {
         inputNumberPrefix.setText(p.numberPrefix)
         inputNumberNext.setText(p.nextNumber.toString())
         inputPaymentDays.setText(if (p.defaultPaymentDays > 0) p.defaultPaymentDays.toString() else "")
+
+        switchSmallBusiness.isChecked = p.smallBusiness
+        layoutExemptionText.visibility = if (p.smallBusiness) View.VISIBLE else View.GONE
+        inputExemptionText.setText(
+            p.exemptionText.ifBlank { if (p.smallBusiness) getString(R.string.creator_exemption_default_19) else "" }
+        )
     }
 
     private fun renderLogo() = with(binding) {
@@ -183,7 +196,9 @@ class CompanyProfileFragment : Fragment() {
             autoNumbering = switchAutoNumber.isChecked,
             numberPrefix = inputNumberPrefix.text.str(),
             nextNumber = inputNumberNext.text.str().toIntOrNull()?.coerceAtLeast(1) ?: 1,
-            defaultPaymentDays = inputPaymentDays.text.str().toIntOrNull()?.coerceAtLeast(0) ?: 0
+            defaultPaymentDays = inputPaymentDays.text.str().toIntOrNull()?.coerceAtLeast(0) ?: 0,
+            smallBusiness = switchSmallBusiness.isChecked,
+            exemptionText = inputExemptionText.text.str()
         )
     }
 

@@ -60,8 +60,20 @@
     <string name="error_unknown_format">Nieznany format faktury</string>
     <string name="error_import_general">Błąd importu</string>
     <string name="import_batch_summary">Zaimportowano %1$d z %2$d faktur</string>
-    <string name="import_batch_duplicates">, %1$d duplikatów</string>
-    <string name="import_batch_errors">, %1$d błędów</string>
+    <plurals name="import_batch_duplicates">
+        <item quantity="one">, %1$d duplikat</item>
+        <item quantity="few">, %1$d duplikaty</item>
+        <item quantity="many">, %1$d duplikatów</item>
+        <item quantity="other">, %1$d duplikatu</item>
+    </plurals>
+    <plurals name="import_batch_errors">
+        <item quantity="one">, %1$d błąd</item>
+        <item quantity="few">, %1$d błędy</item>
+        <item quantity="many">, %1$d błędów</item>
+        <item quantity="other">, %1$d błędu</item>
+    </plurals>
+    <string name="error_xml_malformed">Plik XML jest nieprawidłowo zbudowany</string>
+    <string name="error_file_read">Nie udało się odczytać pliku</string>
     <string name="parse_error">Błąd parsowania: %1$s</string>
     <string name="subtitle_attribution">(by accountant with beard)</string>
 
@@ -347,14 +359,19 @@
     <string name="creator_option_mark_unpaid">Oznacz jako nieopłaconą</string>
     <string name="creator_option_send_dunning">Wyślij wezwanie do zapłaty</string>
     <string name="creator_badge_overdue">Po terminie</string>
-    <string name="creator_badge_dunning">%1$d. wezwanie</string>
-    <string name="dunning_confirm_title">Wysłać %1$d. wezwanie do zapłaty?</string>
+    <string name="creator_badge_dunning_1">Przypomnienie</string>
+    <string name="creator_badge_dunning_2">1. wezwanie</string>
+    <string name="creator_badge_dunning_3">Ostatnie wezwanie</string>
+    <string name="dunning_level_1">Przypomnienie o płatności</string>
+    <string name="dunning_level_2">Pierwsze wezwanie do zapłaty</string>
+    <string name="dunning_level_3">Ostateczne wezwanie do zapłaty</string>
+    <string name="dunning_confirm_title">Wysłać: %1$s?</string>
     <string name="dunning_confirm_message">Zostanie przygotowany e-mail do %1$s z fakturą PDF w załączniku. Nowy termin płatności: %2$s.</string>
     <string name="dunning_no_email_warning">Brak adresu e-mail dla tego klienta — wpisz odbiorcę w aplikacji pocztowej.</string>
-    <string name="dunning_email_subject">%1$d. wezwanie do zapłaty — Faktura %2$s</string>
+    <string name="dunning_email_subject">%1$s — Faktura %2$s</string>
     <string name="dunning_email_body_1">Szanowni Państwo (%1$s),\n\nnasza faktura %2$s z dnia %3$s na kwotę %5$s była płatna do %4$s. Zapewne umknęło to Państwa uwadze.\n\nProsimy o przelanie kwoty do %6$s.\n\nJeżeli płatność została już dokonana, prosimy uznać to przypomnienie za bezprzedmiotowe.\n\nZ poważaniem\n%7$s</string>
     <string name="dunning_email_body_2">Szanowni Państwo (%1$s),\n\npomimo wcześniejszego przypomnienia faktura %2$s z dnia %3$s na kwotę %5$s (termin %4$s) pozostaje nieopłacona.\n\nProsimy o uregulowanie zaległej kwoty najpóźniej do %6$s.\n\nJeżeli płatność została już dokonana, prosimy uznać to wezwanie za bezprzedmiotowe.\n\nZ poważaniem\n%7$s</string>
-    <string name="dunning_email_body_3">Szanowni Państwo (%1$s),\n\nfaktura %2$s z dnia %3$s na kwotę %5$s (termin %4$s) pozostaje nieopłacona pomimo dwóch wezwań.\n\nPo raz ostatni wzywamy do uregulowania zaległej kwoty do %6$s. W przeciwnym razie zastrzegamy sobie prawo do podjęcia dalszych kroków.\n\nJeżeli płatność została już dokonana, prosimy uznać to wezwanie za bezprzedmiotowe.\n\nZ poważaniem\n%7$s</string>
+    <string name="dunning_email_body_3">Szanowni Państwo (%1$s),\n\nfaktura %2$s z dnia %3$s na kwotę %5$s (termin %4$s) pozostaje nieopłacona pomimo przypomnienia i wezwania do zapłaty.\n\nPo raz ostatni wzywamy do uregulowania zaległej kwoty do %6$s. W przeciwnym razie zastrzegamy sobie prawo do podjęcia dalszych kroków.\n\nJeżeli płatność została już dokonana, prosimy uznać to wezwanie za bezprzedmiotowe.\n\nZ poważaniem\n%7$s</string>
     <string name="dunning_no_mail_app">Nie znaleziono aplikacji pocztowej.</string>
     <string name="notif_outgoing_overdue_title">Faktura wystawiona po terminie</string>
     <string name="notif_outgoing_overdue_text">%1$s — faktura %2$s była płatna do %3$s (%4$s)</string>
@@ -435,6 +452,25 @@
     <string name="creator_validate_due_before_issue">Termin płatności jest przed datą faktury.</string>
     <string name="creator_validate_iban_missing">Brak IBAN w profilu firmy — klient nie ma konta do zapłaty.</string>
     <string name="creator_validate_iban_invalid">IBAN w profilu firmy wygląda na nieprawidłowy.</string>
+    <string name="creator_validate_rc_buyer_vat">Odwrotne obciążenie wymaga numeru VAT nabywcy.</string>
+    <string name="creator_validate_exemption_missing">Wymagany jest powód zwolnienia z VAT (profil firmy → adnotacja o zwolnieniu).</string>
+    <string name="creator_validate_exempt_line_vat">Wprowadzone stawki VAT zostaną ustawione na 0 % (faktura zwolniona).</string>
+    <string name="creator_validate_allowance_reason">Każdy rabat/narzut wymaga podania powodu.</string>
+    <string name="creator_validate_allowance_amount">Kwota rabatu/narzutu powinna być większa od 0.</string>
+    <string name="creator_small_business">Zwolnienie podmiotowe z VAT — bez VAT</string>
+    <string name="creator_small_business_hint">Ta adnotacja jest drukowana na każdej fakturze i osadzana w e-fakturze jako powód zwolnienia.</string>
+    <string name="creator_small_business_banner">Zwolnienie podmiotowe z VAT: ta faktura jest wystawiana bez VAT.</string>
+    <string name="creator_exemption_text">Adnotacja o zwolnieniu</string>
+    <string name="creator_exemption_default_19">Zwolnienie z VAT na podstawie art. 113 ustawy o VAT.</string>
+    <string name="creator_reverse_charge">Odwrotne obciążenie (VAT rozlicza nabywca)</string>
+    <string name="creator_reverse_charge_reason">Odwrotne obciążenie: VAT rozlicza nabywca.</string>
+    <string name="creator_allowances_title">Rabaty i narzuty</string>
+    <string name="creator_add_allowance">+ Rabat/Narzut</string>
+    <string name="creator_allowance_discount">Rabat</string>
+    <string name="creator_allowance_charge">Narzut</string>
+    <string name="creator_allowance_reason">Powód</string>
+    <string name="creator_allowance_amount">Kwota (netto)</string>
+    <string name="creator_tax_basis">Kwota netto</string>
     <string name="creator_duplicate">Powiel jako wersję roboczą</string>
 
     <!-- Notatka + kategoria księgowa -->

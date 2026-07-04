@@ -162,6 +162,12 @@ class MigrationChainTest {
             val dunned = db.outgoingInvoiceDao().getById(outId)!!
             assertEquals(3, dunned.dunningLevel)
             assertEquals(456L, dunned.lastDunningAt)
+
+            // 9. Tax-mode columns added in v14 default to STANDARD / null / empty list.
+            assertEquals(OutgoingInvoice.TAX_MODE_STANDARD, dunned.taxMode)
+            assertNull(dunned.exemptionReason)
+            assertEquals("[]", dunned.allowancesJson)
+            assertEquals(0, dunned.allowances.size)
         }
         db.close()
     }

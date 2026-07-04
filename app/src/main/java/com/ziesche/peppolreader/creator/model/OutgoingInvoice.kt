@@ -47,6 +47,14 @@ data class OutgoingInvoice(
     val lineItemsJson: String = "[]",
     val paymentTermsNote: String? = null,
 
+    // Tax handling (document-wide): STANDARD | EXEMPT (§19 small business) | REVERSE_CHARGE.
+    // exemptionReason is a snapshot like the seller fields — profile edits never rewrite drafts.
+    val taxMode: String = TAX_MODE_STANDARD,
+    val exemptionReason: String? = null,
+
+    // Document-level allowances/charges (BG-20/21), JSON like lineItemsJson.
+    val allowancesJson: String = "[]",
+
     // Lifecycle
     val status: String = STATUS_DRAFT,     // DRAFT | GENERATED
     val generatedXml: String? = null,
@@ -54,7 +62,7 @@ data class OutgoingInvoice(
 
     // Payment / dunning lifecycle (only meaningful once status == GENERATED)
     val paidAt: Long? = null,               // ms epoch, null = unpaid
-    val dunningLevel: Int = 0,              // 0 = none, 1..3 = "1./2./3. Mahnung" sent
+    val dunningLevel: Int = 0,              // 0 = none, 1 = payment reminder, 2/3 = first/final dunning sent
     val lastDunningAt: Long? = null,        // ms epoch of the last dunning email launch
     val lastOverdueNotifiedAt: Long? = null, // anti-spam stamp for the overdue notification
 
@@ -62,6 +70,9 @@ data class OutgoingInvoice(
     val updatedAt: Long = System.currentTimeMillis()
 ) {
     val lines: List<CreatorLine> get() = CreatorLine.listFromJson(lineItemsJson)
+
+    val allowances: List<CreatorAllowanceCharge>
+        get() = CreatorAllowanceCharge.listFromJson(allowancesJson)
 
     /** Overdue = generated, unpaid, due date strictly before [todayIso] (lexical ISO compare). */
     fun isOverdue(todayIso: String): Boolean =
@@ -71,5 +82,12 @@ data class OutgoingInvoice(
     companion object {
         const val STATUS_DRAFT = "DRAFT"
         const val STATUS_GENERATED = "GENERATED"
+
+        /** Regular VAT (categories S/Z derived from the per-line rate). */
+        const val TAX_MODE_STANDARD = "STANDARD"
+        /** Tax-exempt seller, e.g. German §19 UStG small business (category E). */
+        const val TAX_MODE_EXEMPT = "EXEMPT"
+        /** Reverse charge — buyer owes the VAT (category AE). */
+        const val TAX_MODE_REVERSE_CHARGE = "REVERSE_CHARGE"
     }
 }
