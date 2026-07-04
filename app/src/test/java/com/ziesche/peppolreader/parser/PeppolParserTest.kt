@@ -11,6 +11,25 @@ import org.robolectric.annotation.Config
 @Config(sdk = [33])
 class PeppolParserTest {
 
+    /**
+     * Pins the exception type for broken XML: ImportError.from() relies on
+     * XmlPullParserException to categorize the failure as XML_MALFORMED.
+     */
+    @Test
+    fun malformedXmlThrowsXmlPullParserException() {
+        val truncated = """
+            <?xml version="1.0" encoding="UTF-8"?>
+            <Invoice xmlns="urn:oasis:names:specification:ubl:schema:xsd:Invoice-2">
+              <ID>14413574
+        """.trimIndent()
+        try {
+            PeppolParser(truncated, RuntimeEnvironment.getApplication()).parse()
+            fail("expected XmlPullParserException")
+        } catch (expected: org.xmlpull.v1.XmlPullParserException) {
+            // categorized as ImportError.XML_MALFORMED
+        }
+    }
+
     @Test
     fun parseAokInvoiceStructure() {
         val xml = """

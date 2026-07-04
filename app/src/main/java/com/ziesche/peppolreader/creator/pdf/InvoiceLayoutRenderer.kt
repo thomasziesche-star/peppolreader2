@@ -32,7 +32,7 @@ class InvoiceLayoutRenderer(
 ) {
 
     private val lines: List<CreatorLine> = invoice.lines.filter { it.description.isNotBlank() }
-    private val totals = InvoiceTotalsCalculator.calculate(lines)
+    private val totals = InvoiceTotalsCalculator.calculate(lines, invoice.allowances, invoice.taxMode)
     private val currency = invoice.currency.ifBlank { "EUR" }
     private val isCreditNote = invoice.documentTypeCode == "381"
 
@@ -178,17 +178,36 @@ class InvoiceLayoutRenderer(
     // ----- totals + payment --------------------------------------------------------------------
 
     private fun drawTotals() {
-        val rows = 1 + totals.vatBreakdown.size
-        ensureSpace(rows * 15f + 55f)
+        val allowanceEntries = invoice.allowances.filter { it.amount != 0.0 }
+        val exempt = invoice.taxMode != OutgoingInvoice.TAX_MODE_STANDARD
+        val hasDocLevel = allowanceEntries.isNotEmpty()
+        val vatRows = if (exempt) 0 else totals.vatBreakdown.size
+        val rows = 1 + allowanceEntries.size + (if (hasDocLevel) 1 else 0) + vatRows
+        ensureSpace(rows * 15f + 55f + (if (exempt) 16f else 0f))
         y -= 4f
 
         textRight(regular, 10f, TOTALS_LABEL_X, y, "Zwischensumme (netto)", MUTED)
         textRight(regular, 10f, COL_TOTAL, y, money(totals.lineTotal) + " " + currencySymbol())
         y -= 15f
-        for (e in totals.vatBreakdown) {
-            textRight(regular, 10f, TOTALS_LABEL_X, y, "zzgl. ${trimNum(e.rate)} % USt.", MUTED)
-            textRight(regular, 10f, COL_TOTAL, y, money(e.tax) + " " + currencySymbol(), MUTED)
+        // Document-level discounts/surcharges between subtotal and VAT.
+        for (entry in allowanceEntries) {
+            val label = (if (entry.isCharge) "zzgl. " else "abzgl. ") + entry.reason.ifBlank { if (entry.isCharge) "Zuschlag" else "Rabatt" }
+            val sign = if (entry.isCharge) "" else "−"
+            textRight(regular, 10f, TOTALS_LABEL_X, y, label, MUTED)
+            textRight(regular, 10f, COL_TOTAL, y, sign + money(entry.amount) + " " + currencySymbol(), MUTED)
             y -= 15f
+        }
+        if (hasDocLevel) {
+            textRight(regular, 10f, TOTALS_LABEL_X, y, "Nettobetrag", MUTED)
+            textRight(regular, 10f, COL_TOTAL, y, money(totals.taxBasisTotal) + " " + currencySymbol())
+            y -= 15f
+        }
+        if (!exempt) {
+            for (e in totals.vatBreakdown) {
+                textRight(regular, 10f, TOTALS_LABEL_X, y, "zzgl. ${trimNum(e.rate)} % USt.", MUTED)
+                textRight(regular, 10f, COL_TOTAL, y, money(e.tax) + " " + currencySymbol(), MUTED)
+                y -= 15f
+            }
         }
 
         // Grand total in a light gray panel, set in terracotta serif. The panel top must clear
@@ -197,6 +216,19 @@ class InvoiceLayoutRenderer(
         textRight(serif, 14f, TOTALS_LABEL_X, y - 10f, "Gesamtbetrag", ACCENT)
         textRight(serif, 14f, COL_TOTAL - 10f, y - 10f, money(totals.grandTotal) + " " + currencySymbol(), ACCENT)
         y -= 47f
+
+        // §14 UStG requires the exemption note on the human-readable invoice as well.
+        if (exempt) {
+            invoice.exemptionReason?.takeIf { it.isNotBlank() }?.let { reason ->
+                val wrapped = wrap(reason, regular, 9f, MARGIN_R - MARGIN_L)
+                ensureSpace(wrapped.size * 12f + 4f)
+                for (row in wrapped) {
+                    text(regular, 9f, MARGIN_L, y, row, MUTED)
+                    y -= 12f
+                }
+                y -= 4f
+            }
+        }
     }
 
     private fun drawPaymentBlock() {

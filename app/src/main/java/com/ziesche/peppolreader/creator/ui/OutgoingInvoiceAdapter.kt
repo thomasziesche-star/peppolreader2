@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.color.MaterialColors
 import com.ziesche.peppolreader.R
+import com.ziesche.peppolreader.creator.dunning.DunningTextBuilder
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 import com.ziesche.peppolreader.databinding.ItemOutgoingInvoiceBinding
 import java.time.LocalDate
@@ -68,7 +69,7 @@ class OutgoingInvoiceAdapter(
             if (overdue && item.dunningLevel > 0) View.VISIBLE else View.GONE
         if (overdue && item.dunningLevel > 0) {
             holder.binding.chipDunning.text =
-                ctx.getString(R.string.creator_badge_dunning, item.dunningLevel)
+                ctx.getString(DunningTextBuilder.badgeLabelRes(item.dunningLevel))
         }
         val onErrorContainer = MaterialColors.getColor(
             holder.binding.chipOverdue, com.google.android.material.R.attr.colorOnErrorContainer

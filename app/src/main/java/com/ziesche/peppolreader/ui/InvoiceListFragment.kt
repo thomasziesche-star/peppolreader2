@@ -51,6 +51,7 @@ class InvoiceListFragment : Fragment() {
     ) { uris ->
         if (uris.isNullOrEmpty()) return@registerForActivityResult
         val filesToImport = mutableListOf<InvoiceViewModel.ImportItem>()
+        val pickErrors = mutableListOf<ImportError>()
         var skipped = 0
         try {
             uris.forEach { uri ->
@@ -58,10 +59,13 @@ class InvoiceListFragment : Fragment() {
                     skipped++
                     return@forEach
                 }
-                processUri(uri)?.let { filesToImport.add(it) }
+                when (val picked = processUri(uri)) {
+                    is PickResult.Ok -> filesToImport.add(picked.item)
+                    is PickResult.Failed -> pickErrors.add(picked.error)
+                }
             }
-            if (filesToImport.isNotEmpty()) {
-                viewModel.importInvoices(filesToImport)
+            if (filesToImport.isNotEmpty() || pickErrors.isNotEmpty()) {
+                viewModel.importInvoices(filesToImport, pickErrors)
             }
             if (skipped > 0) {
                 val msg = resources.getQuantityString(
@@ -86,7 +90,7 @@ class InvoiceListFragment : Fragment() {
             name.endsWith(".xml", ignoreCase = true)
     }
 
-    private fun processUri(uri: android.net.Uri): InvoiceViewModel.ImportItem? {
+    private fun processUri(uri: android.net.Uri): PickResult {
         return try {
             val fileName = getFileName(uri)
             if (isPdf(uri, fileName)) {
@@ -95,11 +99,13 @@ class InvoiceListFragment : Fragment() {
                 val inputStream = requireContext().contentResolver.openInputStream(uri)
                 val xmlContent = inputStream?.bufferedReader()?.use { it.readText() } ?: ""
                 if (xmlContent.isNotEmpty()) {
-                    InvoiceViewModel.ImportItem(fileName, xmlContent)
-                } else null
+                    PickResult.Ok(InvoiceViewModel.ImportItem(fileName, xmlContent))
+                } else {
+                    PickResult.Failed(ImportError.FILE_READ)
+                }
             }
         } catch (e: Exception) {
-            null
+            PickResult.Failed(ImportError.FILE_READ)
         }
     }
 
@@ -109,37 +115,28 @@ class InvoiceListFragment : Fragment() {
         return fileName.endsWith(".pdf", ignoreCase = true)
     }
 
-    private fun processPdfUri(uri: android.net.Uri, fileName: String): InvoiceViewModel.ImportItem? {
-        val stream = requireContext().contentResolver.openInputStream(uri) ?: return null
+    private fun processPdfUri(uri: android.net.Uri, fileName: String): PickResult {
+        val stream = requireContext().contentResolver.openInputStream(uri)
+            ?: return PickResult.Failed(ImportError.FILE_READ)
         return stream.use { input ->
             when (val result = ZugferdExtractor().extract(input)) {
                 is ZugferdExtractor.Result.Success ->
-                    InvoiceViewModel.ImportItem(fileName, result.xml, result.originalPdf)
-                ZugferdExtractor.Result.Encrypted -> {
-                    showSnackbar(getString(R.string.error_pdf_encrypted))
-                    null
-                }
-                ZugferdExtractor.Result.NoEmbeddedXml -> {
-                    showSnackbar(getString(R.string.error_pdf_no_xml))
-                    null
-                }
-                is ZugferdExtractor.Result.Error -> {
-                    showSnackbar(getString(R.string.error_pdf_read, result.message))
-                    null
-                }
+                    PickResult.Ok(InvoiceViewModel.ImportItem(fileName, result.xml, result.originalPdf))
+                ZugferdExtractor.Result.Encrypted -> PickResult.Failed(ImportError.PDF_ENCRYPTED)
+                ZugferdExtractor.Result.NoEmbeddedXml -> PickResult.Failed(ImportError.PDF_NO_XML)
+                is ZugferdExtractor.Result.Error -> PickResult.Failed(ImportError.FILE_READ)
             }
         }
-    }
-
-    private fun showSnackbar(text: String) {
-        Snackbar.make(binding.root, text, Snackbar.LENGTH_LONG).show()
     }
 
     /**
      * Entry point for URIs delivered via external Intents (ACTION_VIEW / ACTION_SEND).
      */
     fun importExternalUri(uri: android.net.Uri) {
-        processUri(uri)?.let { viewModel.importInvoices(listOf(it)) }
+        when (val picked = processUri(uri)) {
+            is PickResult.Ok -> viewModel.importInvoices(listOf(picked.item))
+            is PickResult.Failed -> viewModel.importInvoices(emptyList(), listOf(picked.error))
+        }
     }
 
     override fun onCreateView(
@@ -237,7 +234,8 @@ class InvoiceListFragment : Fragment() {
         
         viewModel.message.observe(viewLifecycleOwner) { message ->
             message?.let {
-                Snackbar.make(binding.root, it, Snackbar.LENGTH_SHORT).show()
+                // LONG: batch summaries carry counts + a possible cause and need reading time.
+                Snackbar.make(binding.root, it, Snackbar.LENGTH_LONG).show()
                 viewModel.clearMessage()
             }
         }

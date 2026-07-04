@@ -247,6 +247,27 @@
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
+        <!-- Reverse charge (hidden when the §19 small-business profile switch is on) -->
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/check_reverse_charge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/creator_reverse_charge" />
+
+        <!-- §19 small-business banner (visible instead of the checkbox) -->
+        <TextView
+            android:id="@+id/text_small_business_banner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="?attr/colorSurfaceVariant"
+            android:padding="10dp"
+            android:text="@string/creator_small_business_banner"
+            android:textColor="?attr/colorOnSurfaceVariant"
+            android:textSize="13sp"
+            android:visibility="gone" />
+
         <!-- ===== Line items ===== -->
         <TextView
             android:layout_width="match_parent"
@@ -287,6 +308,30 @@
                 android:layout_weight="1"
                 android:text="@string/creator_add_from_catalog" />
         </LinearLayout>
+
+        <!-- ===== Document-level allowances / charges (BG-20/21) ===== -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="@string/creator_allowances_title"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:id="@+id/container_allowances"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_add_allowance"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/creator_add_allowance" />
 
         <!-- ===== Payment note ===== -->
         <com.google.android.material.textfield.TextInputLayout

@@ -21,7 +21,7 @@ class ZugferdXmlBuilder(private val invoice: OutgoingInvoice) {
 
     private val lines: List<CreatorLine> =
         invoice.lines.filter { it.description.isNotBlank() }
-    private val totals = InvoiceTotalsCalculator.calculate(lines)
+    private val totals = InvoiceTotalsCalculator.calculate(lines, invoice.allowances, invoice.taxMode)
     private val currency = invoice.currency.ifBlank { "EUR" }
 
     fun build(): String {
@@ -86,7 +86,7 @@ class ZugferdXmlBuilder(private val invoice: OutgoingInvoice) {
             sb.append("        <ram:ApplicableTradeTax>\n")
             sb.append("          <ram:TypeCode>VAT</ram:TypeCode>\n")
             sb.append("          <ram:CategoryCode>${vatCategory(line.vatRate)}</ram:CategoryCode>\n")
-            sb.append("          <ram:RateApplicablePercent>${money(line.vatRate)}</ram:RateApplicablePercent>\n")
+            sb.append("          <ram:RateApplicablePercent>${money(effectiveRate(line.vatRate))}</ram:RateApplicablePercent>\n")
             sb.append("        </ram:ApplicableTradeTax>\n")
             sb.append("        <ram:SpecifiedTradeSettlementLineMonetarySummation>\n")
             sb.append("          <ram:LineTotalAmount>${money(lineNet.toDouble())}</ram:LineTotalAmount>\n")
@@ -186,15 +186,45 @@ class ZugferdXmlBuilder(private val invoice: OutgoingInvoice) {
             sb.append("      </ram:SpecifiedTradeSettlementPaymentMeans>\n")
         }
 
-        // VAT breakdown per rate (BG-23).
+        // VAT breakdown per rate (BG-23). CII child sequence is schema-strict:
+        // CalculatedAmount → TypeCode → ExemptionReason → BasisAmount → CategoryCode
+        // → ExemptionReasonCode → RateApplicablePercent.
+        val exemptionReason = invoice.exemptionReason?.takeIf {
+            it.isNotBlank() && invoice.taxMode != OutgoingInvoice.TAX_MODE_STANDARD
+        }
         totals.vatBreakdown.forEach { e ->
             sb.append("      <ram:ApplicableTradeTax>\n")
             sb.append("        <ram:CalculatedAmount>${money(e.tax)}</ram:CalculatedAmount>\n")
             sb.append("        <ram:TypeCode>VAT</ram:TypeCode>\n")
+            exemptionReason?.let {
+                sb.append("        <ram:ExemptionReason>${esc(it)}</ram:ExemptionReason>\n")
+            }
             sb.append("        <ram:BasisAmount>${money(e.basis)}</ram:BasisAmount>\n")
             sb.append("        <ram:CategoryCode>${vatCategory(e.rate)}</ram:CategoryCode>\n")
+            if (invoice.taxMode == OutgoingInvoice.TAX_MODE_REVERSE_CHARGE) {
+                // BT-121 for reverse charge (VATEX code list).
+                sb.append("        <ram:ExemptionReasonCode>VATEX-EU-AE</ram:ExemptionReasonCode>\n")
+            }
             sb.append("        <ram:RateApplicablePercent>${money(e.rate)}</ram:RateApplicablePercent>\n")
             sb.append("      </ram:ApplicableTradeTax>\n")
+        }
+
+        // Document-level allowances/charges (BG-20/21): after the last ApplicableTradeTax,
+        // before SpecifiedTradePaymentTerms. Child sequence: ChargeIndicator → ActualAmount
+        // → Reason → CategoryTradeTax — exactly the paths CiiParser.parseAllowanceCharges reads.
+        invoice.allowances.forEach { entry ->
+            sb.append("      <ram:SpecifiedTradeAllowanceCharge>\n")
+            sb.append("        <ram:ChargeIndicator><udt:Indicator>${entry.isCharge}</udt:Indicator></ram:ChargeIndicator>\n")
+            sb.append("        <ram:ActualAmount>${money(entry.amount)}</ram:ActualAmount>\n")
+            entry.reason.takeIf { it.isNotBlank() }?.let {
+                sb.append("        <ram:Reason>${esc(it)}</ram:Reason>\n")
+            }
+            sb.append("        <ram:CategoryTradeTax>\n")
+            sb.append("          <ram:TypeCode>VAT</ram:TypeCode>\n")
+            sb.append("          <ram:CategoryCode>${vatCategory(entry.vatRate)}</ram:CategoryCode>\n")
+            sb.append("          <ram:RateApplicablePercent>${money(effectiveRate(entry.vatRate))}</ram:RateApplicablePercent>\n")
+            sb.append("        </ram:CategoryTradeTax>\n")
+            sb.append("      </ram:SpecifiedTradeAllowanceCharge>\n")
         }
 
         // Payment terms (note + due date).
@@ -211,9 +241,14 @@ class ZugferdXmlBuilder(private val invoice: OutgoingInvoice) {
             sb.append("      </ram:SpecifiedTradePaymentTerms>\n")
         }
 
-        // Monetary summation (BG-22).
+        // Monetary summation (BG-22). CII order: ChargeTotalAmount BEFORE AllowanceTotalAmount
+        // (the reverse of UBL); both only when document-level allowances/charges exist.
         sb.append("      <ram:SpecifiedTradeSettlementHeaderMonetarySummation>\n")
         sb.append("        <ram:LineTotalAmount>${money(totals.lineTotal)}</ram:LineTotalAmount>\n")
+        if (invoice.allowances.isNotEmpty()) {
+            sb.append("        <ram:ChargeTotalAmount>${money(totals.chargeTotal)}</ram:ChargeTotalAmount>\n")
+            sb.append("        <ram:AllowanceTotalAmount>${money(totals.allowanceTotal)}</ram:AllowanceTotalAmount>\n")
+        }
         sb.append("        <ram:TaxBasisTotalAmount>${money(totals.taxBasisTotal)}</ram:TaxBasisTotalAmount>\n")
         sb.append("        <ram:TaxTotalAmount currencyID=\"${esc(currency)}\">${money(totals.taxTotal)}</ram:TaxTotalAmount>\n")
         sb.append("        <ram:GrandTotalAmount>${money(totals.grandTotal)}</ram:GrandTotalAmount>\n")
@@ -235,7 +270,16 @@ class ZugferdXmlBuilder(private val invoice: OutgoingInvoice) {
         return if (bd.scale() < 0) bd.setScale(0).toPlainString() else bd.toPlainString()
     }
 
-    private fun vatCategory(rate: Double): String = if (rate > 0.0) "S" else "Z"
+    /** EN 16931 VAT category (BT-151/BT-118): E/AE come from the document-wide tax mode. */
+    private fun vatCategory(rate: Double): String = when (invoice.taxMode) {
+        OutgoingInvoice.TAX_MODE_EXEMPT -> "E"
+        OutgoingInvoice.TAX_MODE_REVERSE_CHARGE -> "AE"
+        else -> if (rate > 0.0) "S" else "Z"
+    }
+
+    /** Categories E/AE require rate 0 everywhere (BR-E-05 / BR-AE-05). */
+    private fun effectiveRate(rate: Double): Double =
+        if (invoice.taxMode != OutgoingInvoice.TAX_MODE_STANDARD) 0.0 else rate
 
     /** ISO yyyy-MM-dd → CII format "102" (yyyyMMdd). Pass-through if already 8 digits. */
     private fun toCiiDate(iso: String): String {

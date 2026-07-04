@@ -60,8 +60,16 @@
     <string name="error_unknown_format">Format de facture inconnu</string>
     <string name="error_import_general">Échec de l\'importation</string>
     <string name="import_batch_summary">%1$d factures importées sur %2$d</string>
-    <string name="import_batch_duplicates">, %1$d doublons</string>
-    <string name="import_batch_errors">, %1$d erreurs</string>
+    <plurals name="import_batch_duplicates">
+        <item quantity="one">, %1$d doublon</item>
+        <item quantity="other">, %1$d doublons</item>
+    </plurals>
+    <plurals name="import_batch_errors">
+        <item quantity="one">, %1$d erreur</item>
+        <item quantity="other">, %1$d erreurs</item>
+    </plurals>
+    <string name="error_xml_malformed">Le fichier XML est mal formé</string>
+    <string name="error_file_read">Le fichier n\'a pas pu être lu</string>
     <string name="parse_error">Erreur d\'analyse : %1$s</string>
     <string name="subtitle_attribution">(by accountant with beard)</string>
 
@@ -343,14 +351,19 @@
     <string name="creator_option_mark_unpaid">Marquer comme impayée</string>
     <string name="creator_option_send_dunning">Envoyer une relance</string>
     <string name="creator_badge_overdue">En retard</string>
-    <string name="creator_badge_dunning">Relance %1$d</string>
-    <string name="dunning_confirm_title">Envoyer la relance %1$d ?</string>
+    <string name="creator_badge_dunning_1">Rappel</string>
+    <string name="creator_badge_dunning_2">1re relance</string>
+    <string name="creator_badge_dunning_3">Dernière relance</string>
+    <string name="dunning_level_1">Rappel de paiement</string>
+    <string name="dunning_level_2">Première relance</string>
+    <string name="dunning_level_3">Dernière relance</string>
+    <string name="dunning_confirm_title">Envoyer : %1$s ?</string>
     <string name="dunning_confirm_message">Un e-mail à %1$s sera préparé avec la facture PDF en pièce jointe. Nouveau délai de paiement : %2$s.</string>
     <string name="dunning_no_email_warning">Aucune adresse e-mail enregistrée pour ce client — saisissez le destinataire dans votre application de messagerie.</string>
-    <string name="dunning_email_subject">Relance %1$d — Facture %2$s</string>
+    <string name="dunning_email_subject">%1$s — Facture %2$s</string>
     <string name="dunning_email_body_1">Bonjour %1$s,\n\nnotre facture %2$s du %3$s d\'un montant de %5$s était exigible le %4$s. Cela a sans doute échappé à votre attention.\n\nMerci de virer le montant avant le %6$s.\n\nSi le paiement a déjà été effectué, veuillez ne pas tenir compte de cette relance.\n\nCordialement\n%7$s</string>
     <string name="dunning_email_body_2">Bonjour %1$s,\n\nmalgré notre précédente relance, la facture %2$s du %3$s d\'un montant de %5$s (échéance %4$s) reste impayée.\n\nMerci de régler le montant dû au plus tard le %6$s.\n\nSi le paiement a déjà été effectué, veuillez ne pas tenir compte de cette relance.\n\nCordialement\n%7$s</string>
-    <string name="dunning_email_body_3">Bonjour %1$s,\n\nla facture %2$s du %3$s d\'un montant de %5$s (échéance %4$s) reste impayée malgré deux relances.\n\nNous vous demandons une dernière fois de régler le montant dû avant le %6$s. À défaut, nous nous réservons le droit d\'engager d\'autres démarches.\n\nSi le paiement a déjà été effectué, veuillez ne pas tenir compte de cette relance.\n\nCordialement\n%7$s</string>
+    <string name="dunning_email_body_3">Bonjour %1$s,\n\nla facture %2$s du %3$s d\'un montant de %5$s (échéance %4$s) reste impayée malgré notre rappel de paiement et notre relance.\n\nNous vous demandons une dernière fois de régler le montant dû avant le %6$s. À défaut, nous nous réservons le droit d\'engager d\'autres démarches.\n\nSi le paiement a déjà été effectué, veuillez ne pas tenir compte de cette relance.\n\nCordialement\n%7$s</string>
     <string name="dunning_no_mail_app">Aucune application de messagerie trouvée.</string>
     <string name="notif_outgoing_overdue_title">Facture émise en retard</string>
     <string name="notif_outgoing_overdue_text">%1$s — la facture %2$s était exigible le %3$s (%4$s)</string>
@@ -431,6 +444,25 @@
     <string name="creator_validate_due_before_issue">La date d’échéance précède la date de facture.</string>
     <string name="creator_validate_iban_missing">Aucun IBAN dans le profil — le client n’a pas de compte de paiement.</string>
     <string name="creator_validate_iban_invalid">L’IBAN du profil d’entreprise semble invalide.</string>
+    <string name="creator_validate_rc_buyer_vat">L’autoliquidation exige le numéro de TVA du client.</string>
+    <string name="creator_validate_exemption_missing">Un motif d’exonération de TVA est requis (profil d’entreprise → mention d’exonération).</string>
+    <string name="creator_validate_exempt_line_vat">Les taux de TVA saisis seront mis à 0 % (facture exonérée).</string>
+    <string name="creator_validate_allowance_reason">Chaque remise/majoration doit avoir un motif.</string>
+    <string name="creator_validate_allowance_amount">Le montant d’une remise/majoration doit être supérieur à 0.</string>
+    <string name="creator_small_business">Franchise en base de TVA — sans TVA</string>
+    <string name="creator_small_business_hint">Cette mention est imprimée sur chaque facture et intégrée à la facture électronique comme motif d’exonération.</string>
+    <string name="creator_small_business_banner">Franchise en base de TVA : cette facture est établie sans TVA.</string>
+    <string name="creator_exemption_text">Mention d’exonération</string>
+    <string name="creator_exemption_default_19">TVA non applicable, art. 293 B du CGI.</string>
+    <string name="creator_reverse_charge">Autoliquidation (TVA due par le preneur)</string>
+    <string name="creator_reverse_charge_reason">Autoliquidation : TVA due par le preneur.</string>
+    <string name="creator_allowances_title">Remises &amp; majorations</string>
+    <string name="creator_add_allowance">+ Remise/Majoration</string>
+    <string name="creator_allowance_discount">Remise</string>
+    <string name="creator_allowance_charge">Majoration</string>
+    <string name="creator_allowance_reason">Motif</string>
+    <string name="creator_allowance_amount">Montant (HT)</string>
+    <string name="creator_tax_basis">Total net</string>
     <string name="creator_duplicate">Dupliquer en brouillon</string>
 
     <!-- Note + catégorie comptable -->

@@ -28,7 +28,12 @@ object CreatorValidator {
         LINE_NON_POSITIVE_QTY,     // BT-129: quantity should be > 0
         DUE_BEFORE_ISSUE,          // BT-9 must not precede BT-2
         IBAN_MISSING,              // no payment account → buyer has no SEPA target
-        IBAN_INVALID               // IBAN length outside the ISO 13616 range
+        IBAN_INVALID,              // IBAN length outside the ISO 13616 range
+        RC_BUYER_VAT_ID_MISSING,   // BR-AE-04: reverse charge requires the buyer's VAT id
+        EXEMPTION_REASON_MISSING,  // BR-E-10/BR-AE-10: category E/AE needs BT-120
+        EXEMPT_LINE_HAS_VAT,       // advisory: entered rate > 0 will be forced to 0
+        ALLOWANCE_REASON_MISSING,  // BR-33/BR-38: each allowance/charge needs a reason
+        ALLOWANCE_NON_POSITIVE     // advisory: allowance/charge amount should be > 0
     }
 
     /** One finding. [lineIndex] is set (0-based) for the per-line codes, null otherwise. */
@@ -71,6 +76,33 @@ object CreatorValidator {
         when {
             iban.isBlank() -> issues += Issue(Severity.WARNING, Code.IBAN_MISSING)
             iban.length !in 15..34 -> issues += Issue(Severity.WARNING, Code.IBAN_INVALID)
+        }
+
+        // Tax mode (E/AE): exemption reason is mandatory; reverse charge additionally
+        // requires the buyer's VAT id (BR-AE-04). Entered rates > 0 are forced to 0 by the
+        // calculator — surface that so the user isn't surprised.
+        if (draft.taxMode != OutgoingInvoice.TAX_MODE_STANDARD) {
+            if (draft.exemptionReason.isNullOrBlank()) {
+                issues += Issue(Severity.ERROR, Code.EXEMPTION_REASON_MISSING)
+            }
+            if (draft.taxMode == OutgoingInvoice.TAX_MODE_REVERSE_CHARGE &&
+                draft.buyerVatId.isNullOrBlank()
+            ) {
+                issues += Issue(Severity.ERROR, Code.RC_BUYER_VAT_ID_MISSING)
+            }
+            val vatEntered = present.any { (_, l) -> l.vatRate > 0.0 } ||
+                draft.allowances.any { it.amount != 0.0 && it.vatRate > 0.0 }
+            if (vatEntered) issues += Issue(Severity.WARNING, Code.EXEMPT_LINE_HAS_VAT)
+        }
+
+        // Document-level allowances/charges (BG-20/21).
+        draft.allowances.forEach { entry ->
+            if (entry.amount != 0.0 && entry.reason.isBlank()) {
+                issues += Issue(Severity.ERROR, Code.ALLOWANCE_REASON_MISSING)
+            }
+            if (entry.amount <= 0.0) {
+                issues += Issue(Severity.WARNING, Code.ALLOWANCE_NON_POSITIVE)
+            }
         }
 
         return issues

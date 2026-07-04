@@ -92,4 +92,67 @@ class CreatorValidatorTest {
         assertTrue(codes(validDraft(), completeProfile().copy(iban = "DE123"))
             .contains(Code.IBAN_INVALID))
     }
+
+    // ----- tax modes + allowances ----------------------------------------------------------
+
+    @Test
+    fun reverseChargeWithoutBuyerVatIdIsAnError() {
+        val draft = validDraft().copy(
+            taxMode = OutgoingInvoice.TAX_MODE_REVERSE_CHARGE,
+            exemptionReason = "Reverse charge."
+        )
+        val issue = CreatorValidator.validate(draft, completeProfile())
+            .first { it.code == Code.RC_BUYER_VAT_ID_MISSING }
+        assertEquals(Severity.ERROR, issue.severity)
+
+        // With a buyer VAT id the error disappears.
+        assertTrue(
+            !codes(draft.copy(buyerVatId = "DE987654321"), completeProfile())
+                .contains(Code.RC_BUYER_VAT_ID_MISSING)
+        )
+    }
+
+    @Test
+    fun exemptWithoutReasonIsAnError() {
+        val draft = validDraft().copy(taxMode = OutgoingInvoice.TAX_MODE_EXEMPT)
+        val issue = CreatorValidator.validate(draft, completeProfile())
+            .first { it.code == Code.EXEMPTION_REASON_MISSING }
+        assertEquals(Severity.ERROR, issue.severity)
+    }
+
+    @Test
+    fun exemptDraftWithVatRateOnLineIsAWarning() {
+        val draft = validDraft().copy(  // line carries 19 %
+            taxMode = OutgoingInvoice.TAX_MODE_EXEMPT,
+            exemptionReason = "§ 19 UStG"
+        )
+        val issue = CreatorValidator.validate(draft, completeProfile())
+            .first { it.code == Code.EXEMPT_LINE_HAS_VAT }
+        assertEquals(Severity.WARNING, issue.severity)
+    }
+
+    @Test
+    fun allowanceWithoutReasonOrAmountIsFlagged() {
+        val draft = validDraft().copy(
+            allowancesJson = com.ziesche.peppolreader.creator.model.CreatorAllowanceCharge.listToJson(
+                listOf(
+                    com.ziesche.peppolreader.creator.model.CreatorAllowanceCharge(
+                        isCharge = false, reason = "", amount = 50.0, vatRate = 19.0
+                    ),
+                    com.ziesche.peppolreader.creator.model.CreatorAllowanceCharge(
+                        isCharge = true, reason = "Versand", amount = 0.0, vatRate = 19.0
+                    )
+                )
+            )
+        )
+        val issues = CreatorValidator.validate(draft, completeProfile())
+        assertEquals(
+            Severity.ERROR,
+            issues.first { it.code == Code.ALLOWANCE_REASON_MISSING }.severity
+        )
+        assertEquals(
+            Severity.WARNING,
+            issues.first { it.code == Code.ALLOWANCE_NON_POSITIVE }.severity
+        )
+    }
 }
