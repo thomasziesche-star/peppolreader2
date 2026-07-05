@@ -463,6 +463,33 @@
     <string name="creator_allowance_reason">Reason</string>
     <string name="creator_allowance_amount">Amount (net)</string>
     <string name="creator_tax_basis">Net total</string>
+    <string name="layout_editor_title">Invoice layout</string>
+    <string name="layout_preview_cd">Preview of the invoice layout</string>
+    <string name="layout_presets">Style</string>
+    <string name="layout_preset_warm">Warm Editorial</string>
+    <string name="layout_preset_classic">Classic</string>
+    <string name="layout_preset_modern">Modern</string>
+    <string name="layout_preset_custom">Custom</string>
+    <string name="layout_accent">Accent colour</string>
+    <string name="layout_font">Typeface</string>
+    <string name="layout_font_editorial">Editorial</string>
+    <string name="layout_font_sans">Sans</string>
+    <string name="layout_font_serif">Serif</string>
+    <string name="layout_paper">Paper</string>
+    <string name="layout_paper_white">White</string>
+    <string name="layout_paper_ivory">Ivory</string>
+    <string name="layout_paper_cool">Cool grey</string>
+    <string name="layout_table_header">Table header</string>
+    <string name="layout_header_rule">Line</string>
+    <string name="layout_header_band">Band</string>
+    <string name="layout_color_terracotta">Terracotta</string>
+    <string name="layout_color_bordeaux">Bordeaux</string>
+    <string name="layout_color_green">Fir green</string>
+    <string name="layout_color_petrol">Petrol</string>
+    <string name="layout_color_blue">Steel blue</string>
+    <string name="layout_color_violet">Violet</string>
+    <string name="layout_color_ochre">Ochre</string>
+    <string name="layout_color_black">Black</string>
     <string name="creator_duplicate">Duplicate as draft</string>
 
     <!-- Invoice note + bookkeeping category -->

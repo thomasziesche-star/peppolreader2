@@ -7,6 +7,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.ziesche.peppolreader.R
 import com.ziesche.peppolreader.creator.data.CompanyProfileStore
+import com.ziesche.peppolreader.creator.data.LayoutThemeStore
 import com.ziesche.peppolreader.creator.data.OutgoingInvoiceRepository
 import com.ziesche.peppolreader.creator.data.PdfExporter
 import com.ziesche.peppolreader.creator.model.CompanyProfile
@@ -172,7 +173,8 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
             val xml = ZugferdXmlBuilder(withLines).build()
             val profile = profileStore.load()
             val pdfBytes = ZugferdPdfA3Writer(app).write(
-                withLines, xml, profile.logoPath.takeIf { it.isNotBlank() }
+                withLines, xml, profile.logoPath.takeIf { it.isNotBlank() },
+                LayoutThemeStore(app).load()
             )
 
             val dir = File(app.filesDir, "created_invoices").apply { mkdirs() }

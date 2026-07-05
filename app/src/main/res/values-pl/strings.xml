@@ -471,6 +471,33 @@
     <string name="creator_allowance_reason">Powód</string>
     <string name="creator_allowance_amount">Kwota (netto)</string>
     <string name="creator_tax_basis">Kwota netto</string>
+    <string name="layout_editor_title">Układ faktury</string>
+    <string name="layout_preview_cd">Podgląd układu faktury</string>
+    <string name="layout_presets">Styl</string>
+    <string name="layout_preset_warm">Warm Editorial</string>
+    <string name="layout_preset_classic">Klasyczny</string>
+    <string name="layout_preset_modern">Nowoczesny</string>
+    <string name="layout_preset_custom">Własny</string>
+    <string name="layout_accent">Kolor akcentu</string>
+    <string name="layout_font">Czcionka</string>
+    <string name="layout_font_editorial">Editorial</string>
+    <string name="layout_font_sans">Sans</string>
+    <string name="layout_font_serif">Serif</string>
+    <string name="layout_paper">Papier</string>
+    <string name="layout_paper_white">Biały</string>
+    <string name="layout_paper_ivory">Kość słoniowa</string>
+    <string name="layout_paper_cool">Chłodna szarość</string>
+    <string name="layout_table_header">Nagłówek tabeli</string>
+    <string name="layout_header_rule">Linia</string>
+    <string name="layout_header_band">Pasek</string>
+    <string name="layout_color_terracotta">Terakota</string>
+    <string name="layout_color_bordeaux">Bordo</string>
+    <string name="layout_color_green">Zieleń jodłowa</string>
+    <string name="layout_color_petrol">Petrol</string>
+    <string name="layout_color_blue">Stalowy błękit</string>
+    <string name="layout_color_violet">Fiolet</string>
+    <string name="layout_color_ochre">Ochra</string>
+    <string name="layout_color_black">Czarny</string>
     <string name="creator_duplicate">Powiel jako wersję roboczą</string>
 
     <!-- Notatka + kategoria księgowa -->

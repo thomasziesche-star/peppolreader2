@@ -463,6 +463,33 @@
     <string name="creator_allowance_reason">Reden</string>
     <string name="creator_allowance_amount">Bedrag (netto)</string>
     <string name="creator_tax_basis">Nettobedrag</string>
+    <string name="layout_editor_title">Factuurlayout</string>
+    <string name="layout_preview_cd">Voorbeeld van de factuurlayout</string>
+    <string name="layout_presets">Stijl</string>
+    <string name="layout_preset_warm">Warm Editorial</string>
+    <string name="layout_preset_classic">Klassiek</string>
+    <string name="layout_preset_modern">Modern</string>
+    <string name="layout_preset_custom">Eigen</string>
+    <string name="layout_accent">Accentkleur</string>
+    <string name="layout_font">Lettertype</string>
+    <string name="layout_font_editorial">Editorial</string>
+    <string name="layout_font_sans">Sans</string>
+    <string name="layout_font_serif">Serif</string>
+    <string name="layout_paper">Papier</string>
+    <string name="layout_paper_white">Wit</string>
+    <string name="layout_paper_ivory">Ivoor</string>
+    <string name="layout_paper_cool">Koelgrijs</string>
+    <string name="layout_table_header">Tabelkop</string>
+    <string name="layout_header_rule">Lijn</string>
+    <string name="layout_header_band">Band</string>
+    <string name="layout_color_terracotta">Terracotta</string>
+    <string name="layout_color_bordeaux">Bordeaux</string>
+    <string name="layout_color_green">Dennengroen</string>
+    <string name="layout_color_petrol">Petrol</string>
+    <string name="layout_color_blue">Staalblauw</string>
+    <string name="layout_color_violet">Violet</string>
+    <string name="layout_color_ochre">Oker</string>
+    <string name="layout_color_black">Zwart</string>
     <string name="creator_duplicate">Dupliceren als concept</string>
 
     <!-- Notitie + boekhoudcategorie -->
