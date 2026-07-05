@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.ziesche.peppolreader.R
 import com.ziesche.peppolreader.creator.data.CompanyProfileStore
@@ -110,6 +111,10 @@ class CompanyProfileFragment : Fragment() {
         binding.btnSave.setOnClickListener {
             store.save(collect())
             Snackbar.make(binding.root, R.string.creator_saved, Snackbar.LENGTH_SHORT).show()
+        }
+
+        binding.btnLayoutEditor.setOnClickListener {
+            findNavController().navigate(R.id.action_companyProfile_to_layoutEditor)
         }
     }
 

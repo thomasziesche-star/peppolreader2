@@ -88,7 +88,22 @@
         android:id="@+id/companyProfileFragment"
         android:name="com.ziesche.peppolreader.creator.ui.CompanyProfileFragment"
         android:label="@string/creator_company_profile"
-        tools:layout="@layout/fragment_company_profile" />
+        tools:layout="@layout/fragment_company_profile">
+
+        <action
+            android:id="@+id/action_companyProfile_to_layoutEditor"
+            app:destination="@id/layoutEditorFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/layoutEditorFragment"
+        android:name="com.ziesche.peppolreader.creator.ui.LayoutEditorFragment"
+        android:label="@string/layout_editor_title"
+        tools:layout="@layout/fragment_layout_editor" />
 
     <fragment
         android:id="@+id/creatorCustomerListFragment"

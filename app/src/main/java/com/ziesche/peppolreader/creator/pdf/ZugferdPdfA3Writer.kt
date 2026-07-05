@@ -15,6 +15,7 @@ import com.tom_roush.pdfbox.pdmodel.common.filespecification.PDEmbeddedFile
 import com.tom_roush.pdfbox.pdmodel.font.PDType0Font
 import com.tom_roush.pdfbox.pdmodel.graphics.color.PDOutputIntent
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
+import com.ziesche.peppolreader.creator.model.LayoutTheme
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -43,17 +44,23 @@ class ZugferdPdfA3Writer(private val context: Context) {
 
     /**
      * Builds the hybrid PDF and returns its bytes. [xml] is the factur-x.xml produced for
-     * [invoice]; [logoPath] optionally points to the company logo image inside app storage.
+     * [invoice]; [logoPath] optionally points to the company logo image inside app storage;
+     * [theme] styles the visible page (default = shipped "Warm Editorial" look).
      */
     @JvmOverloads
-    fun write(invoice: OutgoingInvoice, xml: String, logoPath: String? = null): ByteArray {
+    fun write(
+        invoice: OutgoingInvoice,
+        xml: String,
+        logoPath: String? = null,
+        theme: LayoutTheme = LayoutTheme()
+    ): ByteArray {
         PDFBoxResourceLoader.init(context.applicationContext)
 
         PDDocument().use { doc ->
             val regular = loadFont(doc, FONT_REGULAR)
             val bold = loadFont(doc, FONT_BOLD)
             val serif = loadFont(doc, FONT_SERIF)
-            InvoiceLayoutRenderer(doc, regular, bold, serif, invoice, loadLogo(logoPath)).render()
+            InvoiceLayoutRenderer(doc, regular, bold, serif, invoice, loadLogo(logoPath), theme).render()
             addOutputIntent(doc)
             addXmpMetadata(doc, invoice)
             setDocumentInfo(doc, invoice)

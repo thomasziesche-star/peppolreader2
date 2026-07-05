@@ -94,6 +94,15 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Invoice layout theme editor (branding belongs to "my company") -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_layout_editor"
+            style="@style/Widget.Material3.Button.TonalButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/layout_editor_title" />
+
         <com.google.android.material.textfield.TextInputLayout
             style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"

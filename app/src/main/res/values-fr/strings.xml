@@ -463,6 +463,33 @@
     <string name="creator_allowance_reason">Motif</string>
     <string name="creator_allowance_amount">Montant (HT)</string>
     <string name="creator_tax_basis">Total net</string>
+    <string name="layout_editor_title">Mise en page de facture</string>
+    <string name="layout_preview_cd">Aperçu de la mise en page de la facture</string>
+    <string name="layout_presets">Style</string>
+    <string name="layout_preset_warm">Warm Editorial</string>
+    <string name="layout_preset_classic">Classique</string>
+    <string name="layout_preset_modern">Moderne</string>
+    <string name="layout_preset_custom">Personnalisé</string>
+    <string name="layout_accent">Couleur d\'accent</string>
+    <string name="layout_font">Police</string>
+    <string name="layout_font_editorial">Editorial</string>
+    <string name="layout_font_sans">Sans</string>
+    <string name="layout_font_serif">Serif</string>
+    <string name="layout_paper">Papier</string>
+    <string name="layout_paper_white">Blanc</string>
+    <string name="layout_paper_ivory">Ivoire</string>
+    <string name="layout_paper_cool">Gris froid</string>
+    <string name="layout_table_header">En-tête de tableau</string>
+    <string name="layout_header_rule">Ligne</string>
+    <string name="layout_header_band">Bandeau</string>
+    <string name="layout_color_terracotta">Terracotta</string>
+    <string name="layout_color_bordeaux">Bordeaux</string>
+    <string name="layout_color_green">Vert sapin</string>
+    <string name="layout_color_petrol">Pétrole</string>
+    <string name="layout_color_blue">Bleu acier</string>
+    <string name="layout_color_violet">Violet</string>
+    <string name="layout_color_ochre">Ocre</string>
+    <string name="layout_color_black">Noir</string>
     <string name="creator_duplicate">Dupliquer en brouillon</string>
 
     <!-- Note + catégorie comptable -->

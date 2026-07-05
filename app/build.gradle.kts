@@ -21,8 +21,8 @@ android {
         applicationId = "com.ziesche.peppolreader"
         minSdk = 28
         targetSdk = 35
-        versionCode = 22
-        versionName = "3.12"
+        versionCode = 23
+        versionName = "3.13"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -89,24 +89,22 @@ android {
 }
 
 /**
- * Builds APK + AAB for the release variant and archives both into
+ * Builds the release AAB (all the Play Console needs) and archives it into
  * release-archive/<versionName>/ so previous versions are never overwritten.
+ * The signed APK is intentionally no longer produced — sideload testing uses debug builds.
  *
  * Run: gradlew :app:archiveRelease
  */
 tasks.register("archiveRelease") {
     group = "release"
-    description = "Assembles release APK + AAB and copies them into release-archive/<versionName>/"
-    dependsOn("assembleRelease", "bundleRelease")
+    description = "Builds the release AAB and copies it into release-archive/<versionName>/"
+    dependsOn("bundleRelease")
     doLast {
         val versionName = android.defaultConfig.versionName
             ?: error("versionName is not set in android.defaultConfig")
         val archiveDir = rootProject.file("release-archive/$versionName")
         archiveDir.mkdirs()
         project.copy {
-            from(layout.buildDirectory.dir("outputs/apk/release")) {
-                include("*.apk")
-            }
             from(layout.buildDirectory.dir("outputs/bundle/release")) {
                 include("*.aab")
                 rename("app-release.aab", "PeppolReader-$versionName.aab")

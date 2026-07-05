@@ -463,6 +463,33 @@
     <string name="creator_allowance_reason">Grund</string>
     <string name="creator_allowance_amount">Betrag (netto)</string>
     <string name="creator_tax_basis">Nettobetrag</string>
+    <string name="layout_editor_title">Rechnungslayout</string>
+    <string name="layout_preview_cd">Vorschau des Rechnungslayouts</string>
+    <string name="layout_presets">Stil</string>
+    <string name="layout_preset_warm">Warm Editorial</string>
+    <string name="layout_preset_classic">Klassisch</string>
+    <string name="layout_preset_modern">Modern</string>
+    <string name="layout_preset_custom">Eigenes</string>
+    <string name="layout_accent">Akzentfarbe</string>
+    <string name="layout_font">Schrift</string>
+    <string name="layout_font_editorial">Editorial</string>
+    <string name="layout_font_sans">Sans</string>
+    <string name="layout_font_serif">Serif</string>
+    <string name="layout_paper">Papier</string>
+    <string name="layout_paper_white">Weiß</string>
+    <string name="layout_paper_ivory">Elfenbein</string>
+    <string name="layout_paper_cool">Kühlgrau</string>
+    <string name="layout_table_header">Tabellenkopf</string>
+    <string name="layout_header_rule">Linie</string>
+    <string name="layout_header_band">Band</string>
+    <string name="layout_color_terracotta">Terracotta</string>
+    <string name="layout_color_bordeaux">Bordeaux</string>
+    <string name="layout_color_green">Tannengrün</string>
+    <string name="layout_color_petrol">Petrol</string>
+    <string name="layout_color_blue">Stahlblau</string>
+    <string name="layout_color_violet">Violett</string>
+    <string name="layout_color_ochre">Ocker</string>
+    <string name="layout_color_black">Schwarz</string>
     <string name="creator_duplicate">Als Entwurf duplizieren</string>
 
     <!-- Beleg-Notiz + Kategorie -->
