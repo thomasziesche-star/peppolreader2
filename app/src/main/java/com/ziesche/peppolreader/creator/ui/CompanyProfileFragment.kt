@@ -1,7 +1,6 @@
 package com.ziesche.peppolreader.creator.ui
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,6 +16,7 @@ import com.ziesche.peppolreader.creator.data.CompanyProfileStore
 import com.ziesche.peppolreader.creator.data.PdfExporter
 import com.ziesche.peppolreader.creator.model.CompanyProfile
 import com.ziesche.peppolreader.databinding.FragmentCompanyProfileBinding
+import com.ziesche.peppolreader.util.decodeSampledBitmap
 import java.io.File
 
 /**
@@ -161,8 +161,10 @@ class CompanyProfileFragment : Fragment() {
     }
 
     private fun renderLogo() = with(binding) {
+        // The preview is only 96dp tall; decode downsampled so we never load the full-resolution
+        // logo just to show a thumbnail (stored logos are already capped at 1000px).
         val bitmap = logoPath.takeIf { it.isNotBlank() }
-            ?.let { BitmapFactory.decodeFile(it) }
+            ?.let { decodeSampledBitmap(File(it), LOGO_PREVIEW_MAX_PX) }
         if (bitmap != null) {
             imageLogoPreview.setImageBitmap(bitmap)
             imageLogoPreview.visibility = View.VISIBLE
@@ -222,3 +224,6 @@ class CompanyProfileFragment : Fragment() {
         _binding = null
     }
 }
+
+/** Longest side (px) the logo thumbnail is decoded to; the preview ImageView is only 96dp tall. */
+private const val LOGO_PREVIEW_MAX_PX = 512

@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -109,6 +110,15 @@ class MainActivity : AppCompatActivity(),
             view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = (16 * resources.displayMetrics.density).toInt() + extraBottom
             }
+            insets
+        }
+
+        // Belt-and-suspenders for Android 15 edge-to-edge: the bottom nav sits outside the
+        // fitsSystemWindows CoordinatorLayout, so lift it above the gesture/navigation bar
+        // ourselves. This replaces Material's own inset listener (the bar carries no XML padding,
+        // so the raw inset is the correct padding — no double counting).
+        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNav) { view, insets ->
+            view.updatePadding(bottom = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom)
             insets
         }
 

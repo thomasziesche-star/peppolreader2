@@ -2,7 +2,6 @@ package com.ziesche.peppolreader.creator.pdf
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import com.tom_roush.pdfbox.cos.COSArray
 import com.tom_roush.pdfbox.cos.COSName
 import com.tom_roush.pdfbox.pdmodel.PDDocument
@@ -17,6 +16,7 @@ import com.tom_roush.pdfbox.pdmodel.graphics.color.PDOutputIntent
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
 import com.ziesche.peppolreader.creator.model.LayoutTheme
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
+import com.ziesche.peppolreader.util.decodeSampledBitmap
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -107,9 +107,9 @@ class ZugferdPdfA3Writer(private val context: Context) {
 
     private fun loadLogo(logoPath: String?): Bitmap? {
         if (logoPath.isNullOrBlank()) return null
-        val file = File(logoPath)
-        if (!file.exists()) return null
-        return runCatching { BitmapFactory.decodeFile(file.absolutePath) }.getOrNull()
+        // Decode downsampled to guard against oversized files; stored logos are already ≤1000px,
+        // so this is effectively a no-op for them while satisfying the memory-safety advisory.
+        return runCatching { decodeSampledBitmap(File(logoPath), LOGO_MAX_PX) }.getOrNull()
     }
 
     // ----- PDF/A OutputIntent --------------------------------------------------------------
@@ -273,5 +273,8 @@ class ZugferdPdfA3Writer(private val context: Context) {
         private const val ICC_ASSET = "creator/sRGB.icc"
         private const val EMBEDDED_NAME = "factur-x.xml"
         private const val PRODUCER = "PeppolReader Invoice Creator"
+
+        /** Longest side (px) the embedded logo is decoded to; stored logos are already ≤1000px. */
+        private const val LOGO_MAX_PX = 1000
     }
 }
