@@ -74,16 +74,6 @@ android {
     testOptions {
         unitTests {
             isIncludeAndroidResources = true
-            all {
-                // Robolectric is memory-hungry; a small default heap can GC-thrash on CI.
-                it.maxHeapSize = "2g"
-                // Per-test events make CI hangs diagnosable (which test started last) and show
-                // Robolectric's runtime-SDK download progress.
-                it.testLogging {
-                    events("started", "passed", "skipped", "failed")
-                    showStandardStreams = true
-                }
-            }
         }
     }
 

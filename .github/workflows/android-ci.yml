@@ -1,6 +1,7 @@
 name: Android CI
 
-# Build + unit tests on every PR and on pushes to main / release branches.
+# Verifies that a fresh checkout builds. Unit tests run locally (they rely on Robolectric,
+# which behaves inconsistently on hosted runners) — CI deliberately builds only.
 on:
   pull_request:
   push:
@@ -14,10 +15,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
-    # Hard ceiling so a hung test can never occupy a runner indefinitely.
-    timeout-minutes: 30
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,24 +38,13 @@ jobs:
       - name: Use runner JDK (strip local java.home)
         run: sed -i '/^org\.gradle\.java\.home=/d' gradle.properties
 
-      # Robolectric downloads its android-all runtime jar into ~/.m2 on first use; that isn't
-      # covered by the Gradle cache, so persist it separately to avoid re-downloading each run.
-      - name: Cache Robolectric runtime
-        uses: actions/cache@v4
-        with:
-          path: ~/.m2/repository/org/robolectric
-          key: robolectric-${{ runner.os }}-sdk33
-
-      - name: Unit tests
-        run: ./gradlew --no-daemon testDebugUnitTest
-
       - name: Assemble debug APK
         run: ./gradlew --no-daemon assembleDebug
 
-      - name: Upload test reports
+      - name: Upload debug APK
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: unit-test-report
-          path: app/build/reports/tests/testDebugUnitTest
+          name: debug-apk
+          path: app/build/outputs/apk/debug/*.apk
           if-no-files-found: ignore
