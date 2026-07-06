@@ -8,9 +8,16 @@ on:
       - main
       - 'release/**'
 
+# Only one run per branch/PR at a time; a newer push cancels the older, still-running one.
+concurrency:
+  group: android-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    # Hard ceiling so a hung test can never occupy a runner indefinitely.
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
