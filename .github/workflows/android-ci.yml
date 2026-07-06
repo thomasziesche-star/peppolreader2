@@ -25,6 +25,12 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
+      # gradle.properties pins a local Windows JDK path (org.gradle.java.home) for the dev
+      # machine; it doesn't exist on the Linux runner, so drop it here and let Gradle use the
+      # JDK from setup-java (JAVA_HOME). Only affects the checkout on the runner.
+      - name: Use runner JDK (strip local java.home)
+        run: sed -i '/^org\.gradle\.java\.home=/d' gradle.properties
+
       - name: Unit tests
         run: ./gradlew --no-daemon testDebugUnitTest
 
