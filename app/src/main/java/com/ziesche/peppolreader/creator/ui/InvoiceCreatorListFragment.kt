@@ -1,8 +1,10 @@
 package com.ziesche.peppolreader.creator.ui
 
 import android.content.ActivityNotFoundException
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.print.PrintManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,8 +21,10 @@ import com.ziesche.peppolreader.creator.data.CompanyProfileStore
 import com.ziesche.peppolreader.creator.data.OutgoingInvoiceRepository
 import com.ziesche.peppolreader.creator.dunning.DunningTextBuilder
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
+import com.ziesche.peppolreader.creator.pdf.PdfPrintDocumentAdapter
 import com.ziesche.peppolreader.creator.xml.InvoiceTotalsCalculator
 import com.ziesche.peppolreader.data.AppDatabase
+import com.ziesche.peppolreader.databinding.DialogRecordPaymentBinding
 import com.ziesche.peppolreader.databinding.FragmentInvoiceCreatorListBinding
 import kotlinx.coroutines.launch
 import java.io.File
@@ -46,9 +50,12 @@ class InvoiceCreatorListFragment : Fragment() {
 
     private lateinit var repository: OutgoingInvoiceRepository
 
-    /** Unfiltered drafts from the database; [render] applies the current search query. */
+    /** Unfiltered drafts from the database; [render] applies the current search + type filter. */
     private var allDrafts: List<OutgoingInvoice> = emptyList()
     private var query: String = ""
+
+    private enum class TypeFilter { ALL, INVOICES, QUOTES }
+    private var typeFilter: TypeFilter = TypeFilter.ALL
 
     private val adapter by lazy {
         OutgoingInvoiceAdapter(
@@ -90,6 +97,16 @@ class InvoiceCreatorListFragment : Fragment() {
         }
         binding.btnNewDraft.setOnClickListener { openDraft(null) }
 
+        binding.toggleTypeFilter.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked) return@addOnButtonCheckedListener
+            typeFilter = when (checkedId) {
+                R.id.btn_filter_invoices -> TypeFilter.INVOICES
+                R.id.btn_filter_quotes -> TypeFilter.QUOTES
+                else -> TypeFilter.ALL
+            }
+            render()
+        }
+
         binding.searchView.setOnQueryTextListener(object : androidx.appcompat.widget.SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(text: String?): Boolean = true
             override fun onQueryTextChange(text: String?): Boolean {
@@ -102,12 +119,18 @@ class InvoiceCreatorListFragment : Fragment() {
         repository.allLiveData().observe(viewLifecycleOwner) { drafts ->
             allDrafts = drafts
             render()
+            reloadPaidSums()
         }
     }
 
-    /** Applies the quick-search query (number, buyer, dates) and updates the list/empty state. */
+    /** Applies the type filter + quick-search query (number, buyer, dates) and updates the list. */
     private fun render() {
-        val filtered = if (query.isBlank()) allDrafts else allDrafts.filter { d ->
+        val byType = when (typeFilter) {
+            TypeFilter.INVOICES -> allDrafts.filter { !it.isQuote }
+            TypeFilter.QUOTES -> allDrafts.filter { it.isQuote }
+            TypeFilter.ALL -> allDrafts
+        }
+        val filtered = if (query.isBlank()) byType else byType.filter { d ->
             listOfNotNull(d.invoiceNumber, d.buyerName, d.issueDate, d.dueDate)
                 .any { it.contains(query, ignoreCase = true) }
         }
@@ -125,12 +148,17 @@ class InvoiceCreatorListFragment : Fragment() {
     // ----- generated invoices: view / share ------------------------------------------------
 
     private fun showGeneratedOptions(draft: OutgoingInvoice) {
+        if (draft.isQuote) {
+            showGeneratedQuoteOptions(draft)
+            return
+        }
         val isPaid = draft.paidAt != null
         val items = buildList {
             add(getString(R.string.creator_view_pdf))
             add(getString(R.string.creator_share))
+            add(getString(R.string.creator_print))
             add(getString(R.string.creator_duplicate))
-            add(getString(if (isPaid) R.string.creator_option_mark_unpaid else R.string.creator_option_mark_paid))
+            add(getString(R.string.creator_payments))
             if (!isPaid) add(getString(R.string.creator_option_send_dunning))
         }.toTypedArray()
         MaterialAlertDialogBuilder(requireContext())
@@ -139,20 +167,157 @@ class InvoiceCreatorListFragment : Fragment() {
                 when (which) {
                     0 -> viewPdf(draft)
                     1 -> sharePdf(draft)
-                    2 -> duplicateAsDraft(draft)
-                    3 -> togglePaid(draft)
-                    4 -> startDunning(draft)
+                    2 -> printPdf(draft)
+                    3 -> duplicateAsDraft(draft)
+                    4 -> showPayments(draft)
+                    5 -> startDunning(draft)
                 }
             }
             .setNegativeButton(android.R.string.cancel, null)
             .show()
     }
 
-    private fun togglePaid(draft: OutgoingInvoice) {
+    /** Generated quote actions: view / share the PDF, or turn the quote into an invoice draft. */
+    private fun showGeneratedQuoteOptions(quote: OutgoingInvoice) {
+        val items = arrayOf(
+            getString(R.string.creator_view_pdf),
+            getString(R.string.creator_share),
+            getString(R.string.creator_print),
+            getString(R.string.creator_convert_to_invoice)
+        )
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(quote.invoiceNumber.ifBlank { getString(R.string.creator_doc_type_quote) })
+            .setItems(items) { _, which ->
+                when (which) {
+                    0 -> viewPdf(quote)
+                    1 -> sharePdf(quote)
+                    2 -> printPdf(quote)
+                    3 -> convertToInvoice(quote)
+                }
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    /**
+     * Turns a (final) quote into a fresh, editable invoice draft: same buyer and line items, but a
+     * new invoice number from the invoice sequence, document type invoice and today's dates. The
+     * original quote is untouched.
+     */
+    private fun convertToInvoice(quote: OutgoingInvoice) {
         viewLifecycleOwner.lifecycleScope.launch {
-            repository.setPaid(draft.id, if (draft.paidAt == null) System.currentTimeMillis() else null)
+            val profile = CompanyProfileStore(requireContext()).load()
+            val today = LocalDate.now()
+            val now = System.currentTimeMillis()
+            val invoice = quote.copy(
+                id = 0,
+                documentTypeCode = OutgoingInvoice.DOC_TYPE_INVOICE,
+                invoiceNumber = if (profile.autoNumbering) profile.suggestedNumber() else "",
+                issueDate = today.toString(),
+                dueDate = if (profile.defaultPaymentDays > 0) {
+                    today.plusDays(profile.defaultPaymentDays.toLong()).toString()
+                } else null,
+                status = OutgoingInvoice.STATUS_DRAFT,
+                generatedXml = null,
+                pdfPath = null,
+                paidAt = null,
+                dunningLevel = 0,
+                lastDunningAt = null,
+                lastOverdueNotifiedAt = null,
+                createdAt = now,
+                updatedAt = now
+            )
+            val newId = repository.insert(invoice)
+            openDraft(newId)
         }
     }
+
+    // ----- partial payments -----------------------------------------------------------------
+
+    /** Shows the payment ledger: recorded payments, remaining amount, add/delete + mark fully paid. */
+    private fun showPayments(invoice: OutgoingInvoice) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            val payments = repository.paymentsFor(invoice.id)
+            val grand = InvoiceTotalsCalculator.calculate(invoice).grandTotal
+            val paid = payments.sumOf { it.amount }
+            val remaining = (grand - paid).coerceAtLeast(0.0)
+            val nf = currencyFormat(invoice.currency)
+
+            val labels = payments.map { p ->
+                buildString {
+                    append(nf.format(p.amount)).append(" · ").append(isoDate(p.paidAtMs))
+                    p.note?.takeIf { it.isNotBlank() }?.let { append(" · ").append(it) }
+                }
+            }.toTypedArray()
+
+            val builder = MaterialAlertDialogBuilder(requireContext())
+                .setTitle(getString(R.string.creator_payments_title, nf.format(remaining)))
+            if (labels.isNotEmpty()) {
+                builder.setItems(labels) { _, which -> confirmDeletePayment(invoice, payments[which]) }
+            } else {
+                builder.setMessage(getString(R.string.creator_payments_none, nf.format(grand)))
+            }
+            builder.setPositiveButton(R.string.creator_payment_record) { _, _ ->
+                showRecordPayment(invoice, remaining)
+            }
+            builder.setNegativeButton(android.R.string.cancel, null)
+            builder.show()
+        }
+    }
+
+    /** Amount + note entry for a single incoming payment; amount pre-filled with the remainder. */
+    private fun showRecordPayment(invoice: OutgoingInvoice, remaining: Double) {
+        val dialogBinding = DialogRecordPaymentBinding.inflate(layoutInflater)
+        if (remaining > 0.0) {
+            dialogBinding.inputPaymentAmount.setText(String.format(Locale.US, "%.2f", remaining))
+        }
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(R.string.creator_payment_record)
+            .setView(dialogBinding.root)
+            .setPositiveButton(R.string.creator_save) { _, _ ->
+                val amount = dialogBinding.inputPaymentAmount.text?.toString()
+                    ?.trim()?.replace(',', '.')?.toDoubleOrNull() ?: 0.0
+                if (amount <= 0.0) {
+                    Snackbar.make(binding.root, R.string.creator_error_invalid, Snackbar.LENGTH_LONG).show()
+                    return@setPositiveButton
+                }
+                val note = dialogBinding.inputPaymentNote.text?.toString()?.trim()?.ifBlank { null }
+                viewLifecycleOwner.lifecycleScope.launch {
+                    repository.recordPayment(invoice, amount, System.currentTimeMillis(), note)
+                    reloadPaidSums()
+                }
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    private fun confirmDeletePayment(invoice: OutgoingInvoice, payment: com.ziesche.peppolreader.creator.model.OutgoingInvoicePayment) {
+        MaterialAlertDialogBuilder(requireContext())
+            .setMessage(R.string.creator_payment_delete_confirm)
+            .setPositiveButton(R.string.creator_delete) { _, _ ->
+                viewLifecycleOwner.lifecycleScope.launch {
+                    repository.deletePayment(invoice, payment)
+                    reloadPaidSums()
+                }
+            }
+            .setNegativeButton(android.R.string.cancel, null)
+            .show()
+    }
+
+    /** Refreshes the per-invoice paid totals feeding the list's "partially paid" chips. */
+    private fun reloadPaidSums() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            adapter.setPaidSums(repository.paidSums())
+        }
+    }
+
+    private fun currencyFormat(currency: String): NumberFormat =
+        NumberFormat.getCurrencyInstance(Locale.getDefault()).apply {
+            runCatching { this.currency = Currency.getInstance(currency) }
+        }
+
+    private fun isoDate(ms: Long): String =
+        java.text.SimpleDateFormat("yyyy-MM-dd", Locale.US).format(java.util.Date(ms))
 
     // ----- dunning --------------------------------------------------------------------------
 
@@ -279,6 +444,13 @@ class InvoiceCreatorListFragment : Fragment() {
         } catch (e: ActivityNotFoundException) {
             Snackbar.make(binding.root, R.string.creator_view_error, Snackbar.LENGTH_LONG).show()
         }
+    }
+
+    private fun printPdf(draft: OutgoingInvoice) {
+        val file = pdfFile(draft) ?: run { showMissing(); return }
+        val printManager = requireContext().getSystemService(Context.PRINT_SERVICE) as PrintManager
+        val jobName = getString(R.string.app_name) + " " + draft.invoiceNumber
+        printManager.print(jobName, PdfPrintDocumentAdapter(file), null)
     }
 
     private fun sharePdf(draft: OutgoingInvoice) {

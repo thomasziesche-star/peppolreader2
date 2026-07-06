@@ -145,6 +145,32 @@ class ZugferdPdfA3WriterTest {
         }
     }
 
+    /**
+     * A quote (Angebot) is produced via [ZugferdPdfA3Writer.writePlain]: a plain PDF with the
+     * visible page, the "Angebot" title — but NO embedded factur-x.xml (it is not an invoice).
+     */
+    @Test
+    fun writePlainProducesQuotePdfWithoutEmbeddedXml() {
+        val ctx = RuntimeEnvironment.getApplication()
+        val quote = draft().copy(
+            invoiceNumber = "AN-2026-007",
+            documentTypeCode = OutgoingInvoice.DOC_TYPE_QUOTE
+        )
+        val pdf = ZugferdPdfA3Writer(ctx).writePlain(quote)
+
+        assertTrue("starts with %PDF", String(pdf, 0, 5).startsWith("%PDF"))
+
+        // No embedded XML: the extractor must NOT find a factur-x attachment.
+        val result = ZugferdExtractor().extract(ByteArrayInputStream(pdf))
+        assertTrue("no embedded XML in a quote", result !is ZugferdExtractor.Result.Success)
+
+        PDDocument.load(pdf).use { doc ->
+            val text = PDFTextStripper().getText(doc)
+            assertTrue("quote title", text.contains("Angebot"))
+            assertTrue("quote number", text.contains("AN-2026-007"))
+        }
+    }
+
     /** Logo on the letterhead + enough lines to force a page break must still round-trip. */
     @Test
     fun multiPageWithLogoRoundTrips() {

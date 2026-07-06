@@ -298,6 +298,7 @@
     <string name="creator_subtitle">Genereer ZUGFeRD-facturen als hybride PDF/A-3 (EN 16931).</string>
     <string name="creator_no_drafts">Nog geen concepten. Tik op „Nieuwe factuur".</string>
     <string name="creator_new_draft">Nieuwe factuur</string>
+    <string name="creator_new_draft_button">Nieuwe factuur (of offerte)</string>
     <string name="creator_company_profile">Bedrijfsprofiel</string>
     <string name="creator_company_profile_hint">Uw gegevens verschijnen als afzender op elke factuur.</string>
 
@@ -308,6 +309,8 @@
     <string name="creator_city">Plaats</string>
     <string name="creator_country">Landcode (bijv. DE)</string>
     <string name="creator_vat_id">Btw-nummer</string>
+    <string name="creator_buyer_reference">Leitweg-ID (routerings-ID)</string>
+    <string name="creator_buyer_reference_helper">Vereist voor facturen aan Duitse overheden (B2G)</string>
     <string name="creator_tax_number">Fiscaal nummer</string>
     <string name="creator_iban">IBAN</string>
     <string name="creator_bic">BIC</string>
@@ -389,6 +392,26 @@
     <string name="creator_doc_type">Documenttype</string>
     <string name="creator_doc_type_invoice">Factuur</string>
     <string name="creator_doc_type_credit_note">Creditnota</string>
+    <string name="creator_doc_type_quote">Offerte</string>
+    <string name="creator_generate_quote">Offerte maken</string>
+    <string name="creator_convert_to_invoice">Omzetten naar factuur</string>
+    <string name="creator_print">Afdrukken</string>
+    <string name="creator_customer_payment_days">Betalingstermijn (dagen)</string>
+    <string name="creator_customer_payment_days_hint">Leeg laten voor de bedrijfsstandaard</string>
+    <string name="creator_customer_payment_note">Betalingsnotitie voor deze klant</string>
+    <string name="creator_payments">Betalingen</string>
+    <string name="creator_payments_title">Betalingen · resterend %1$s</string>
+    <string name="creator_payments_none">Nog geen betalingen. Totaal: %1$s</string>
+    <string name="creator_payment_record">Betaling registreren</string>
+    <string name="creator_payment_amount">Bedrag</string>
+    <string name="creator_payment_note">Notitie (optioneel)</string>
+    <string name="creator_payment_delete_confirm">Deze betaling verwijderen?</string>
+    <string name="creator_badge_partial">Deels betaald</string>
+    <string name="creator_filter_all">Alle</string>
+    <string name="creator_filter_invoices">Facturen</string>
+    <string name="creator_filter_quotes">Offertes</string>
+    <string name="creator_numbering_quote_prefix">Offerte-prefix</string>
+    <string name="creator_numbering_quote_next">Volgende nr.</string>
     <string name="creator_currency">Valuta</string>
 
     <!-- Partijen -->
@@ -508,6 +531,13 @@
     <string name="backup_create">Back-up maken</string>
     <string name="backup_restore">Back-up herstellen</string>
     <string name="backup_success">Back-up opgeslagen.</string>
+    <string name="backup_options_title">Back-up</string>
+    <string name="backup_save_now">Back-up opslaan…</string>
+    <string name="backup_share">Back-up delen (Drive, e-mail…)</string>
+    <string name="backup_auto_setup">Automatische back-up instellen…</string>
+    <string name="backup_auto_disable">Automatische back-up uitschakelen</string>
+    <string name="backup_auto_enabled">Automatische back-up aan: %1$s</string>
+    <string name="backup_auto_disabled">Automatische back-up uitgeschakeld.</string>
     <string name="backup_error">Back-up mislukt.</string>
     <string name="backup_restore_warning">Hiermee worden alle huidige facturen en bijlagen vervangen door de back-up. Doorgaan?</string>
     <string name="backup_restore_confirm">Herstellen</string>
@@ -517,13 +547,37 @@
     <string name="help_detail"><b>Detailweergave</b>\n\nDrie tabbladen: de weergegeven factuur, de ruwe XML (met live zoeken) en de originele PDF indien bijgevoegd.\n\n<b>Open / Betaald:</b> markeert de factuur als voldaan.\n\n<b>Notitie &amp; categorie:</b> tik op de regel boven de tabbladen om een boekhoudnotitie en categorie toe te voegen — beide verschijnen in de CSV-export en zijn doorzoekbaar.\n\n<b>AI vragen:</b> de tekstballon opent een chat over deze factuur (vereist een AI-aanbieder in AI-instellingen).</string>
     <string name="help_dashboard"><b>Dashboard</b>\n\nOverzicht van je facturen voor de gekozen periode (filter bovenaan).\n\n<b>Kerncijfers:</b> totaal, aantal, openstaande en achterstallige bedragen.\n<b>Grafieken:</b> betaalstatus, uitgaven per maand, trend betaald/totaal en topleveranciers.\n<b>Btw per kwartaal:</b> netto/btw/bruto per kwartaal voor je btw-aangifte.\n\nCreditnota’s tellen overal negatief.</string>
     <string name="help_ai"><b>AI-instellingen</b>\n\nVoeg een of meer AI-aanbieders toe (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock of een generiek OpenAI-compatibel eindpunt).\n\nVoeg een aanbieder toe, plak je API-sleutel, laad de modellen en kies er een — markeer daarna een vermelding als standaard.\n\nOpen daarna een factuur en tik op de tekstballon.\n\n<b>Privacy:</b> de factuurinhoud wordt naar de gekozen aanbieder gestuurd.</string>
-    <string name="help_creator_list"><b>ZUGFeRD &amp; E-Invoice Creator</b>\n\nMaak je eigen e-facturen als hybride ZUGFeRD PDF/A-3 (EN 16931).\n\n<b>Nieuwe factuur:</b> start een concept.\n<b>Bedrijfsprofiel:</b> je afzendergegevens — vul dit eerst in.\n<b>Klanten:</b> je klantenbestand voor snel hergebruik.\n\nConcepten zijn bewerkbaar; <i>gegenereerde</i> facturen zijn definitief — tik erop om te bekijken, delen of als nieuw concept te dupliceren (handig voor terugkerende facturen).</string>
-    <string name="help_creator_edit"><b>Factuureditor</b>\n\nVoer nummer, datums, je klant en de regels in (omschrijving, aantal, eenheid, stukprijs, btw-tarief). Totalen werken live bij.\n\n<b>Uit klantenbestand:</b> vult de kopervelden uit een opgeslagen klant.\n\n<b>Aanmaken:</b> voert eerst een EN 16931-controle uit — fouten blokkeren, waarschuwingen kunnen worden overgeslagen — en maakt dan de hybride ZUGFeRD-PDF. Een gegenereerde factuur is niet meer bewerkbaar.</string>
-    <string name="help_company_profile"><b>Bedrijfsprofiel</b>\n\nJe afzendergegevens, gebruikt op elke factuur die je maakt. EN 16931 vereist minstens een volledig adres plus btw-nummer of fiscaal nummer.\n\n<b>Logo:</b> optioneel, op de PDF.\n<b>Nummering:</b> stelt het volgende nummer voor (blijft bewerkbaar).\n<b>Betaaltermijn:</b> vult de vervaldatum voor (factuurdatum + N dagen).\n<b>Opslag:</b> waar gegenereerde PDF’s worden opgeslagen.</string>
-    <string name="help_creator_customers"><b>Klantenbestand</b>\n\nOpgeslagen klanten voor je gemaakte facturen. Nieuwe klanten worden automatisch toegevoegd bij het genereren; je kunt ze hier ook toevoegen, bewerken of verwijderen.\n\nIn de editor vult <i>Uit klantenbestand</i> de kopervelden met één tik.</string>
+    <string name="help_creator_list"><b>ZUGFeRD &amp; E-Invoice Creator</b>\n\nMaak je eigen e-facturen als hybride ZUGFeRD PDF/A-3 (EN 16931), plus offertes.\n\n<b>Nieuwe factuur (of offerte):</b> start een concept — kies boven in de editor factuur, creditnota of offerte.\n<b>Bedrijfsprofiel:</b> je afzendergegevens — vul dit eerst in.\n<b>Klanten / Artikelen:</b> stamgegevens voor snel hergebruik.\n<b>Filter:</b> schakelt de lijst tussen facturen en offertes.\n\nConcepten zijn bewerkbaar; <i>gegenereerde</i> documenten zijn definitief — tik erop om te bekijken, delen, afdrukken, betalingen te registreren of (bij offertes) om te zetten naar een factuur. Facturen kun je ook als nieuw concept dupliceren (handig voor terugkerende).</string>
+    <string name="help_creator_edit"><b>Factuureditor</b>\n\nKies het documenttype (factuur, creditnota of offerte), voer dan nummer, datums, je klant en de regels in (omschrijving, aantal, eenheid, stukprijs, btw-tarief). Totalen werken live bij.\n\n<b>Leitweg-ID:</b> voor facturen aan overheden (B2G).\n<b>Uit klantenbestand:</b> vult de kopervelden — inclusief de betaalvoorwaarden van die klant.\n\n<b>Aanmaken:</b> voert eerst een EN 16931-controle uit — fouten blokkeren, waarschuwingen kunnen worden overgeslagen — en maakt dan de hybride ZUGFeRD-PDF (een offerte levert een gewone PDF). Een gegenereerd document is niet meer bewerkbaar.</string>
+    <string name="help_company_profile"><b>Bedrijfsprofiel</b>\n\nJe afzendergegevens, gebruikt op elk document dat je maakt. EN 16931 vereist minstens een volledig adres plus btw-nummer of fiscaal nummer.\n\n<b>Logo:</b> optioneel, op de PDF.\n<b>Nummering:</b> aparte automatische reeksen voor facturen en offertes (blijven bewerkbaar).\n<b>Betaaltermijn:</b> vult de vervaldatum voor (factuurdatum + N dagen).\n<b>Opslag:</b> waar gegenereerde PDF’s worden opgeslagen.</string>
+    <string name="help_creator_customers"><b>Klantenbestand</b>\n\nOpgeslagen klanten voor je gemaakte facturen. Nieuwe klanten worden automatisch toegevoegd bij het genereren; je kunt ze hier ook toevoegen, bewerken of verwijderen.\n\nPer klant kun je een standaard betaaltermijn en notitie opslaan die nieuwe facturen voorinvullen. In de editor vult <i>Uit klantenbestand</i> de kopervelden met één tik.</string>
     <string name="help_creator_articles"><b>Artikelen &amp; diensten</b>\n\nJe catalogus van terugkerende artikelen en diensten met eenheid, stukprijs en btw-tarief. In de factuureditor voegt <i>Uit catalogus</i> een vooraf ingevulde regel toe — aantal en alle andere velden blijven bewerkbaar.</string>
-    <string name="help_creator_dashboard"><b>Omzetdashboard</b>\n\nKerncijfers van je gemaakte facturen: omzet, openstaande en achterstallige bedragen, betaalstatus, omzet per maand, btw per kwartaal en topklanten.\n\nAlleen <i>gegenereerde</i> facturen tellen mee — concepten niet, creditnota\'s tellen negatief. Markeer facturen als betaald via de facturenlijst.</string>
+    <string name="help_creator_dashboard"><b>Omzetdashboard</b>\n\nKerncijfers van je gemaakte facturen: omzet, openstaande en achterstallige bedragen, betaalstatus, omzet per maand, btw per kwartaal en topklanten.\n\nAlleen <i>gegenereerde</i> facturen tellen mee — concepten niet, creditnota\'s tellen negatief. Registreer (deel)betalingen via de facturenlijst; openstaande bedragen tonen het resterende saldo.</string>
     <string name="help_export"><b>Export</b>\n\nMaak een CSV (UTF-8, puntkomma-gescheiden) van je facturen voor de gekozen periode — klaar voor je boekhouder of spreadsheet.\n\n<b>Bundelen als ZIP:</b> bevat daarnaast de originele XML- en PDF-bestanden per factuur.\n\nDe CSV bevat kolommen voor categorie en notitie. Creditnota’s worden met een negatief bedrag geëxporteerd.</string>
     <string name="help_reminders"><b>Vervaldatumherinneringen</b>\n\nSchakel een dagelijkse controle in die je waarschuwt voor binnenkort vervallende facturen.\n\n<b>Vooraankondiging:</b> hoeveel dagen vooraf je herinnerd wordt (0/3/7/14).\n\n<b>Nu controleren</b> voert de controle direct uit. Op Android 13+ vraagt de app bij inschakelen om meldingstoestemming.</string>
     <string name="help_ai_credential"><b>AI-aanbieder</b>\n\n<b>Aanbieder:</b> kies je dienst (of <i>Generiek</i> voor elk OpenAI-compatibel eindpunt).\n<b>API-sleutel:</b> plak je sleutel, laad de modellen, kies er een.\n<b>Label:</b> een naam om de vermelding te herkennen.\n\nDe sleutel wordt alleen op dit apparaat opgeslagen. Bij een chat over een factuur wordt de inhoud naar deze aanbieder gestuurd.</string>
+    <!-- Onboarding intro -->
+    <string name="onboarding_skip">Overslaan</string>
+    <string name="onboarding_next">Volgende</string>
+    <string name="onboarding_start">Aan de slag</string>
+    <string name="onboarding_dont_show_again">Niet meer tonen</string>
+    <string name="onboarding_welcome_title">Welkom bij Zugferd &amp; Accounting</string>
+    <string name="onboarding_welcome_subtitle">E-facturen maken en lezen — volledig op je apparaat.</string>
+    <string name="onboarding_language_label">Taal</string>
+    <string name="onboarding_steps_title">In 3 stappen naar je factuur</string>
+    <string name="onboarding_step_1">Profiel aanmaken (naam, IBAN, fiscaal nr.)</string>
+    <string name="onboarding_step_2">Ontvanger en regels invoeren</string>
+    <string name="onboarding_step_3">PDF genereren en per e-mail versturen — klaar.</string>
+    <string name="onboarding_ease_label">Eenvoudig in gebruik</string>
+    <string name="onboarding_ease_1">✓  Facturen in enkele seconden</string>
+    <string name="onboarding_ease_2">✓  Verkoper- &amp; kopergegevens opslaan</string>
+    <string name="onboarding_ease_3">✓  Automatische factuurnummers</string>
+    <string name="onboarding_privacy_title">Jouw gegevens blijven bij jou</string>
+    <string name="onboarding_privacy_body">Alle factuurgegevens worden uitsluitend lokaal op je apparaat opgeslagen — geen cloud, geen account nodig.</string>
+    <string name="onboarding_features_label">Uitgebreide functies</string>
+    <string name="onboarding_feature_1">✓  ZUGFeRD, XRechnung, Factur-X &amp; Peppol</string>
+    <string name="onboarding_feature_2">✓  Meerdere btw-tarieven, kortingen &amp; verlegging</string>
+    <string name="onboarding_feature_3">✓  Betaalstatus, aanmaningen &amp; omzetoverzicht</string>
+    <string name="onboarding_backup_title">Belangrijk: eigen back-up</string>
+    <string name="onboarding_backup_body">Omdat er niets in de cloud staat, zijn je gegevens weg als je de app verwijdert. Maak regelmatig een back-up via „Profiel → Gegevens back-uppen“.</string>
 </resources>

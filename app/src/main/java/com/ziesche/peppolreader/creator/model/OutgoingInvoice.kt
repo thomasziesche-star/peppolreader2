@@ -42,6 +42,7 @@ data class OutgoingInvoice(
     val buyerCity: String? = null,
     val buyerCountry: String? = null,
     val buyerVatId: String? = null,
+    val buyerReference: String? = null,    // BT-10 Leitweg-ID (buyer reference), e.g. B2G routing id
 
     // Lines + payment
     val lineItemsJson: String = "[]",
@@ -74,6 +75,12 @@ data class OutgoingInvoice(
     val allowances: List<CreatorAllowanceCharge>
         get() = CreatorAllowanceCharge.listFromJson(allowancesJson)
 
+    /**
+     * A quote/offer (Angebot) rather than a real invoice: stored with [DOC_TYPE_QUOTE] and
+     * produced as a plain PDF (no EN 16931 XML), later convertible into an invoice.
+     */
+    val isQuote: Boolean get() = documentTypeCode == DOC_TYPE_QUOTE
+
     /** Overdue = generated, unpaid, due date strictly before [todayIso] (lexical ISO compare). */
     fun isOverdue(todayIso: String): Boolean =
         status == STATUS_GENERATED && paidAt == null &&
@@ -82,6 +89,12 @@ data class OutgoingInvoice(
     companion object {
         const val STATUS_DRAFT = "DRAFT"
         const val STATUS_GENERATED = "GENERATED"
+
+        /** documentTypeCode values. Invoice/credit note are the EN 16931 (UNTDID 1001) codes;
+         *  quote is an app-internal marker that never reaches the CII XML (quotes are PDF-only). */
+        const val DOC_TYPE_INVOICE = "380"
+        const val DOC_TYPE_CREDIT_NOTE = "381"
+        const val DOC_TYPE_QUOTE = "QUOTE"
 
         /** Regular VAT (categories S/Z derived from the per-line rate). */
         const val TAX_MODE_STANDARD = "STANDARD"

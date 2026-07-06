@@ -89,6 +89,26 @@ class ZugferdXmlBuilderTest {
     }
 
     @Test
+    fun emitsBuyerReferenceAtCorrectPosition() {
+        val xml = ZugferdXmlBuilder(sampleDraft().copy(buyerReference = "991-33333TEST-33")).build()
+
+        // BT-10: present as BuyerReference, and it must be the first child of the trade agreement
+        // (before SellerTradeParty), per the CII sequence.
+        assertTrue(xml.contains("<ram:BuyerReference>991-33333TEST-33</ram:BuyerReference>"))
+        val agreement = xml.indexOf("<ram:ApplicableHeaderTradeAgreement>")
+        val buyerRef = xml.indexOf("<ram:BuyerReference>")
+        val seller = xml.indexOf("<ram:SellerTradeParty>")
+        assertTrue(agreement in 0 until buyerRef)
+        assertTrue(buyerRef < seller)
+    }
+
+    @Test
+    fun omitsBuyerReferenceWhenBlank() {
+        val xml = ZugferdXmlBuilder(sampleDraft().copy(buyerReference = null)).build()
+        assertTrue(!xml.contains("<ram:BuyerReference>"))
+    }
+
+    @Test
     fun totalsCalculatorMatchesExpectedBreakdown() {
         val totals = InvoiceTotalsCalculator.calculate(
             listOf(

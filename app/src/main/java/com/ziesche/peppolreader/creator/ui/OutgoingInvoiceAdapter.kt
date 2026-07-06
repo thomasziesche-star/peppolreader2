@@ -22,6 +22,14 @@ class OutgoingInvoiceAdapter(
     private val onDelete: (OutgoingInvoice) -> Unit
 ) : ListAdapter<OutgoingInvoice, OutgoingInvoiceAdapter.VH>(DIFF) {
 
+    /** invoiceId → total recorded partial payments; drives the "partially paid" chip. */
+    private var paidSums: Map<Long, Double> = emptyMap()
+
+    fun setPaidSums(sums: Map<Long, Double>) {
+        paidSums = sums
+        notifyDataSetChanged()
+    }
+
     inner class VH(val binding: ItemOutgoingInvoiceBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -45,24 +53,39 @@ class OutgoingInvoiceAdapter(
                 R.string.creator_status_draft
         )
 
-        // Document-type pill: invoice neutral, credit note in the error-container palette.
-        val isCreditNote = item.documentTypeCode == "381"
+        // Document-type pill: invoice neutral, credit note error-container, quote tertiary.
+        val isCreditNote = item.documentTypeCode == OutgoingInvoice.DOC_TYPE_CREDIT_NOTE
+        val isQuote = item.isQuote
         holder.binding.badgeDocType.text = ctx.getString(
-            if (isCreditNote) R.string.creator_doc_type_credit_note else R.string.creator_doc_type_invoice
+            when {
+                isQuote -> R.string.creator_doc_type_quote
+                isCreditNote -> R.string.creator_doc_type_credit_note
+                else -> R.string.creator_doc_type_invoice
+            }
         )
         holder.binding.badgeDocType.setBackgroundResource(
-            if (isCreditNote) R.drawable.bg_credit_note_chip else R.drawable.bg_format_badge
+            when {
+                isQuote -> R.drawable.bg_quote_chip
+                isCreditNote -> R.drawable.bg_credit_note_chip
+                else -> R.drawable.bg_format_badge
+            }
         )
         holder.binding.badgeDocType.setTextColor(
-            if (isCreditNote)
-                MaterialColors.getColor(holder.binding.badgeDocType, com.google.android.material.R.attr.colorOnErrorContainer)
-            else
-                ContextCompat.getColor(ctx, R.color.badge_neutral_fg)
+            when {
+                isQuote -> MaterialColors.getColor(holder.binding.badgeDocType, com.google.android.material.R.attr.colorOnTertiaryContainer)
+                isCreditNote -> MaterialColors.getColor(holder.binding.badgeDocType, com.google.android.material.R.attr.colorOnErrorContainer)
+                else -> ContextCompat.getColor(ctx, R.color.badge_neutral_fg)
+            }
         )
-        // Payment chips: paid wins; otherwise overdue, escalating to the dunning level.
-        val overdue = item.isOverdue(LocalDate.now().toString())
-        val paid = item.status == OutgoingInvoice.STATUS_GENERATED && item.paidAt != null
+        // Payment chips only apply to real invoices, never to quotes.
+        val overdue = !isQuote && item.isOverdue(LocalDate.now().toString())
+        val paid = !isQuote && item.status == OutgoingInvoice.STATUS_GENERATED && item.paidAt != null
         holder.binding.chipPaid.visibility = if (paid) View.VISIBLE else View.GONE
+        // Partially paid: generated, not fully paid, but some money recorded against it.
+        val partiallyPaid = !isQuote && !paid &&
+            item.status == OutgoingInvoice.STATUS_GENERATED &&
+            (paidSums[item.id] ?: 0.0) > 0.0
+        holder.binding.chipPartial.visibility = if (partiallyPaid) View.VISIBLE else View.GONE
         holder.binding.chipOverdue.visibility =
             if (overdue && item.dunningLevel == 0) View.VISIBLE else View.GONE
         holder.binding.chipDunning.visibility =

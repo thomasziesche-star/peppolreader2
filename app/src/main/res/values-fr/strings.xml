@@ -298,6 +298,7 @@
     <string name="creator_subtitle">Générez des factures ZUGFeRD au format hybride PDF/A-3 (EN 16931).</string>
     <string name="creator_no_drafts">Aucun brouillon. Touchez « Nouvelle facture ».</string>
     <string name="creator_new_draft">Nouvelle facture</string>
+    <string name="creator_new_draft_button">Nouvelle facture (ou devis)</string>
     <string name="creator_company_profile">Profil de l\'entreprise</string>
     <string name="creator_company_profile_hint">Vos coordonnées apparaissent comme expéditeur sur chaque facture.</string>
 
@@ -308,6 +309,8 @@
     <string name="creator_city">Ville</string>
     <string name="creator_country">Code pays (ex. DE)</string>
     <string name="creator_vat_id">N° de TVA</string>
+    <string name="creator_buyer_reference">Identifiant de routage (Leitweg-ID)</string>
+    <string name="creator_buyer_reference_helper">Requis pour les factures aux administrations allemandes (B2G)</string>
     <string name="creator_tax_number">Numéro fiscal</string>
     <string name="creator_iban">IBAN</string>
     <string name="creator_bic">BIC</string>
@@ -389,6 +392,26 @@
     <string name="creator_doc_type">Type de document</string>
     <string name="creator_doc_type_invoice">Facture</string>
     <string name="creator_doc_type_credit_note">Avoir</string>
+    <string name="creator_doc_type_quote">Devis</string>
+    <string name="creator_generate_quote">Créer un devis</string>
+    <string name="creator_convert_to_invoice">Convertir en facture</string>
+    <string name="creator_print">Imprimer</string>
+    <string name="creator_customer_payment_days">Délai de paiement (jours)</string>
+    <string name="creator_customer_payment_days_hint">Laisser vide pour la valeur par défaut</string>
+    <string name="creator_customer_payment_note">Note de paiement pour ce client</string>
+    <string name="creator_payments">Paiements</string>
+    <string name="creator_payments_title">Paiements · reste %1$s</string>
+    <string name="creator_payments_none">Aucun paiement enregistré. Total : %1$s</string>
+    <string name="creator_payment_record">Enregistrer un paiement</string>
+    <string name="creator_payment_amount">Montant</string>
+    <string name="creator_payment_note">Note (facultatif)</string>
+    <string name="creator_payment_delete_confirm">Supprimer ce paiement ?</string>
+    <string name="creator_badge_partial">Partiellement payé</string>
+    <string name="creator_filter_all">Tout</string>
+    <string name="creator_filter_invoices">Factures</string>
+    <string name="creator_filter_quotes">Devis</string>
+    <string name="creator_numbering_quote_prefix">Préfixe devis</string>
+    <string name="creator_numbering_quote_next">Prochain n°</string>
     <string name="creator_currency">Devise</string>
 
     <!-- Parties -->
@@ -508,6 +531,13 @@
     <string name="backup_create">Créer une sauvegarde</string>
     <string name="backup_restore">Restaurer une sauvegarde</string>
     <string name="backup_success">Sauvegarde enregistrée.</string>
+    <string name="backup_options_title">Sauvegarde</string>
+    <string name="backup_save_now">Enregistrer la sauvegarde…</string>
+    <string name="backup_share">Partager la sauvegarde (Drive, e-mail…)</string>
+    <string name="backup_auto_setup">Configurer la sauvegarde automatique…</string>
+    <string name="backup_auto_disable">Désactiver la sauvegarde automatique</string>
+    <string name="backup_auto_enabled">Sauvegarde automatique activée : %1$s</string>
+    <string name="backup_auto_disabled">Sauvegarde automatique désactivée.</string>
     <string name="backup_error">Échec de la sauvegarde.</string>
     <string name="backup_restore_warning">Cela remplace toutes les factures et pièces jointes actuelles par la sauvegarde. Continuer ?</string>
     <string name="backup_restore_confirm">Restaurer</string>
@@ -517,13 +547,37 @@
     <string name="help_detail"><b>Vue détaillée</b>\n\nTrois onglets : la facture rendue, le XML brut (avec recherche en direct) et le PDF original s’il est joint.\n\n<b>Ouvert / Payé :</b> marque la facture comme réglée.\n\n<b>Note &amp; catégorie :</b> touchez la ligne au-dessus des onglets pour ajouter une note comptable et une catégorie — elles apparaissent dans l’export CSV et sont cherchables.\n\n<b>Demander à l’IA :</b> la bulle ouvre un chat sur cette facture (nécessite un fournisseur d’IA dans les réglages IA).</string>
     <string name="help_dashboard"><b>Tableau de bord</b>\n\nAperçu de vos factures sur la période choisie (filtre en haut).\n\n<b>Indicateurs :</b> total, nombre, montants ouverts et en retard.\n<b>Graphiques :</b> statut de paiement, dépenses par mois, tendance payé/total et principaux fournisseurs.\n<b>TVA par trimestre :</b> net/TVA/brut par trimestre pour votre déclaration de TVA.\n\nLes avoirs comptent négativement partout.</string>
     <string name="help_ai"><b>Réglages IA</b>\n\nAjoutez un ou plusieurs fournisseurs d’IA (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock ou un point d’accès générique compatible OpenAI).\n\nAjoutez un fournisseur, collez votre clé API, chargez les modèles et choisissez-en un — puis marquez une entrée par défaut.\n\nOuvrez ensuite une facture et touchez la bulle pour poser des questions.\n\n<b>Confidentialité :</b> le contenu de la facture est envoyé au fournisseur choisi.</string>
-    <string name="help_creator_list"><b>ZUGFeRD &amp; E-Invoice Creator</b>\n\nCréez vos propres factures électroniques en PDF/A-3 hybride ZUGFeRD (EN 16931).\n\n<b>Nouvelle facture :</b> démarre un brouillon.\n<b>Profil d’entreprise :</b> vos données d’expéditeur — à remplir d’abord.\n<b>Clients :</b> votre fichier clients pour réutilisation rapide.\n\nLes brouillons sont modifiables ; les factures <i>générées</i> sont définitives — touchez-en une pour la voir, la partager ou la dupliquer en brouillon (pratique pour les factures récurrentes).</string>
-    <string name="help_creator_edit"><b>Éditeur de facture</b>\n\nSaisissez le numéro, les dates, votre client et les lignes (description, quantité, unité, prix unitaire, taux de TVA). Les totaux se mettent à jour en direct.\n\n<b>Depuis le fichier clients :</b> remplit les champs de l’acheteur.\n\n<b>Créer :</b> effectue d’abord un contrôle EN 16931 — les erreurs bloquent, les avertissements peuvent être ignorés — puis produit le PDF ZUGFeRD hybride. Une facture générée ne peut plus être modifiée.</string>
-    <string name="help_company_profile"><b>Profil d’entreprise</b>\n\nVos données d’expéditeur, utilisées sur chaque facture créée. EN 16931 exige au moins une adresse complète et un n° de TVA ou un numéro fiscal.\n\n<b>Logo :</b> optionnel, affiché sur le PDF.\n<b>Numérotation :</b> propose le prochain numéro (modifiable).\n<b>Délai de paiement :</b> pré-remplit l’échéance (date de facture + N jours).\n<b>Stockage :</b> où sont enregistrés les PDF générés.</string>
-    <string name="help_creator_customers"><b>Fichier clients</b>\n\nClients enregistrés pour vos factures créées. Les nouveaux clients sont ajoutés automatiquement à la génération ; vous pouvez aussi les ajouter, modifier ou supprimer ici.\n\nDans l’éditeur, <i>Depuis le fichier clients</i> remplit les champs de l’acheteur d’un seul geste.</string>
+    <string name="help_creator_list"><b>ZUGFeRD &amp; E-Invoice Creator</b>\n\nCréez vos propres factures électroniques en PDF/A-3 hybride ZUGFeRD (EN 16931), ainsi que des devis.\n\n<b>Nouvelle facture (ou devis) :</b> démarre un brouillon — choisissez facture, avoir ou devis en haut de l’éditeur.\n<b>Profil d’entreprise :</b> vos données d’expéditeur — à remplir d’abord.\n<b>Clients / Articles :</b> données de base pour réutilisation rapide.\n<b>Filtre :</b> bascule la liste entre factures et devis.\n\nLes brouillons sont modifiables ; les documents <i>générés</i> sont définitifs — touchez-en un pour le voir, le partager, l’imprimer, enregistrer des paiements ou (pour un devis) le convertir en facture. Les factures peuvent aussi être dupliquées en brouillon (pratique pour les récurrentes).</string>
+    <string name="help_creator_edit"><b>Éditeur de facture</b>\n\nChoisissez le type de document (facture, avoir ou devis), puis saisissez le numéro, les dates, votre client et les lignes (description, quantité, unité, prix unitaire, taux de TVA). Les totaux se mettent à jour en direct.\n\n<b>Leitweg-ID :</b> pour les factures aux administrations (B2G).\n<b>Depuis le fichier clients :</b> remplit les champs de l’acheteur — y compris les conditions de paiement du client.\n\n<b>Créer :</b> effectue d’abord un contrôle EN 16931 — les erreurs bloquent, les avertissements peuvent être ignorés — puis produit le PDF ZUGFeRD hybride (un devis produit un PDF simple). Un document généré ne peut plus être modifié.</string>
+    <string name="help_company_profile"><b>Profil d’entreprise</b>\n\nVos données d’expéditeur, utilisées sur chaque document créé. EN 16931 exige au moins une adresse complète et un n° de TVA ou un numéro fiscal.\n\n<b>Logo :</b> optionnel, affiché sur le PDF.\n<b>Numérotation :</b> séquences automatiques distinctes pour les factures et les devis (modifiables).\n<b>Délai de paiement :</b> pré-remplit l’échéance (date de facture + N jours).\n<b>Stockage :</b> où sont enregistrés les PDF générés.</string>
+    <string name="help_creator_customers"><b>Fichier clients</b>\n\nClients enregistrés pour vos factures créées. Les nouveaux clients sont ajoutés automatiquement à la génération ; vous pouvez aussi les ajouter, modifier ou supprimer ici.\n\nPour chaque client, vous pouvez enregistrer un délai de paiement et une note par défaut, pré-remplis sur les nouvelles factures. Dans l’éditeur, <i>Depuis le fichier clients</i> remplit les champs de l’acheteur d’un seul geste.</string>
     <string name="help_creator_articles"><b>Articles &amp; prestations</b>\n\nVotre catalogue d’articles et de prestations récurrents avec unité, prix unitaire et taux de TVA. Dans l’éditeur de factures, <i>Depuis le catalogue</i> ajoute une ligne préremplie — la quantité et tous les autres champs restent modifiables.</string>
-    <string name="help_creator_dashboard"><b>Tableau de bord des revenus</b>\n\nChiffres clés de vos factures créées : revenus, montants ouverts et en retard, statut de paiement, revenus par mois, TVA par trimestre et meilleurs clients.\n\nSeules les factures <i>générées</i> comptent — les brouillons sont exclus, les avoirs comptent négativement. Marquez les factures comme payées depuis la liste des factures.</string>
+    <string name="help_creator_dashboard"><b>Tableau de bord des revenus</b>\n\nChiffres clés de vos factures créées : revenus, montants ouverts et en retard, statut de paiement, revenus par mois, TVA par trimestre et meilleurs clients.\n\nSeules les factures <i>générées</i> comptent — les brouillons sont exclus, les avoirs comptent négativement. Enregistrez les paiements (partiels) depuis la liste des factures ; les montants ouverts reflètent le solde restant.</string>
     <string name="help_export"><b>Export</b>\n\nCréez un CSV (UTF-8, séparé par des points-virgules) de vos factures sur la période choisie — prêt pour votre comptable ou un tableur.\n\n<b>Regrouper en ZIP :</b> inclut en plus les fichiers XML et PDF originaux par facture.\n\nLe CSV inclut les colonnes catégorie et note. Les avoirs sont exportés avec un montant négatif.</string>
     <string name="help_reminders"><b>Rappels d’échéance</b>\n\nActivez une vérification quotidienne qui vous avertit des factures bientôt dues.\n\n<b>Anticipation :</b> combien de jours à l’avance être averti (0/3/7/14).\n\n<b>Vérifier maintenant</b> lance la vérification immédiatement. Sous Android 13+, l’app demande l’autorisation de notification à l’activation.</string>
     <string name="help_ai_credential"><b>Fournisseur d’IA</b>\n\n<b>Fournisseur :</b> choisissez votre service (ou <i>Générique</i> pour tout point d’accès compatible OpenAI).\n<b>Clé API :</b> collez votre clé, chargez les modèles, puis choisissez-en un.\n<b>Libellé :</b> un nom pour reconnaître l’entrée.\n\nLa clé n’est stockée que sur cet appareil. Lors d’un chat sur une facture, son contenu est envoyé à ce fournisseur.</string>
+    <!-- Onboarding intro -->
+    <string name="onboarding_skip">Passer</string>
+    <string name="onboarding_next">Suivant</string>
+    <string name="onboarding_start">Commencer</string>
+    <string name="onboarding_dont_show_again">Ne plus afficher</string>
+    <string name="onboarding_welcome_title">Bienvenue sur Zugferd &amp; Accounting</string>
+    <string name="onboarding_welcome_subtitle">Créez et lisez des e-factures — entièrement sur votre appareil.</string>
+    <string name="onboarding_language_label">Langue</string>
+    <string name="onboarding_steps_title">Votre facture en 3 étapes</string>
+    <string name="onboarding_step_1">Créer votre profil (nom, IBAN, n° fiscal)</string>
+    <string name="onboarding_step_2">Saisir le destinataire et les lignes</string>
+    <string name="onboarding_step_3">Générer le PDF et l\'envoyer par e-mail — terminé.</string>
+    <string name="onboarding_ease_label">Simple d\'utilisation</string>
+    <string name="onboarding_ease_1">✓  Des factures en quelques secondes</string>
+    <string name="onboarding_ease_2">✓  Enregistrer les données vendeur &amp; acheteur</string>
+    <string name="onboarding_ease_3">✓  Numérotation automatique des factures</string>
+    <string name="onboarding_privacy_title">Vos données restent chez vous</string>
+    <string name="onboarding_privacy_body">Toutes les données de facturation sont stockées uniquement sur votre appareil — sans cloud, sans compte.</string>
+    <string name="onboarding_features_label">Fonctions complètes</string>
+    <string name="onboarding_feature_1">✓  ZUGFeRD, XRechnung, Factur-X &amp; Peppol</string>
+    <string name="onboarding_feature_2">✓  Plusieurs taux de TVA, remises &amp; autoliquidation</string>
+    <string name="onboarding_feature_3">✓  Suivi des paiements, relances &amp; tableau de bord</string>
+    <string name="onboarding_backup_title">Important : votre propre sauvegarde</string>
+    <string name="onboarding_backup_body">Comme rien n\'est stocké dans le cloud, vos données sont perdues si vous supprimez l\'application. Sauvegardez régulièrement via « Profil → Sauvegarder les données ».</string>
 </resources>

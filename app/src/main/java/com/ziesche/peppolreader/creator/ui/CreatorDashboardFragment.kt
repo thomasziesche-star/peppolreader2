@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
@@ -21,6 +22,7 @@ import com.ziesche.peppolreader.R
 import com.ziesche.peppolreader.creator.data.OutgoingInvoiceRepository
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
 import com.ziesche.peppolreader.databinding.FragmentCreatorDashboardBinding
+import kotlinx.coroutines.launch
 import java.text.NumberFormat
 import java.util.Locale
 
@@ -59,6 +61,9 @@ class CreatorDashboardFragment : Fragment() {
     /** Unfiltered invoices from the database; the dashboard applies only its own date filter. */
     private var allInvoices: List<OutgoingInvoice> = emptyList()
 
+    /** invoiceId → recorded partial payments, so "open" reflects the true outstanding amount. */
+    private var paidByInvoice: Map<Long, Double> = emptyMap()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -77,7 +82,10 @@ class CreatorDashboardFragment : Fragment() {
 
         repository.allLiveData().observe(viewLifecycleOwner) { invoices ->
             allInvoices = invoices
-            updateCharts(currentFilterIndex)
+            viewLifecycleOwner.lifecycleScope.launch {
+                paidByInvoice = repository.paidSums()
+                updateCharts(currentFilterIndex)
+            }
         }
     }
 
@@ -164,7 +172,7 @@ class CreatorDashboardFragment : Fragment() {
 
     private fun updateCharts(filterIndex: Int) {
         val filtered = filterInvoicesByDate(allInvoices, filterIndex)
-        val stats = CreatorDashboardStats.compute(filtered)
+        val stats = CreatorDashboardStats.compute(filtered, paidByInvoice = paidByInvoice)
 
         renderKpis(stats)
         renderPaymentStatus(stats)

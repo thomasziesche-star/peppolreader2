@@ -1,0 +1,684 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 17,
+    "identityHash": "dc5f0e03349bd917192b71c96520d1b2",
+    "entities": [
+      {
+        "tableName": "invoices",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `invoiceId` TEXT NOT NULL, `issueDate` TEXT NOT NULL, `dueDate` TEXT, `currency` TEXT NOT NULL, `supplierName` TEXT NOT NULL, `supplierStreet` TEXT, `supplierCity` TEXT, `supplierZip` TEXT, `supplierCountry` TEXT, `supplierTaxId` TEXT, `customerName` TEXT NOT NULL, `customerStreet` TEXT, `customerCity` TEXT, `customerZip` TEXT, `customerCountry` TEXT, `customerTaxId` TEXT, `netAmount` REAL NOT NULL, `taxAmount` REAL NOT NULL, `grossAmount` REAL NOT NULL, `payableAmount` REAL NOT NULL, `xmlContent` TEXT NOT NULL, `fileName` TEXT NOT NULL, `embeddedDocumentFilename` TEXT, `embeddedDocumentPath` TEXT, `createdAt` INTEGER NOT NULL, `documentTypeCode` TEXT, `formatLabel` TEXT, `paidAt` INTEGER, `lastReminderShownAt` INTEGER, `invoiceSubtype` TEXT, `correctionInfoJson` TEXT, `note` TEXT, `category` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "invoiceId",
+            "columnName": "invoiceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "issueDate",
+            "columnName": "issueDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dueDate",
+            "columnName": "dueDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "supplierName",
+            "columnName": "supplierName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "supplierStreet",
+            "columnName": "supplierStreet",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "supplierCity",
+            "columnName": "supplierCity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "supplierZip",
+            "columnName": "supplierZip",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "supplierCountry",
+            "columnName": "supplierCountry",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "supplierTaxId",
+            "columnName": "supplierTaxId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "customerName",
+            "columnName": "customerName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "customerStreet",
+            "columnName": "customerStreet",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "customerCity",
+            "columnName": "customerCity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "customerZip",
+            "columnName": "customerZip",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "customerCountry",
+            "columnName": "customerCountry",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "customerTaxId",
+            "columnName": "customerTaxId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "netAmount",
+            "columnName": "netAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "taxAmount",
+            "columnName": "taxAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "grossAmount",
+            "columnName": "grossAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payableAmount",
+            "columnName": "payableAmount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "xmlContent",
+            "columnName": "xmlContent",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fileName",
+            "columnName": "fileName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "embeddedDocumentFilename",
+            "columnName": "embeddedDocumentFilename",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "embeddedDocumentPath",
+            "columnName": "embeddedDocumentPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "documentTypeCode",
+            "columnName": "documentTypeCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "formatLabel",
+            "columnName": "formatLabel",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paidAt",
+            "columnName": "paidAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastReminderShownAt",
+            "columnName": "lastReminderShownAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "invoiceSubtype",
+            "columnName": "invoiceSubtype",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "correctionInfoJson",
+            "columnName": "correctionInfoJson",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "category",
+            "columnName": "category",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "outgoing_invoices",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `invoiceNumber` TEXT NOT NULL, `issueDate` TEXT NOT NULL, `dueDate` TEXT, `documentTypeCode` TEXT NOT NULL, `currency` TEXT NOT NULL, `sellerName` TEXT NOT NULL, `sellerStreet` TEXT, `sellerZip` TEXT, `sellerCity` TEXT, `sellerCountry` TEXT, `sellerVatId` TEXT, `sellerTaxNumber` TEXT, `sellerIban` TEXT, `sellerBic` TEXT, `sellerEmail` TEXT, `sellerPhone` TEXT, `buyerName` TEXT NOT NULL, `buyerStreet` TEXT, `buyerZip` TEXT, `buyerCity` TEXT, `buyerCountry` TEXT, `buyerVatId` TEXT, `buyerReference` TEXT, `lineItemsJson` TEXT NOT NULL, `paymentTermsNote` TEXT, `taxMode` TEXT NOT NULL, `exemptionReason` TEXT, `allowancesJson` TEXT NOT NULL, `status` TEXT NOT NULL, `generatedXml` TEXT, `pdfPath` TEXT, `paidAt` INTEGER, `dunningLevel` INTEGER NOT NULL, `lastDunningAt` INTEGER, `lastOverdueNotifiedAt` INTEGER, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "invoiceNumber",
+            "columnName": "invoiceNumber",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "issueDate",
+            "columnName": "issueDate",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "dueDate",
+            "columnName": "dueDate",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "documentTypeCode",
+            "columnName": "documentTypeCode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "currency",
+            "columnName": "currency",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sellerName",
+            "columnName": "sellerName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sellerStreet",
+            "columnName": "sellerStreet",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sellerZip",
+            "columnName": "sellerZip",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sellerCity",
+            "columnName": "sellerCity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sellerCountry",
+            "columnName": "sellerCountry",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sellerVatId",
+            "columnName": "sellerVatId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sellerTaxNumber",
+            "columnName": "sellerTaxNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sellerIban",
+            "columnName": "sellerIban",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sellerBic",
+            "columnName": "sellerBic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sellerEmail",
+            "columnName": "sellerEmail",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "sellerPhone",
+            "columnName": "sellerPhone",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "buyerName",
+            "columnName": "buyerName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "buyerStreet",
+            "columnName": "buyerStreet",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "buyerZip",
+            "columnName": "buyerZip",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "buyerCity",
+            "columnName": "buyerCity",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "buyerCountry",
+            "columnName": "buyerCountry",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "buyerVatId",
+            "columnName": "buyerVatId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "buyerReference",
+            "columnName": "buyerReference",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lineItemsJson",
+            "columnName": "lineItemsJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paymentTermsNote",
+            "columnName": "paymentTermsNote",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "taxMode",
+            "columnName": "taxMode",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "exemptionReason",
+            "columnName": "exemptionReason",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "allowancesJson",
+            "columnName": "allowancesJson",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "status",
+            "columnName": "status",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "generatedXml",
+            "columnName": "generatedXml",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "pdfPath",
+            "columnName": "pdfPath",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paidAt",
+            "columnName": "paidAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "dunningLevel",
+            "columnName": "dunningLevel",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastDunningAt",
+            "columnName": "lastDunningAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "lastOverdueNotifiedAt",
+            "columnName": "lastOverdueNotifiedAt",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "createdAt",
+            "columnName": "createdAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "creator_customers",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `street` TEXT, `zip` TEXT, `city` TEXT, `country` TEXT, `vatId` TEXT, `email` TEXT, `paymentDays` INTEGER, `paymentNote` TEXT, `updatedAt` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "street",
+            "columnName": "street",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "zip",
+            "columnName": "zip",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "city",
+            "columnName": "city",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "vatId",
+            "columnName": "vatId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "email",
+            "columnName": "email",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paymentDays",
+            "columnName": "paymentDays",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "paymentNote",
+            "columnName": "paymentNote",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_creator_customers_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_creator_customers_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "creator_articles",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `articleNumber` TEXT, `unit` TEXT NOT NULL, `unitPrice` REAL NOT NULL, `vatRate` REAL NOT NULL, `updatedAt` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "articleNumber",
+            "columnName": "articleNumber",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "unit",
+            "columnName": "unit",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "unitPrice",
+            "columnName": "unitPrice",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "vatRate",
+            "columnName": "vatRate",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAt",
+            "columnName": "updatedAt",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_creator_articles_name",
+            "unique": true,
+            "columnNames": [
+              "name"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_creator_articles_name` ON `${TABLE_NAME}` (`name`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "outgoing_invoice_payments",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `invoiceId` INTEGER NOT NULL, `amount` REAL NOT NULL, `paidAtMs` INTEGER NOT NULL, `note` TEXT)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "invoiceId",
+            "columnName": "invoiceId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "amount",
+            "columnName": "amount",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "paidAtMs",
+            "columnName": "paidAtMs",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "note",
+            "columnName": "note",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_outgoing_invoice_payments_invoiceId",
+            "unique": false,
+            "columnNames": [
+              "invoiceId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_outgoing_invoice_payments_invoiceId` ON `${TABLE_NAME}` (`invoiceId`)"
+          }
+        ],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dc5f0e03349bd917192b71c96520d1b2')"
+    ]
+  }
+}

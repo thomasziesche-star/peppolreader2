@@ -36,7 +36,8 @@ class InvoiceLayoutRenderer(
     private val lines: List<CreatorLine> = invoice.lines.filter { it.description.isNotBlank() }
     private val totals = InvoiceTotalsCalculator.calculate(lines, invoice.allowances, invoice.taxMode)
     private val currency = invoice.currency.ifBlank { "EUR" }
-    private val isCreditNote = invoice.documentTypeCode == "381"
+    private val isCreditNote = invoice.documentTypeCode == OutgoingInvoice.DOC_TYPE_CREDIT_NOTE
+    private val isQuote = invoice.documentTypeCode == OutgoingInvoice.DOC_TYPE_QUOTE
 
     // Theme-derived palette; the defaults reproduce the shipped editorial look exactly.
     private val paper = theme.paper()
@@ -127,14 +128,21 @@ class InvoiceLayoutRenderer(
 
         // Key-data block (right): label left, value right-aligned at the margin.
         var infoY = recipientTop
-        val numberLabel = if (isCreditNote) "Gutschrift-Nr." else "Rechnungs-Nr."
+        val numberLabel = when {
+            isQuote -> "Angebots-Nr."
+            isCreditNote -> "Gutschrift-Nr."
+            else -> "Rechnungs-Nr."
+        }
         val info = buildList {
             add(numberLabel to invoice.invoiceNumber)
-            add("Rechnungsdatum" to displayDate(invoice.issueDate))
-            invoice.dueDate?.takeIf { it.isNotBlank() }?.let { add("Fällig am" to displayDate(it)) }
+            add((if (isQuote) "Angebotsdatum" else "Rechnungsdatum") to displayDate(invoice.issueDate))
+            invoice.dueDate?.takeIf { it.isNotBlank() }?.let {
+                add((if (isQuote) "Gültig bis" else "Fällig am") to displayDate(it))
+            }
             invoice.sellerVatId?.takeIf { it.isNotBlank() }?.let { add("USt-IdNr." to it) }
                 ?: invoice.sellerTaxNumber?.takeIf { it.isNotBlank() }?.let { add("Steuernummer" to it) }
             invoice.buyerVatId?.takeIf { it.isNotBlank() }?.let { add("USt-IdNr. Kunde" to it) }
+            invoice.buyerReference?.takeIf { it.isNotBlank() }?.let { add("Leitweg-ID" to it) }
         }
         for ((label, value) in info) {
             text(body, 8.5f, INFO_X, infoY, label, FAINT)
@@ -144,7 +152,11 @@ class InvoiceLayoutRenderer(
 
         // Editorial document title: large serif word, the number in terracotta beneath it.
         y = minOf(recipientBottom, infoY) - 38f
-        val title = if (isCreditNote) "Gutschrift" else "Rechnung"
+        val title = when {
+            isQuote -> "Angebot"
+            isCreditNote -> "Gutschrift"
+            else -> "Rechnung"
+        }
         text(heading, 24f, MARGIN_L, y, title)
         y -= 17f
         text(body, 12f, MARGIN_L, y, invoice.invoiceNumber, accent)
@@ -260,9 +272,16 @@ class InvoiceLayoutRenderer(
     private fun drawPaymentBlock() {
         val rows = buildList {
             invoice.dueDate?.takeIf { it.isNotBlank() }?.let {
-                add(if (isCreditNote) "Der Betrag wird bis zum ${displayDate(it)} erstattet." else "Zahlbar ohne Abzug bis zum ${displayDate(it)}.")
+                add(
+                    when {
+                        isQuote -> "Dieses Angebot ist gültig bis zum ${displayDate(it)}."
+                        isCreditNote -> "Der Betrag wird bis zum ${displayDate(it)} erstattet."
+                        else -> "Zahlbar ohne Abzug bis zum ${displayDate(it)}."
+                    }
+                )
             }
-            if (!invoice.sellerIban.isNullOrBlank() && !isCreditNote) {
+            // Quotes carry no payment instruction (no money changes hands yet).
+            if (!invoice.sellerIban.isNullOrBlank() && !isCreditNote && !isQuote) {
                 add("Bitte geben Sie bei der Überweisung die Rechnungs-Nr. ${invoice.invoiceNumber} als Verwendungszweck an.")
             }
             invoice.paymentTermsNote?.takeIf { it.isNotBlank() }?.let { add(it) }

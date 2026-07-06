@@ -72,10 +72,13 @@ object CreatorValidator {
             issues += Issue(Severity.WARNING, Code.DUE_BEFORE_ISSUE)
         }
 
-        val iban = profile.iban.replace(" ", "")
-        when {
-            iban.isBlank() -> issues += Issue(Severity.WARNING, Code.IBAN_MISSING)
-            iban.length !in 15..34 -> issues += Issue(Severity.WARNING, Code.IBAN_INVALID)
+        // Payment account only matters for real invoices — a quote collects no money.
+        if (!draft.isQuote) {
+            val iban = profile.iban.replace(" ", "")
+            when {
+                iban.isBlank() -> issues += Issue(Severity.WARNING, Code.IBAN_MISSING)
+                iban.length !in 15..34 -> issues += Issue(Severity.WARNING, Code.IBAN_INVALID)
+            }
         }
 
         // Tax mode (E/AE): exemption reason is mandatory; reverse charge additionally

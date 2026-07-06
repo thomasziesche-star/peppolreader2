@@ -98,7 +98,9 @@ class CompanyProfileFragment : Fragment() {
         binding.btnPickFolder.setOnClickListener { pickFolder.launch(null) }
 
         binding.switchAutoNumber.setOnCheckedChangeListener { _, checked ->
-            binding.containerNumbering.visibility = if (checked) View.VISIBLE else View.GONE
+            val vis = if (checked) View.VISIBLE else View.GONE
+            binding.containerNumbering.visibility = vis
+            binding.containerQuoteNumbering.visibility = vis
         }
 
         binding.switchSmallBusiness.setOnCheckedChangeListener { _, checked ->
@@ -142,9 +144,13 @@ class CompanyProfileFragment : Fragment() {
         renderStorage()
 
         switchAutoNumber.isChecked = p.autoNumbering
-        containerNumbering.visibility = if (p.autoNumbering) View.VISIBLE else View.GONE
+        val numberingVis = if (p.autoNumbering) View.VISIBLE else View.GONE
+        containerNumbering.visibility = numberingVis
+        containerQuoteNumbering.visibility = numberingVis
         inputNumberPrefix.setText(p.numberPrefix)
         inputNumberNext.setText(p.nextNumber.toString())
+        inputQuoteNumberPrefix.setText(p.quoteNumberPrefix)
+        inputQuoteNumberNext.setText(p.nextQuoteNumber.toString())
         inputPaymentDays.setText(if (p.defaultPaymentDays > 0) p.defaultPaymentDays.toString() else "")
 
         switchSmallBusiness.isChecked = p.smallBusiness
@@ -201,6 +207,8 @@ class CompanyProfileFragment : Fragment() {
             autoNumbering = switchAutoNumber.isChecked,
             numberPrefix = inputNumberPrefix.text.str(),
             nextNumber = inputNumberNext.text.str().toIntOrNull()?.coerceAtLeast(1) ?: 1,
+            quoteNumberPrefix = inputQuoteNumberPrefix.text.str(),
+            nextQuoteNumber = inputQuoteNumberNext.text.str().toIntOrNull()?.coerceAtLeast(1) ?: 1,
             defaultPaymentDays = inputPaymentDays.text.str().toIntOrNull()?.coerceAtLeast(0) ?: 0,
             smallBusiness = switchSmallBusiness.isChecked,
             exemptionText = inputExemptionText.text.str()

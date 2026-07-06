@@ -1,9 +1,15 @@
 package com.ziesche.peppolreader.data
 
+import android.content.ContentResolver
 import android.content.Context
+import android.net.Uri
+import android.provider.DocumentsContract
 import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
@@ -118,6 +124,76 @@ object BackupManager {
         }
         return sawDb
     }
+
+    /** File-name prefix for backups the app writes; used to recognise/prune its own files. */
+    private const val BACKUP_NAME_PREFIX = "PeppolReader-Backup-"
+    private const val BACKUP_NAME_SUFFIX = ".peppolbackup.zip"
+
+    private fun timestampedName(): String =
+        BACKUP_NAME_PREFIX + SimpleDateFormat("yyyy-MM-dd-HHmmss", Locale.US).format(Date()) + BACKUP_NAME_SUFFIX
+
+    /**
+     * Writes a timestamped backup ZIP into the SAF tree [treeUri] (a user-picked folder, e.g. a
+     * Google-Drive-synced one) and prunes to the newest [maxKeep] files. Returns the created file
+     * name, or null on failure. No Drive API/credentials involved — the app only writes into the
+     * folder the user granted via SAF; Drive's own sync handles the upload.
+     */
+    fun exportToTree(context: Context, treeUri: Uri, maxKeep: Int = 10): String? {
+        val resolver = context.contentResolver
+        val dirDocId = runCatching { DocumentsContract.getTreeDocumentId(treeUri) }.getOrNull() ?: return null
+        val dirUri = DocumentsContract.buildDocumentUriUsingTree(treeUri, dirDocId)
+        val name = timestampedName()
+        val fileUri = runCatching {
+            DocumentsContract.createDocument(resolver, dirUri, "application/zip", name)
+        }.getOrNull() ?: return null
+
+        val ok = runCatching {
+            resolver.openOutputStream(fileUri)?.use { export(context, it); true } ?: false
+        }.getOrDefault(false)
+        if (!ok) {
+            runCatching { DocumentsContract.deleteDocument(resolver, fileUri) }
+            return null
+        }
+        runCatching { pruneTree(resolver, treeUri, dirDocId, maxKeep) }
+        return name
+    }
+
+    /** Deletes all but the newest [maxKeep] app backups in the tree (best effort). */
+    private fun pruneTree(resolver: ContentResolver, treeUri: Uri, dirDocId: String, maxKeep: Int) {
+        val childrenUri = DocumentsContract.buildChildDocumentsUriUsingTree(treeUri, dirDocId)
+        val backups = mutableListOf<Pair<String, String>>() // (displayName, documentId)
+        resolver.query(
+            childrenUri,
+            arrayOf(DocumentsContract.Document.COLUMN_DISPLAY_NAME, DocumentsContract.Document.COLUMN_DOCUMENT_ID),
+            null, null, null
+        )?.use { c ->
+            while (c.moveToNext()) {
+                val n = c.getString(0)
+                val id = c.getString(1)
+                if (n != null && id != null && n.startsWith(BACKUP_NAME_PREFIX)) backups.add(n to id)
+            }
+        }
+        // Timestamp is in the name, so lexical sort == chronological; drop all but the newest N.
+        backups.sortBy { it.first }
+        backups.dropLast(maxKeep).forEach { (_, id) ->
+            runCatching {
+                DocumentsContract.deleteDocument(resolver, DocumentsContract.buildDocumentUriUsingTree(treeUri, id))
+            }
+        }
+    }
+
+    /**
+     * Writes a backup ZIP into cacheDir (covered by the FileProvider cache-path) for one-off
+     * sharing via ACTION_SEND — the simplest way to hand a backup to Google Drive, Gmail, etc.
+     * Returns the file, or null on failure.
+     */
+    fun exportToCacheForShare(context: Context): File? = runCatching {
+        val dir = File(context.cacheDir, "backup").apply { mkdirs() }
+        dir.listFiles()?.forEach { it.delete() } // keep only the latest share file
+        val file = File(dir, timestampedName())
+        file.outputStream().use { export(context, it) }
+        file
+    }.getOrNull()
 
     private fun zipFile(zos: ZipOutputStream, file: File, prefix: String) {
         zos.putNextEntry(ZipEntry("$prefix${file.name}"))

@@ -72,6 +72,32 @@ class ZugferdPdfA3Writer(private val context: Context) {
         }
     }
 
+    /**
+     * Builds a plain (non-hybrid) PDF with only the human-readable page — no embedded XML, no
+     * PDF/A OutputIntent or Factur-X metadata. Used for quotes/offers (Angebote), which are not
+     * EN 16931 documents. Same layout pipeline as [write].
+     */
+    @JvmOverloads
+    fun writePlain(
+        invoice: OutgoingInvoice,
+        logoPath: String? = null,
+        theme: LayoutTheme = LayoutTheme()
+    ): ByteArray {
+        PDFBoxResourceLoader.init(context.applicationContext)
+
+        PDDocument().use { doc ->
+            val regular = loadFont(doc, FONT_REGULAR)
+            val bold = loadFont(doc, FONT_BOLD)
+            val serif = loadFont(doc, FONT_SERIF)
+            InvoiceLayoutRenderer(doc, regular, bold, serif, invoice, loadLogo(logoPath), theme).render()
+            setDocumentInfo(doc, invoice)
+
+            val out = ByteArrayOutputStream()
+            doc.save(out)
+            return out.toByteArray()
+        }
+    }
+
     // ----- assets ---------------------------------------------------------------------------
 
     private fun loadFont(doc: PDDocument, asset: String): PDType0Font =
@@ -101,8 +127,14 @@ class ZugferdPdfA3Writer(private val context: Context) {
 
     // ----- document info + XMP -------------------------------------------------------------
 
-    private fun docTitle(invoice: OutgoingInvoice): String =
-        (if (invoice.documentTypeCode == "381") "Gutschrift " else "Rechnung ") + invoice.invoiceNumber
+    private fun docTitle(invoice: OutgoingInvoice): String {
+        val label = when (invoice.documentTypeCode) {
+            OutgoingInvoice.DOC_TYPE_CREDIT_NOTE -> "Gutschrift "
+            OutgoingInvoice.DOC_TYPE_QUOTE -> "Angebot "
+            else -> "Rechnung "
+        }
+        return label + invoice.invoiceNumber
+    }
 
     private fun setDocumentInfo(doc: PDDocument, invoice: OutgoingInvoice) {
         val info: PDDocumentInformation = doc.documentInformation
