@@ -38,6 +38,14 @@ jobs:
       - name: Use runner JDK (strip local java.home)
         run: sed -i '/^org\.gradle\.java\.home=/d' gradle.properties
 
+      # Robolectric downloads its android-all runtime jar into ~/.m2 on first use; that isn't
+      # covered by the Gradle cache, so persist it separately to avoid re-downloading each run.
+      - name: Cache Robolectric runtime
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/repository/org/robolectric
+          key: robolectric-${{ runner.os }}-sdk33
+
       - name: Unit tests
         run: ./gradlew --no-daemon testDebugUnitTest
 
