@@ -10,13 +10,18 @@ import com.ziesche.peppolreader.data.model.Invoice
 import com.ziesche.peppolreader.creator.data.CreatorArticleDao
 import com.ziesche.peppolreader.creator.data.CreatorCustomerDao
 import com.ziesche.peppolreader.creator.data.OutgoingInvoiceDao
+import com.ziesche.peppolreader.creator.data.OutgoingInvoicePaymentDao
 import com.ziesche.peppolreader.creator.model.CreatorArticle
 import com.ziesche.peppolreader.creator.model.CreatorCustomer
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
+import com.ziesche.peppolreader.creator.model.OutgoingInvoicePayment
 
 @Database(
-    entities = [Invoice::class, OutgoingInvoice::class, CreatorCustomer::class, CreatorArticle::class],
-    version = 14,
+    entities = [
+        Invoice::class, OutgoingInvoice::class, CreatorCustomer::class, CreatorArticle::class,
+        OutgoingInvoicePayment::class
+    ],
+    version = 17,
     exportSchema = true
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -28,6 +33,8 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun creatorCustomerDao(): CreatorCustomerDao
 
     abstract fun creatorArticleDao(): CreatorArticleDao
+
+    abstract fun outgoingInvoicePaymentDao(): OutgoingInvoicePaymentDao
 
     companion object {
         @Volatile
@@ -213,13 +220,58 @@ abstract class AppDatabase : RoomDatabase() {
         }
 
         /**
+         * v14 → v15: adds [OutgoingInvoice.buyerReference] — the BT-10 buyer reference
+         * (German Leitweg-ID for B2G invoices), an optional field on outgoing invoices.
+         */
+        private val MIGRATION_14_15 = object : Migration(14, 15) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE outgoing_invoices ADD COLUMN buyerReference TEXT")
+            }
+        }
+
+        /**
+         * v15 → v16: per-customer payment terms — [CreatorCustomer.paymentDays] and
+         * [CreatorCustomer.paymentNote], pre-filled on new invoices for that buyer.
+         */
+        private val MIGRATION_15_16 = object : Migration(15, 16) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE creator_customers ADD COLUMN paymentDays INTEGER")
+                db.execSQL("ALTER TABLE creator_customers ADD COLUMN paymentNote TEXT")
+            }
+        }
+
+        /**
+         * v16 → v17: partial-payment ledger — the `outgoing_invoice_payments` table records one
+         * row per incoming (partial) payment against an outgoing invoice.
+         */
+        private val MIGRATION_16_17 = object : Migration(16, 17) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL(
+                    """
+                    CREATE TABLE IF NOT EXISTS outgoing_invoice_payments (
+                        id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                        invoiceId INTEGER NOT NULL,
+                        amount REAL NOT NULL,
+                        paidAtMs INTEGER NOT NULL,
+                        note TEXT
+                    )
+                    """.trimIndent()
+                )
+                db.execSQL(
+                    "CREATE INDEX IF NOT EXISTS index_outgoing_invoice_payments_invoiceId " +
+                        "ON outgoing_invoice_payments (invoiceId)"
+                )
+            }
+        }
+
+        /**
          * All schema migrations in order. Exposed (internal) so the migration test can
          * exercise the exact same chain the app uses.
          */
         internal val ALL_MIGRATIONS = arrayOf(
             MIGRATION_4_5, MIGRATION_5_6, MIGRATION_6_7,
             MIGRATION_7_8, MIGRATION_8_9, MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12,
-            MIGRATION_12_13, MIGRATION_13_14
+            MIGRATION_12_13, MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16, MIGRATION_16_17
         )
 
         /**

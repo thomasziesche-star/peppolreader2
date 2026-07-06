@@ -307,6 +307,8 @@
     <string name="creator_city">City</string>
     <string name="creator_country">Country code (e.g. DE)</string>
     <string name="creator_vat_id">VAT ID</string>
+    <string name="creator_buyer_reference">Routing ID (Leitweg-ID)</string>
+    <string name="creator_buyer_reference_helper">Required for invoices to German public authorities (B2G)</string>
     <string name="creator_tax_number">Tax number</string>
     <string name="creator_iban">IBAN</string>
     <string name="creator_bic">BIC</string>
@@ -389,6 +391,26 @@
     <string name="creator_doc_type">Document type</string>
     <string name="creator_doc_type_invoice">Invoice</string>
     <string name="creator_doc_type_credit_note">Credit note</string>
+    <string name="creator_doc_type_quote">Quote</string>
+    <string name="creator_generate_quote">Create quote</string>
+    <string name="creator_convert_to_invoice">Convert to invoice</string>
+    <string name="creator_print">Print</string>
+    <string name="creator_customer_payment_days">Payment term (days)</string>
+    <string name="creator_customer_payment_days_hint">Leave empty to use the company default</string>
+    <string name="creator_customer_payment_note">Payment note for this customer</string>
+    <string name="creator_payments">Payments</string>
+    <string name="creator_payments_title">Payments · remaining %1$s</string>
+    <string name="creator_payments_none">No payments recorded yet. Total: %1$s</string>
+    <string name="creator_payment_record">Record payment</string>
+    <string name="creator_payment_amount">Amount</string>
+    <string name="creator_payment_note">Note (optional)</string>
+    <string name="creator_payment_delete_confirm">Delete this payment?</string>
+    <string name="creator_badge_partial">Part-paid</string>
+    <string name="creator_filter_all">All</string>
+    <string name="creator_filter_invoices">Invoices</string>
+    <string name="creator_filter_quotes">Quotes</string>
+    <string name="creator_numbering_quote_prefix">Quote prefix</string>
+    <string name="creator_numbering_quote_next">Next quote no.</string>
     <string name="creator_currency">Currency</string>
 
     <!-- Parties -->
@@ -511,6 +533,13 @@
     <string name="backup_create">Create backup</string>
     <string name="backup_restore">Restore backup</string>
     <string name="backup_success">Backup saved.</string>
+    <string name="backup_options_title">Backup</string>
+    <string name="backup_save_now">Save backup…</string>
+    <string name="backup_share">Share backup (Drive, email…)</string>
+    <string name="backup_auto_setup">Set up automatic backup…</string>
+    <string name="backup_auto_disable">Turn off automatic backup</string>
+    <string name="backup_auto_enabled">Automatic backup on: %1$s</string>
+    <string name="backup_auto_disabled">Automatic backup turned off.</string>
     <string name="backup_error">Backup failed.</string>
     <string name="backup_restore_warning">This replaces all current invoices and attachments with the backup. Continue?</string>
     <string name="backup_restore_confirm">Restore</string>
@@ -529,4 +558,28 @@
     <string name="help_export"><b>Export</b>\n\nCreate a CSV (UTF-8, semicolon-separated) of your invoices for the chosen period — ready for your tax advisor or spreadsheet.\n\n<b>Bundle as ZIP:</b> additionally includes the original XML and PDF files per invoice.\n\nThe CSV includes category and note columns. Credit notes are exported with a negative amount.</string>
     <string name="help_reminders"><b>Due-date reminders</b>\n\nSwitch on a daily check that notifies you about invoices coming due.\n\n<b>Lead time:</b> how many days ahead to be reminded (0/3/7/14).\n\n<b>Check now</b> runs the check immediately. On Android 13+ the app asks for notification permission when you enable this.</string>
     <string name="help_ai_credential"><b>AI provider</b>\n\n<b>Provider:</b> pick your service (or <i>Generic</i> for any OpenAI-compatible endpoint).\n<b>API key:</b> paste your key, load the models, then pick one.\n<b>Label:</b> a name to recognise this entry.\n\nThe key is stored only on this device. When you chat about an invoice, its content is sent to this provider.</string>
+    <!-- Onboarding intro -->
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_start">Get started</string>
+    <string name="onboarding_dont_show_again">Don\'t show this again</string>
+    <string name="onboarding_welcome_title">Welcome to Peppol Reader</string>
+    <string name="onboarding_welcome_subtitle">Create and read e-invoices — entirely on your device.</string>
+    <string name="onboarding_language_label">Language</string>
+    <string name="onboarding_steps_title">Your invoice in 3 steps</string>
+    <string name="onboarding_step_1">Set up your profile (name, IBAN, tax number)</string>
+    <string name="onboarding_step_2">Enter the recipient and line items</string>
+    <string name="onboarding_step_3">Generate the PDF and send it by email — done.</string>
+    <string name="onboarding_ease_label">Easy to use</string>
+    <string name="onboarding_ease_1">✓  Invoices in seconds</string>
+    <string name="onboarding_ease_2">✓  Save seller &amp; buyer data</string>
+    <string name="onboarding_ease_3">✓  Automatic invoice numbering</string>
+    <string name="onboarding_privacy_title">Your data stays with you</string>
+    <string name="onboarding_privacy_body">All invoice data is stored only on your device — no cloud, no account required.</string>
+    <string name="onboarding_features_label">Powerful features</string>
+    <string name="onboarding_feature_1">✓  ZUGFeRD, XRechnung, Factur-X &amp; Peppol</string>
+    <string name="onboarding_feature_2">✓  Multiple tax rates, discounts &amp; reverse charge</string>
+    <string name="onboarding_feature_3">✓  Payment tracking, dunning &amp; revenue dashboard</string>
+    <string name="onboarding_backup_title">Important: your own backup</string>
+    <string name="onboarding_backup_body">Because nothing is stored in the cloud, your data is gone if you delete the app. Back up regularly under “Profile → Back up data”.</string>
 </resources>

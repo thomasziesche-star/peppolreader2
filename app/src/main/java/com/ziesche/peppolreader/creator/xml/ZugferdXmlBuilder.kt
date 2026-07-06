@@ -100,6 +100,11 @@ class ZugferdXmlBuilder(private val invoice: OutgoingInvoice) {
 
     private fun appendAgreement(sb: StringBuilder) {
         sb.append("    <ram:ApplicableHeaderTradeAgreement>\n")
+        // BT-10 buyer reference (German Leitweg-ID for B2G). CII sequence: BuyerReference is the
+        // first child of ApplicableHeaderTradeAgreement, before SellerTradeParty.
+        invoice.buyerReference?.takeIf { it.isNotBlank() }?.let {
+            sb.append("      <ram:BuyerReference>${esc(it)}</ram:BuyerReference>\n")
+        }
         // Seller
         sb.append("      <ram:SellerTradeParty>\n")
         sb.append("        <ram:Name>${esc(invoice.sellerName)}</ram:Name>\n")

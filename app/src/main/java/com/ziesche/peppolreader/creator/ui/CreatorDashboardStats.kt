@@ -59,7 +59,8 @@ object CreatorDashboardStats {
     fun compute(
         invoices: List<OutgoingInvoice>,
         todayIso: String = todayIso(),
-        topN: Int = 5
+        topN: Int = 5,
+        paidByInvoice: Map<Long, Double> = emptyMap()
     ): Result {
         val entries = invoices
             .filter { it.status == OutgoingInvoice.STATUS_GENERATED }
@@ -71,9 +72,13 @@ object CreatorDashboardStats {
                 Entry(inv, totals.taxBasisTotal * sign, totals.taxTotal * sign, totals.grandTotal * sign)
             }
 
+        // Amount still outstanding: 0 once fully paid, else gross minus recorded partial payments.
+        fun remainingOf(e: Entry): Double =
+            if (e.inv.paidAt != null) 0.0 else e.gross - (paidByInvoice[e.inv.id] ?: 0.0)
+
         val total = entries.sumOf { it.gross }
-        val open = entries.filter { it.inv.paidAt == null }.sumOf { it.gross }
-        val overdue = entries.filter { it.inv.isOverdue(todayIso) }.sumOf { it.gross }
+        val overdue = entries.filter { it.inv.isOverdue(todayIso) }.sumOf { remainingOf(it) }
+        val open = entries.filter { it.inv.paidAt == null }.sumOf { remainingOf(it) }
 
         val perMonth = entries
             .mapNotNull { e -> monthOf(e)?.let { it to e.gross } }
@@ -94,11 +99,14 @@ object CreatorDashboardStats {
             .sortedByDescending { it.amount }
             .take(topN)
 
-        val paidAmount = entries.filter { it.inv.paidAt != null }.sumOf { it.gross }
+        // Received money = full gross for settled invoices + recorded partials for the rest.
+        val paidAmount = entries.sumOf { e ->
+            if (e.inv.paidAt != null) e.gross else (paidByInvoice[e.inv.id] ?: 0.0)
+        }
         // "open" here excludes the overdue part so the three slices add up to the total.
         val openNotOverdue = entries
             .filter { it.inv.paidAt == null && !it.inv.isOverdue(todayIso) }
-            .sumOf { it.gross }
+            .sumOf { remainingOf(it) }
         val status = DashboardStats.StatusBreakdown(
             paid = paidAmount, open = openNotOverdue, overdue = overdue
         )

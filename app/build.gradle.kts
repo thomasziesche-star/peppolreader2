@@ -21,8 +21,8 @@ android {
         applicationId = "com.ziesche.peppolreader"
         minSdk = 28
         targetSdk = 35
-        versionCode = 23
-        versionName = "3.13"
+        versionCode = 24
+        versionName = "3.20"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -137,6 +137,9 @@ dependencies {
 
     // RecyclerView
     implementation(libs.androidx.recyclerview)
+
+    // ViewPager2 (onboarding intro pager)
+    implementation(libs.androidx.viewpager2)
 
     // Coroutines
     implementation(libs.kotlinx.coroutines.android)

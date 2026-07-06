@@ -93,6 +93,15 @@ class CreatorValidatorTest {
             .contains(Code.IBAN_INVALID))
     }
 
+    @Test
+    fun quoteDoesNotRequireIban() {
+        // A quote collects no money, so a missing IBAN must not warn (unlike a real invoice).
+        val quote = validDraft().copy(documentTypeCode = OutgoingInvoice.DOC_TYPE_QUOTE)
+        val codes = codes(quote, completeProfile().copy(iban = ""))
+        assertTrue(!codes.contains(Code.IBAN_MISSING))
+        assertTrue(!codes.contains(Code.IBAN_INVALID))
+    }
+
     // ----- tax modes + allowances ----------------------------------------------------------
 
     @Test

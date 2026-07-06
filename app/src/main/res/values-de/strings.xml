@@ -308,6 +308,8 @@
     <string name="creator_city">Ort</string>
     <string name="creator_country">Ländercode (z. B. DE)</string>
     <string name="creator_vat_id">USt-IdNr.</string>
+    <string name="creator_buyer_reference">Leitweg-ID</string>
+    <string name="creator_buyer_reference_helper">Für Rechnungen an Behörden (B2G) erforderlich</string>
     <string name="creator_tax_number">Steuernummer</string>
     <string name="creator_iban">IBAN</string>
     <string name="creator_bic">BIC</string>
@@ -389,6 +391,26 @@
     <string name="creator_doc_type">Dokumenttyp</string>
     <string name="creator_doc_type_invoice">Rechnung</string>
     <string name="creator_doc_type_credit_note">Gutschrift</string>
+    <string name="creator_doc_type_quote">Angebot</string>
+    <string name="creator_generate_quote">Angebot erstellen</string>
+    <string name="creator_convert_to_invoice">In Rechnung umwandeln</string>
+    <string name="creator_print">Drucken</string>
+    <string name="creator_customer_payment_days">Zahlungsziel (Tage)</string>
+    <string name="creator_customer_payment_days_hint">Leer lassen für den Firmen-Standard</string>
+    <string name="creator_customer_payment_note">Zahlungsnotiz für diesen Kunden</string>
+    <string name="creator_payments">Zahlungen</string>
+    <string name="creator_payments_title">Zahlungen · Rest %1$s</string>
+    <string name="creator_payments_none">Noch keine Zahlungen erfasst. Gesamt: %1$s</string>
+    <string name="creator_payment_record">Zahlung erfassen</string>
+    <string name="creator_payment_amount">Betrag</string>
+    <string name="creator_payment_note">Notiz (optional)</string>
+    <string name="creator_payment_delete_confirm">Diese Zahlung löschen?</string>
+    <string name="creator_badge_partial">Teilw. bezahlt</string>
+    <string name="creator_filter_all">Alle</string>
+    <string name="creator_filter_invoices">Rechnungen</string>
+    <string name="creator_filter_quotes">Angebote</string>
+    <string name="creator_numbering_quote_prefix">Angebots-Präfix</string>
+    <string name="creator_numbering_quote_next">Nächste Nr.</string>
     <string name="creator_currency">Währung</string>
 
     <!-- Parteien -->
@@ -508,6 +530,13 @@
     <string name="backup_create">Backup erstellen</string>
     <string name="backup_restore">Backup wiederherstellen</string>
     <string name="backup_success">Backup gespeichert.</string>
+    <string name="backup_options_title">Backup</string>
+    <string name="backup_save_now">Backup speichern…</string>
+    <string name="backup_share">Backup teilen (Drive, E-Mail…)</string>
+    <string name="backup_auto_setup">Automatisches Backup einrichten…</string>
+    <string name="backup_auto_disable">Automatisches Backup deaktivieren</string>
+    <string name="backup_auto_enabled">Automatisches Backup aktiv: %1$s</string>
+    <string name="backup_auto_disabled">Automatisches Backup deaktiviert.</string>
     <string name="backup_error">Backup fehlgeschlagen.</string>
     <string name="backup_restore_warning">Dies ersetzt alle aktuellen Rechnungen und Anhänge durch das Backup. Fortfahren?</string>
     <string name="backup_restore_confirm">Wiederherstellen</string>
@@ -526,4 +555,28 @@
     <string name="help_export"><b>Export</b>\n\nErzeuge eine CSV (UTF-8, semikolongetrennt) deiner Rechnungen für den gewählten Zeitraum — direkt für Steuerberater oder Tabellenkalkulation.\n\n<b>Als ZIP bündeln:</b> enthält zusätzlich die Original-XML- und PDF-Dateien pro Rechnung.\n\nDie CSV enthält Spalten für Kategorie und Notiz. Gutschriften werden mit negativem Betrag exportiert.</string>
     <string name="help_reminders"><b>Fälligkeits-Erinnerungen</b>\n\nAktiviere eine tägliche Prüfung, die dich über bald fällige Rechnungen benachrichtigt.\n\n<b>Vorlaufzeit:</b> wie viele Tage im Voraus erinnert wird (0/3/7/14).\n\n<b>Jetzt prüfen</b> startet die Prüfung sofort. Ab Android 13 fragt die App beim Aktivieren nach der Benachrichtigungsberechtigung.</string>
     <string name="help_ai_credential"><b>KI-Anbieter</b>\n\n<b>Anbieter:</b> wähle deinen Dienst (oder <i>Generisch</i> für einen beliebigen OpenAI-kompatiblen Endpunkt).\n<b>API-Schlüssel:</b> einfügen, Modelle laden, dann eines wählen.\n<b>Bezeichnung:</b> ein Name zum Wiedererkennen.\n\nDer Schlüssel wird nur auf diesem Gerät gespeichert. Beim Chat zu einer Rechnung wird deren Inhalt an diesen Anbieter gesendet.</string>
+    <!-- Onboarding intro -->
+    <string name="onboarding_skip">Überspringen</string>
+    <string name="onboarding_next">Weiter</string>
+    <string name="onboarding_start">Los geht\'s</string>
+    <string name="onboarding_dont_show_again">Nicht mehr anzeigen</string>
+    <string name="onboarding_welcome_title">Willkommen bei Peppol Reader</string>
+    <string name="onboarding_welcome_subtitle">E-Rechnungen erstellen und lesen — komplett auf deinem Gerät.</string>
+    <string name="onboarding_language_label">Sprache</string>
+    <string name="onboarding_steps_title">In 3 Schritten zur Rechnung</string>
+    <string name="onboarding_step_1">Profil anlegen (Name, IBAN, Steuer-Nr.)</string>
+    <string name="onboarding_step_2">Empfänger und Positionen eingeben</string>
+    <string name="onboarding_step_3">PDF generieren und per E-Mail versenden — fertig.</string>
+    <string name="onboarding_ease_label">Einfache Bedienung</string>
+    <string name="onboarding_ease_1">✓  Rechnungen in wenigen Sekunden</string>
+    <string name="onboarding_ease_2">✓  Verkäufer- &amp; Käuferdaten speichern</string>
+    <string name="onboarding_ease_3">✓  Automatische Rechnungsnummern</string>
+    <string name="onboarding_privacy_title">Deine Daten bleiben bei dir</string>
+    <string name="onboarding_privacy_body">Alle Rechnungsdaten werden ausschließlich lokal auf deinem Gerät gespeichert — keine Cloud, kein Konto nötig.</string>
+    <string name="onboarding_features_label">Umfangreiche Funktionen</string>
+    <string name="onboarding_feature_1">✓  ZUGFeRD, XRechnung, Factur-X &amp; Peppol</string>
+    <string name="onboarding_feature_2">✓  Mehrere Steuersätze, Rabatte &amp; Reverse-Charge</string>
+    <string name="onboarding_feature_3">✓  Bezahlstatus, Mahnwesen &amp; Umsatz-Dashboard</string>
+    <string name="onboarding_backup_title">Wichtig: Eigenes Backup</string>
+    <string name="onboarding_backup_body">Da nichts in der Cloud liegt, sind deine Daten weg, wenn du die App löschst. Erstelle regelmäßig ein Backup unter „Profil → Daten sichern“.</string>
 </resources>

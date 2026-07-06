@@ -316,6 +316,8 @@
     <string name="creator_city">Miasto</string>
     <string name="creator_country">Kod kraju (np. DE)</string>
     <string name="creator_vat_id">NIP / VAT</string>
+    <string name="creator_buyer_reference">Leitweg-ID (identyfikator kierowania)</string>
+    <string name="creator_buyer_reference_helper">Wymagane dla faktur do niemieckich urzędów (B2G)</string>
     <string name="creator_tax_number">Numer podatkowy</string>
     <string name="creator_iban">IBAN</string>
     <string name="creator_bic">BIC</string>
@@ -397,6 +399,26 @@
     <string name="creator_doc_type">Typ dokumentu</string>
     <string name="creator_doc_type_invoice">Faktura</string>
     <string name="creator_doc_type_credit_note">Faktura korygująca</string>
+    <string name="creator_doc_type_quote">Oferta</string>
+    <string name="creator_generate_quote">Utwórz ofertę</string>
+    <string name="creator_convert_to_invoice">Zamień na fakturę</string>
+    <string name="creator_print">Drukuj</string>
+    <string name="creator_customer_payment_days">Termin płatności (dni)</string>
+    <string name="creator_customer_payment_days_hint">Puste = domyślne ustawienie firmy</string>
+    <string name="creator_customer_payment_note">Notatka płatności dla tego klienta</string>
+    <string name="creator_payments">Płatności</string>
+    <string name="creator_payments_title">Płatności · pozostało %1$s</string>
+    <string name="creator_payments_none">Brak zarejestrowanych płatności. Razem: %1$s</string>
+    <string name="creator_payment_record">Zarejestruj płatność</string>
+    <string name="creator_payment_amount">Kwota</string>
+    <string name="creator_payment_note">Notatka (opcjonalnie)</string>
+    <string name="creator_payment_delete_confirm">Usunąć tę płatność?</string>
+    <string name="creator_badge_partial">Częściowo opłacone</string>
+    <string name="creator_filter_all">Wszystkie</string>
+    <string name="creator_filter_invoices">Faktury</string>
+    <string name="creator_filter_quotes">Oferty</string>
+    <string name="creator_numbering_quote_prefix">Prefiks oferty</string>
+    <string name="creator_numbering_quote_next">Następny nr</string>
     <string name="creator_currency">Waluta</string>
 
     <!-- Strony -->
@@ -516,6 +538,13 @@
     <string name="backup_create">Utwórz kopię zapasową</string>
     <string name="backup_restore">Przywróć kopię zapasową</string>
     <string name="backup_success">Kopia zapasowa zapisana.</string>
+    <string name="backup_options_title">Kopia zapasowa</string>
+    <string name="backup_save_now">Zapisz kopię zapasową…</string>
+    <string name="backup_share">Udostępnij kopię (Drive, e-mail…)</string>
+    <string name="backup_auto_setup">Skonfiguruj automatyczną kopię…</string>
+    <string name="backup_auto_disable">Wyłącz automatyczną kopię</string>
+    <string name="backup_auto_enabled">Automatyczna kopia włączona: %1$s</string>
+    <string name="backup_auto_disabled">Automatyczna kopia wyłączona.</string>
     <string name="backup_error">Tworzenie kopii nie powiodło się.</string>
     <string name="backup_restore_warning">Spowoduje to zastąpienie wszystkich bieżących faktur i załączników kopią zapasową. Kontynuować?</string>
     <string name="backup_restore_confirm">Przywróć</string>
@@ -534,4 +563,28 @@
     <string name="help_export"><b>Eksport</b>\n\nUtwórz CSV (UTF-8, rozdzielany średnikami) faktur za wybrany okres — gotowy dla księgowego lub arkusza.\n\n<b>Spakuj jako ZIP:</b> dodatkowo zawiera oryginalne pliki XML i PDF dla każdej faktury.\n\nCSV zawiera kolumny kategorii i notatki. Korekty są eksportowane z kwotą ujemną.</string>
     <string name="help_reminders"><b>Przypomnienia o terminach</b>\n\nWłącz codzienną kontrolę, która powiadamia o zbliżających się terminach płatności.\n\n<b>Wyprzedzenie:</b> ile dni wcześniej przypominać (0/3/7/14).\n\n<b>Sprawdź teraz</b> uruchamia kontrolę natychmiast. W Androidzie 13+ aplikacja prosi o zgodę na powiadomienia przy włączaniu.</string>
     <string name="help_ai_credential"><b>Dostawca AI</b>\n\n<b>Dostawca:</b> wybierz usługę (lub <i>Ogólny</i> dla dowolnego punktu zgodnego z OpenAI).\n<b>Klucz API:</b> wklej klucz, wczytaj modele, wybierz jeden.\n<b>Etykieta:</b> nazwa do rozpoznania wpisu.\n\nKlucz jest przechowywany tylko na tym urządzeniu. Podczas czatu o fakturze jej treść jest wysyłana do tego dostawcy.</string>
+    <!-- Onboarding intro -->
+    <string name="onboarding_skip">Pomiń</string>
+    <string name="onboarding_next">Dalej</string>
+    <string name="onboarding_start">Zaczynamy</string>
+    <string name="onboarding_dont_show_again">Nie pokazuj ponownie</string>
+    <string name="onboarding_welcome_title">Witamy w Peppol Reader</string>
+    <string name="onboarding_welcome_subtitle">Twórz i czytaj e-faktury — w całości na swoim urządzeniu.</string>
+    <string name="onboarding_language_label">Język</string>
+    <string name="onboarding_steps_title">Faktura w 3 krokach</string>
+    <string name="onboarding_step_1">Utwórz profil (nazwa, IBAN, NIP)</string>
+    <string name="onboarding_step_2">Wprowadź odbiorcę i pozycje</string>
+    <string name="onboarding_step_3">Wygeneruj PDF i wyślij e-mailem — gotowe.</string>
+    <string name="onboarding_ease_label">Proste w obsłudze</string>
+    <string name="onboarding_ease_1">✓  Faktury w kilka sekund</string>
+    <string name="onboarding_ease_2">✓  Zapis danych sprzedawcy i nabywcy</string>
+    <string name="onboarding_ease_3">✓  Automatyczne numery faktur</string>
+    <string name="onboarding_privacy_title">Twoje dane zostają u Ciebie</string>
+    <string name="onboarding_privacy_body">Wszystkie dane faktur są przechowywane wyłącznie na Twoim urządzeniu — bez chmury, bez konta.</string>
+    <string name="onboarding_features_label">Rozbudowane funkcje</string>
+    <string name="onboarding_feature_1">✓  ZUGFeRD, XRechnung, Factur-X i Peppol</string>
+    <string name="onboarding_feature_2">✓  Wiele stawek VAT, rabaty i odwrotne obciążenie</string>
+    <string name="onboarding_feature_3">✓  Status płatności, monity i pulpit przychodów</string>
+    <string name="onboarding_backup_title">Ważne: własna kopia zapasowa</string>
+    <string name="onboarding_backup_body">Ponieważ nic nie jest w chmurze, po usunięciu aplikacji dane przepadną. Regularnie twórz kopię w „Profil → Kopia zapasowa danych“.</string>
 </resources>
