@@ -15,14 +15,14 @@ ksp {
 
 android {
     namespace = "com.ziesche.peppolreader"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.ziesche.peppolreader"
         minSdk = 28
-        targetSdk = 35
-        versionCode = 26
-        versionName = "3.22"
+        targetSdk = 36
+        versionCode = 28
+        versionName = "3.23"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
