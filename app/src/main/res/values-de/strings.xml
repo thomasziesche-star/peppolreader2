@@ -298,6 +298,7 @@
     <string name="creator_subtitle">ZUGFeRD-Rechnungen als hybrides PDF/A-3 erzeugen (EN 16931).</string>
     <string name="creator_no_drafts">Noch keine Entwürfe. Tippe auf „Neue Rechnung".</string>
     <string name="creator_new_draft">Neue Rechnung</string>
+    <string name="creator_new_draft_button">Neue Rechnung (bzw. Angebot)</string>
     <string name="creator_company_profile">Firmenprofil</string>
     <string name="creator_company_profile_hint">Deine Angaben erscheinen als Absender auf jeder Rechnung.</string>
 
@@ -308,6 +309,8 @@
     <string name="creator_city">Ort</string>
     <string name="creator_country">Ländercode (z. B. DE)</string>
     <string name="creator_vat_id">USt-IdNr.</string>
+    <string name="creator_buyer_reference">Leitweg-ID</string>
+    <string name="creator_buyer_reference_helper">Für Rechnungen an Behörden (B2G) erforderlich</string>
     <string name="creator_tax_number">Steuernummer</string>
     <string name="creator_iban">IBAN</string>
     <string name="creator_bic">BIC</string>
@@ -389,6 +392,26 @@
     <string name="creator_doc_type">Dokumenttyp</string>
     <string name="creator_doc_type_invoice">Rechnung</string>
     <string name="creator_doc_type_credit_note">Gutschrift</string>
+    <string name="creator_doc_type_quote">Angebot</string>
+    <string name="creator_generate_quote">Angebot erstellen</string>
+    <string name="creator_convert_to_invoice">In Rechnung umwandeln</string>
+    <string name="creator_print">Drucken</string>
+    <string name="creator_customer_payment_days">Zahlungsziel (Tage)</string>
+    <string name="creator_customer_payment_days_hint">Leer lassen für den Firmen-Standard</string>
+    <string name="creator_customer_payment_note">Zahlungsnotiz für diesen Kunden</string>
+    <string name="creator_payments">Zahlungen</string>
+    <string name="creator_payments_title">Zahlungen · Rest %1$s</string>
+    <string name="creator_payments_none">Noch keine Zahlungen erfasst. Gesamt: %1$s</string>
+    <string name="creator_payment_record">Zahlung erfassen</string>
+    <string name="creator_payment_amount">Betrag</string>
+    <string name="creator_payment_note">Notiz (optional)</string>
+    <string name="creator_payment_delete_confirm">Diese Zahlung löschen?</string>
+    <string name="creator_badge_partial">Teilw. bezahlt</string>
+    <string name="creator_filter_all">Alle</string>
+    <string name="creator_filter_invoices">Rechnungen</string>
+    <string name="creator_filter_quotes">Angebote</string>
+    <string name="creator_numbering_quote_prefix">Angebots-Präfix</string>
+    <string name="creator_numbering_quote_next">Nächste Nr.</string>
     <string name="creator_currency">Währung</string>
 
     <!-- Parteien -->
@@ -463,6 +486,33 @@
     <string name="creator_allowance_reason">Grund</string>
     <string name="creator_allowance_amount">Betrag (netto)</string>
     <string name="creator_tax_basis">Nettobetrag</string>
+    <string name="layout_editor_title">Rechnungslayout</string>
+    <string name="layout_preview_cd">Vorschau des Rechnungslayouts</string>
+    <string name="layout_presets">Stil</string>
+    <string name="layout_preset_warm">Warm Editorial</string>
+    <string name="layout_preset_classic">Klassisch</string>
+    <string name="layout_preset_modern">Modern</string>
+    <string name="layout_preset_custom">Eigenes</string>
+    <string name="layout_accent">Akzentfarbe</string>
+    <string name="layout_font">Schrift</string>
+    <string name="layout_font_editorial">Editorial</string>
+    <string name="layout_font_sans">Sans</string>
+    <string name="layout_font_serif">Serif</string>
+    <string name="layout_paper">Papier</string>
+    <string name="layout_paper_white">Weiß</string>
+    <string name="layout_paper_ivory">Elfenbein</string>
+    <string name="layout_paper_cool">Kühlgrau</string>
+    <string name="layout_table_header">Tabellenkopf</string>
+    <string name="layout_header_rule">Linie</string>
+    <string name="layout_header_band">Band</string>
+    <string name="layout_color_terracotta">Terracotta</string>
+    <string name="layout_color_bordeaux">Bordeaux</string>
+    <string name="layout_color_green">Tannengrün</string>
+    <string name="layout_color_petrol">Petrol</string>
+    <string name="layout_color_blue">Stahlblau</string>
+    <string name="layout_color_violet">Violett</string>
+    <string name="layout_color_ochre">Ocker</string>
+    <string name="layout_color_black">Schwarz</string>
     <string name="creator_duplicate">Als Entwurf duplizieren</string>
 
     <!-- Beleg-Notiz + Kategorie -->
@@ -481,6 +531,13 @@
     <string name="backup_create">Backup erstellen</string>
     <string name="backup_restore">Backup wiederherstellen</string>
     <string name="backup_success">Backup gespeichert.</string>
+    <string name="backup_options_title">Backup</string>
+    <string name="backup_save_now">Backup speichern…</string>
+    <string name="backup_share">Backup teilen (Drive, E-Mail…)</string>
+    <string name="backup_auto_setup">Automatisches Backup einrichten…</string>
+    <string name="backup_auto_disable">Automatisches Backup deaktivieren</string>
+    <string name="backup_auto_enabled">Automatisches Backup aktiv: %1$s</string>
+    <string name="backup_auto_disabled">Automatisches Backup deaktiviert.</string>
     <string name="backup_error">Backup fehlgeschlagen.</string>
     <string name="backup_restore_warning">Dies ersetzt alle aktuellen Rechnungen und Anhänge durch das Backup. Fortfahren?</string>
     <string name="backup_restore_confirm">Wiederherstellen</string>
@@ -490,13 +547,37 @@
     <string name="help_detail"><b>Detailansicht</b>\n\nDrei Tabs: gerenderte Rechnung, Roh-XML (mit Live-Suche) und das Original-PDF, falls angehängt.\n\n<b>Offen / Bezahlt:</b> markiert die Rechnung als beglichen.\n\n<b>Notiz &amp; Kategorie:</b> Tippe auf die Zeile über den Tabs, um eine Buchungs-Notiz und eine Kategorie zu hinterlegen — beide erscheinen im CSV-Export und sind durchsuchbar.\n\n<b>KI fragen:</b> Die Sprechblase öffnet einen Chat zu dieser Rechnung (benötigt einen KI-Anbieter in den KI-Einstellungen).</string>
     <string name="help_dashboard"><b>Dashboard</b>\n\nÜberblick über deine Rechnungen im gewählten Zeitraum (Filter oben).\n\n<b>Kennzahlen:</b> Gesamt, Anzahl, offene und überfällige Beträge.\n<b>Diagramme:</b> Zahlungsstatus, Ausgaben pro Monat, Trend bezahlt/gesamt und Top-Lieferanten.\n<b>USt pro Quartal:</b> Netto/USt/Brutto je Quartal für die Umsatzsteuervoranmeldung.\n\nGutschriften zählen überall negativ.</string>
     <string name="help_ai"><b>KI-Einstellungen</b>\n\nFüge einen oder mehrere KI-Anbieter hinzu (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock oder einen generischen OpenAI-kompatiblen Endpunkt).\n\nAnbieter hinzufügen, API-Schlüssel einfügen, Modelle laden und eines wählen — danach einen Eintrag als Standard markieren.\n\nAnschließend eine Rechnung öffnen und auf die Sprechblase tippen.\n\n<b>Datenschutz:</b> Der Rechnungsinhalt wird an den gewählten Anbieter gesendet.</string>
-    <string name="help_creator_list"><b>ZUGFeRD &amp; E-Invoice Creator</b>\n\nErstelle eigene E-Rechnungen als hybrides ZUGFeRD-PDF/A-3 (EN 16931).\n\n<b>Neue Rechnung:</b> beginnt einen Entwurf.\n<b>Firmenprofil:</b> deine Absenderdaten — zuerst ausfüllen.\n<b>Kundenstamm:</b> gespeicherte Kunden zur schnellen Wiederverwendung.\n\nEntwürfe sind editierbar; <i>erzeugte</i> Rechnungen sind endgültig — tippe darauf, um sie anzusehen, zu teilen oder als neuen Entwurf zu duplizieren (praktisch für wiederkehrende Rechnungen).</string>
-    <string name="help_creator_edit"><b>Rechnungseditor</b>\n\nNummer, Daten, Kunde und Positionen erfassen (Beschreibung, Menge, Einheit, Einzelpreis, USt-Satz). Summen aktualisieren sich live.\n\n<b>Aus Kundenstamm:</b> füllt die Käuferfelder aus einem gespeicherten Kunden.\n\n<b>Erstellen:</b> prüft zuerst nach EN 16931 — Fehler blockieren, Warnungen können übergangen werden — und erzeugt dann das hybride ZUGFeRD-PDF. Eine erzeugte Rechnung ist nicht mehr editierbar.</string>
-    <string name="help_company_profile"><b>Firmenprofil</b>\n\nDeine Absenderdaten für jede erstellte Rechnung. EN 16931 erfordert mindestens eine vollständige Anschrift plus USt-IdNr. oder Steuernummer.\n\n<b>Logo:</b> optional, erscheint auf dem PDF.\n<b>Nummerierung:</b> schlägt die nächste Nummer vor (bleibt editierbar).\n<b>Zahlungsziel:</b> füllt die Fälligkeit vor (Rechnungsdatum + N Tage).\n<b>Speicherort:</b> wohin erzeugte PDFs gespeichert werden.</string>
-    <string name="help_creator_customers"><b>Kundenstamm</b>\n\nGespeicherte Kunden für deine erstellten Rechnungen. Neue Kunden werden beim Erzeugen einer Rechnung automatisch hinzugefügt; hier kannst du sie auch anlegen, bearbeiten oder löschen.\n\nIm Editor füllt <i>Aus Kundenstamm</i> die Käuferfelder mit einem Tipp.</string>
+    <string name="help_creator_list"><b>ZUGFeRD &amp; E-Invoice Creator</b>\n\nErstelle eigene E-Rechnungen als hybrides ZUGFeRD-PDF/A-3 (EN 16931) sowie Angebote.\n\n<b>Neue Rechnung (bzw. Angebot):</b> beginnt einen Entwurf — oben im Editor zwischen Rechnung, Gutschrift und Angebot wählen.\n<b>Firmenprofil:</b> deine Absenderdaten — zuerst ausfüllen.\n<b>Kunden / Artikel:</b> Stammdaten zur schnellen Wiederverwendung.\n<b>Filter:</b> schaltet die Liste zwischen Rechnungen und Angeboten um.\n\nEntwürfe sind editierbar; <i>erzeugte</i> Dokumente sind endgültig — tippe darauf, um sie anzusehen, zu teilen, zu drucken, Zahlungen zu erfassen oder (bei Angeboten) in eine Rechnung umzuwandeln. Rechnungen lassen sich zudem als neuer Entwurf duplizieren (praktisch für wiederkehrende).</string>
+    <string name="help_creator_edit"><b>Rechnungseditor</b>\n\nDokumenttyp wählen (Rechnung, Gutschrift oder Angebot), dann Nummer, Daten, Kunde und Positionen erfassen (Beschreibung, Menge, Einheit, Einzelpreis, USt-Satz). Summen aktualisieren sich live.\n\n<b>Leitweg-ID:</b> für Rechnungen an Behörden (B2G).\n<b>Aus Kundenstamm:</b> füllt die Käuferfelder — inklusive der Zahlungskonditionen des Kunden.\n\n<b>Erstellen:</b> prüft zuerst nach EN 16931 — Fehler blockieren, Warnungen können übergangen werden — und erzeugt dann das hybride ZUGFeRD-PDF (ein Angebot ergibt ein reines PDF). Ein erzeugtes Dokument ist nicht mehr editierbar.</string>
+    <string name="help_company_profile"><b>Firmenprofil</b>\n\nDeine Absenderdaten für jedes erstellte Dokument. EN 16931 erfordert mindestens eine vollständige Anschrift plus USt-IdNr. oder Steuernummer.\n\n<b>Logo:</b> optional, erscheint auf dem PDF.\n<b>Nummerierung:</b> getrennte Auto-Nummernkreise für Rechnungen und Angebote (bleiben editierbar).\n<b>Zahlungsziel:</b> füllt die Fälligkeit vor (Rechnungsdatum + N Tage).\n<b>Speicherort:</b> wohin erzeugte PDFs gespeichert werden.</string>
+    <string name="help_creator_customers"><b>Kundenstamm</b>\n\nGespeicherte Kunden für deine erstellten Rechnungen. Neue Kunden werden beim Erzeugen einer Rechnung automatisch hinzugefügt; hier kannst du sie auch anlegen, bearbeiten oder löschen.\n\nPro Kunde lassen sich ein Standard-Zahlungsziel und eine Notiz hinterlegen, die neue Rechnungen vorbefüllen. Im Editor füllt <i>Aus Kundenstamm</i> die Käuferfelder mit einem Tipp.</string>
     <string name="help_creator_articles"><b>Artikel &amp; Leistungen</b>\n\nDein Katalog wiederkehrender Artikel und Leistungen mit Einheit, Einzelpreis und USt-Satz. Im Rechnungseditor fügt <i>Aus Artikelstamm</i> eine vorausgefüllte Position ein — Menge und alle anderen Felder bleiben editierbar.</string>
-    <string name="help_creator_dashboard"><b>Umsatz-Dashboard</b>\n\nKennzahlen deiner erstellten Rechnungen: Umsatz, offene und überfällige Beträge, Zahlungsstatus, Umsatz pro Monat, USt pro Quartal und Top-Kunden.\n\nNur <i>erzeugte</i> Rechnungen zählen — Entwürfe nicht, Gutschriften negativ. Als bezahlt markierst du Rechnungen über die Rechnungsliste.</string>
+    <string name="help_creator_dashboard"><b>Umsatz-Dashboard</b>\n\nKennzahlen deiner erstellten Rechnungen: Umsatz, offene und überfällige Beträge, Zahlungsstatus, Umsatz pro Monat, USt pro Quartal und Top-Kunden.\n\nNur <i>erzeugte</i> Rechnungen zählen — Entwürfe nicht, Gutschriften negativ. (Teil-)Zahlungen erfasst du über die Rechnungsliste; offene Beträge zeigen den Restbetrag.</string>
     <string name="help_export"><b>Export</b>\n\nErzeuge eine CSV (UTF-8, semikolongetrennt) deiner Rechnungen für den gewählten Zeitraum — direkt für Steuerberater oder Tabellenkalkulation.\n\n<b>Als ZIP bündeln:</b> enthält zusätzlich die Original-XML- und PDF-Dateien pro Rechnung.\n\nDie CSV enthält Spalten für Kategorie und Notiz. Gutschriften werden mit negativem Betrag exportiert.</string>
     <string name="help_reminders"><b>Fälligkeits-Erinnerungen</b>\n\nAktiviere eine tägliche Prüfung, die dich über bald fällige Rechnungen benachrichtigt.\n\n<b>Vorlaufzeit:</b> wie viele Tage im Voraus erinnert wird (0/3/7/14).\n\n<b>Jetzt prüfen</b> startet die Prüfung sofort. Ab Android 13 fragt die App beim Aktivieren nach der Benachrichtigungsberechtigung.</string>
     <string name="help_ai_credential"><b>KI-Anbieter</b>\n\n<b>Anbieter:</b> wähle deinen Dienst (oder <i>Generisch</i> für einen beliebigen OpenAI-kompatiblen Endpunkt).\n<b>API-Schlüssel:</b> einfügen, Modelle laden, dann eines wählen.\n<b>Bezeichnung:</b> ein Name zum Wiedererkennen.\n\nDer Schlüssel wird nur auf diesem Gerät gespeichert. Beim Chat zu einer Rechnung wird deren Inhalt an diesen Anbieter gesendet.</string>
+    <!-- Onboarding intro -->
+    <string name="onboarding_skip">Überspringen</string>
+    <string name="onboarding_next">Weiter</string>
+    <string name="onboarding_start">Los geht\'s</string>
+    <string name="onboarding_dont_show_again">Nicht mehr anzeigen</string>
+    <string name="onboarding_welcome_title">Willkommen bei Zugferd &amp; Accounting</string>
+    <string name="onboarding_welcome_subtitle">E-Rechnungen erstellen und lesen — komplett auf deinem Gerät.</string>
+    <string name="onboarding_language_label">Sprache</string>
+    <string name="onboarding_steps_title">In 3 Schritten zur Rechnung</string>
+    <string name="onboarding_step_1">Profil anlegen (Name, IBAN, Steuer-Nr.)</string>
+    <string name="onboarding_step_2">Empfänger und Positionen eingeben</string>
+    <string name="onboarding_step_3">PDF generieren und per E-Mail versenden — fertig.</string>
+    <string name="onboarding_ease_label">Einfache Bedienung</string>
+    <string name="onboarding_ease_1">✓  Rechnungen in wenigen Sekunden</string>
+    <string name="onboarding_ease_2">✓  Verkäufer- &amp; Käuferdaten speichern</string>
+    <string name="onboarding_ease_3">✓  Automatische Rechnungsnummern</string>
+    <string name="onboarding_privacy_title">Deine Daten bleiben bei dir</string>
+    <string name="onboarding_privacy_body">Alle Rechnungsdaten werden ausschließlich lokal auf deinem Gerät gespeichert — keine Cloud, kein Konto nötig.</string>
+    <string name="onboarding_features_label">Umfangreiche Funktionen</string>
+    <string name="onboarding_feature_1">✓  ZUGFeRD, XRechnung, Factur-X &amp; Peppol</string>
+    <string name="onboarding_feature_2">✓  Mehrere Steuersätze, Rabatte &amp; Reverse-Charge</string>
+    <string name="onboarding_feature_3">✓  Bezahlstatus, Mahnwesen &amp; Umsatz-Dashboard</string>
+    <string name="onboarding_backup_title">Wichtig: Eigenes Backup</string>
+    <string name="onboarding_backup_body">Da nichts in der Cloud liegt, sind deine Daten weg, wenn du die App löschst. Erstelle regelmäßig ein Backup unter „Profil → Daten sichern“.</string>
 </resources>

@@ -88,6 +88,23 @@ class InvoiceCreatorEditFragment : Fragment() {
         if (binding.toggleDocType.checkedButtonId == View.NO_ID) {
             binding.toggleDocType.check(R.id.btn_type_invoice)
         }
+        updateGenerateLabel()
+        // Switching document type on a fresh draft re-suggests the matching number sequence
+        // (invoice vs. quote), unless the user has typed their own number.
+        binding.toggleDocType.addOnButtonCheckedListener { _, checkedId, isChecked ->
+            if (!isChecked) return@addOnButtonCheckedListener
+            updateGenerateLabel()
+            if (isNewDraft && profile.autoNumbering) {
+                val current = binding.inputInvoiceNumber.text.str()
+                val invoiceSug = profile.suggestedNumber()
+                val quoteSug = profile.suggestedQuoteNumber()
+                if (current.isBlank() || current == invoiceSug || current == quoteSug) {
+                    binding.inputInvoiceNumber.setText(
+                        if (checkedId == R.id.btn_type_quote) quoteSug else invoiceSug
+                    )
+                }
+            }
+        }
 
         binding.inputIssueDate.setOnClickListener { pickDate(binding.inputIssueDate.text?.toString()) { binding.inputIssueDate.setText(it) } }
         binding.inputDueDate.setOnClickListener { pickDate(binding.inputDueDate.text?.toString()) { binding.inputDueDate.setText(it) } }
@@ -177,13 +194,20 @@ class InvoiceCreatorEditFragment : Fragment() {
         inputInvoiceNumber.setText(draft.invoiceNumber)
         inputIssueDate.setText(draft.issueDate)
         inputDueDate.setText(draft.dueDate.orEmpty())
-        toggleDocType.check(if (draft.documentTypeCode == "381") R.id.btn_type_credit_note else R.id.btn_type_invoice)
+        toggleDocType.check(
+            when (draft.documentTypeCode) {
+                OutgoingInvoice.DOC_TYPE_CREDIT_NOTE -> R.id.btn_type_credit_note
+                OutgoingInvoice.DOC_TYPE_QUOTE -> R.id.btn_type_quote
+                else -> R.id.btn_type_invoice
+            }
+        )
         inputBuyerName.setText(draft.buyerName)
         inputBuyerStreet.setText(draft.buyerStreet.orEmpty())
         inputBuyerZip.setText(draft.buyerZip.orEmpty())
         inputBuyerCity.setText(draft.buyerCity.orEmpty())
         inputBuyerCountry.setText(draft.buyerCountry.orEmpty())
         inputBuyerVatId.setText(draft.buyerVatId.orEmpty())
+        inputBuyerReference.setText(draft.buyerReference.orEmpty())
         inputPaymentNote.setText(draft.paymentTermsNote.orEmpty())
         if (!profile.smallBusiness) {
             checkReverseCharge.isChecked = draft.taxMode == OutgoingInvoice.TAX_MODE_REVERSE_CHARGE
@@ -393,10 +417,19 @@ class InvoiceCreatorEditFragment : Fragment() {
         }
     }
 
+    /** Primary action label reflects the document type: quote vs. invoice/credit note. */
+    private fun updateGenerateLabel() {
+        val isQuote = binding.toggleDocType.checkedButtonId == R.id.btn_type_quote
+        binding.btnGenerate.setText(
+            if (isQuote) R.string.creator_generate_quote else R.string.creator_generate_pdf
+        )
+    }
+
     private fun runGenerate(draft: OutgoingInvoice) {
         binding.btnGenerate.isEnabled = false
         viewLifecycleOwner.lifecycleScope.launch {
-            when (val result = viewModel.generate(draft)) {
+            val outcome = if (draft.isQuote) viewModel.generateQuote(draft) else viewModel.generate(draft)
+            when (val result = outcome) {
                 is InvoiceCreatorViewModel.GenerateResult.Success -> {
                     val base = result.exportedTo
                         ?.let { getString(R.string.creator_pdf_created_at, it) }
@@ -445,6 +478,13 @@ class InvoiceCreatorEditFragment : Fragment() {
                     binding.inputBuyerCity.setText(c.city.orEmpty())
                     binding.inputBuyerCountry.setText(c.country.orEmpty())
                     binding.inputBuyerVatId.setText(c.vatId.orEmpty())
+                    // Per-customer payment terms override the defaults for this invoice.
+                    c.paymentDays?.let { days ->
+                        val issue = runCatching { LocalDate.parse(binding.inputIssueDate.text.str()) }
+                            .getOrDefault(LocalDate.now())
+                        binding.inputDueDate.setText(issue.plusDays(days.toLong()).toString())
+                    }
+                    c.paymentNote?.takeIf { it.isNotBlank() }?.let { binding.inputPaymentNote.setText(it) }
                 }
                 .setNegativeButton(android.R.string.cancel, null)
                 .show()
@@ -505,7 +545,11 @@ class InvoiceCreatorEditFragment : Fragment() {
 
     /** Assembles the [OutgoingInvoice] from the form + the seller profile snapshot. */
     private fun buildDraft(): OutgoingInvoice {
-        val docType = if (binding.toggleDocType.checkedButtonId == R.id.btn_type_credit_note) "381" else "380"
+        val docType = when (binding.toggleDocType.checkedButtonId) {
+            R.id.btn_type_credit_note -> OutgoingInvoice.DOC_TYPE_CREDIT_NOTE
+            R.id.btn_type_quote -> OutgoingInvoice.DOC_TYPE_QUOTE
+            else -> OutgoingInvoice.DOC_TYPE_INVOICE
+        }
         return OutgoingInvoice(
             invoiceNumber = binding.inputInvoiceNumber.text.str(),
             issueDate = binding.inputIssueDate.text.str(),
@@ -529,6 +573,7 @@ class InvoiceCreatorEditFragment : Fragment() {
             buyerCity = binding.inputBuyerCity.text.str().ifBlank { null },
             buyerCountry = binding.inputBuyerCountry.text.str().ifBlank { null }?.uppercase(),
             buyerVatId = binding.inputBuyerVatId.text.str().ifBlank { null },
+            buyerReference = binding.inputBuyerReference.text.str().ifBlank { null },
             lineItemsJson = CreatorLine.listToJson(viewModel.lines.value.orEmpty()),
             paymentTermsNote = binding.inputPaymentNote.text.str().ifBlank { null },
             taxMode = currentTaxMode(),

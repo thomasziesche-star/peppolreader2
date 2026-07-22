@@ -117,6 +117,60 @@ class ZugferdPdfA3WriterTest {
         }
     }
 
+    /**
+     * A fully customized theme (Modern preset: petrol, sans headings, cool paper, band table
+     * header) must still produce a valid, extractable PDF whose text survives — proves all
+     * font pairings encode and the BAND header doesn't swallow labels or rows.
+     */
+    @Test
+    fun customThemeRoundTripsAndKeepsText() {
+        val ctx = RuntimeEnvironment.getApplication()
+        val invoice = draft()
+        val xml = ZugferdXmlBuilder(invoice).build()
+        val theme = com.ziesche.peppolreader.creator.model.LayoutTheme.preset(
+            com.ziesche.peppolreader.creator.model.LayoutTheme.PRESET_MODERN
+        )
+        val pdf = ZugferdPdfA3Writer(ctx).write(invoice, xml, null, theme)
+
+        val result = ZugferdExtractor().extract(ByteArrayInputStream(pdf))
+        assertTrue("extractable", result is ZugferdExtractor.Result.Success)
+        val parsed = CiiParser((result as ZugferdExtractor.Result.Success).xml, ctx).parse()
+        assertEquals("RE-2026-042", parsed.invoice.id)
+
+        PDDocument.load(pdf).use { doc ->
+            val text = PDFTextStripper().getText(doc)
+            assertTrue("invoice number visible", text.contains("RE-2026-042"))
+            assertTrue("band header labels visible", text.contains("BESCHREIBUNG"))
+            assertTrue("grand total visible", text.contains("Gesamtbetrag"))
+        }
+    }
+
+    /**
+     * A quote (Angebot) is produced via [ZugferdPdfA3Writer.writePlain]: a plain PDF with the
+     * visible page, the "Angebot" title — but NO embedded factur-x.xml (it is not an invoice).
+     */
+    @Test
+    fun writePlainProducesQuotePdfWithoutEmbeddedXml() {
+        val ctx = RuntimeEnvironment.getApplication()
+        val quote = draft().copy(
+            invoiceNumber = "AN-2026-007",
+            documentTypeCode = OutgoingInvoice.DOC_TYPE_QUOTE
+        )
+        val pdf = ZugferdPdfA3Writer(ctx).writePlain(quote)
+
+        assertTrue("starts with %PDF", String(pdf, 0, 5).startsWith("%PDF"))
+
+        // No embedded XML: the extractor must NOT find a factur-x attachment.
+        val result = ZugferdExtractor().extract(ByteArrayInputStream(pdf))
+        assertTrue("no embedded XML in a quote", result !is ZugferdExtractor.Result.Success)
+
+        PDDocument.load(pdf).use { doc ->
+            val text = PDFTextStripper().getText(doc)
+            assertTrue("quote title", text.contains("Angebot"))
+            assertTrue("quote number", text.contains("AN-2026-007"))
+        }
+    }
+
     /** Logo on the letterhead + enough lines to force a page break must still round-trip. */
     @Test
     fun multiPageWithLogoRoundTrips() {

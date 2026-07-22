@@ -297,6 +297,7 @@
     <string name="creator_subtitle">Generate ZUGFeRD e-invoices as a hybrid PDF/A-3 (EN 16931).</string>
     <string name="creator_no_drafts">No drafts yet. Tap “New invoice” to start.</string>
     <string name="creator_new_draft">New invoice</string>
+    <string name="creator_new_draft_button">New invoice (or quote)</string>
     <string name="creator_company_profile">Company profile</string>
     <string name="creator_company_profile_hint">Your details appear as the sender on every invoice.</string>
 
@@ -307,6 +308,8 @@
     <string name="creator_city">City</string>
     <string name="creator_country">Country code (e.g. DE)</string>
     <string name="creator_vat_id">VAT ID</string>
+    <string name="creator_buyer_reference">Routing ID (Leitweg-ID)</string>
+    <string name="creator_buyer_reference_helper">Required for invoices to German public authorities (B2G)</string>
     <string name="creator_tax_number">Tax number</string>
     <string name="creator_iban">IBAN</string>
     <string name="creator_bic">BIC</string>
@@ -389,6 +392,26 @@
     <string name="creator_doc_type">Document type</string>
     <string name="creator_doc_type_invoice">Invoice</string>
     <string name="creator_doc_type_credit_note">Credit note</string>
+    <string name="creator_doc_type_quote">Quote</string>
+    <string name="creator_generate_quote">Create quote</string>
+    <string name="creator_convert_to_invoice">Convert to invoice</string>
+    <string name="creator_print">Print</string>
+    <string name="creator_customer_payment_days">Payment term (days)</string>
+    <string name="creator_customer_payment_days_hint">Leave empty to use the company default</string>
+    <string name="creator_customer_payment_note">Payment note for this customer</string>
+    <string name="creator_payments">Payments</string>
+    <string name="creator_payments_title">Payments · remaining %1$s</string>
+    <string name="creator_payments_none">No payments recorded yet. Total: %1$s</string>
+    <string name="creator_payment_record">Record payment</string>
+    <string name="creator_payment_amount">Amount</string>
+    <string name="creator_payment_note">Note (optional)</string>
+    <string name="creator_payment_delete_confirm">Delete this payment?</string>
+    <string name="creator_badge_partial">Part-paid</string>
+    <string name="creator_filter_all">All</string>
+    <string name="creator_filter_invoices">Invoices</string>
+    <string name="creator_filter_quotes">Quotes</string>
+    <string name="creator_numbering_quote_prefix">Quote prefix</string>
+    <string name="creator_numbering_quote_next">Next quote no.</string>
     <string name="creator_currency">Currency</string>
 
     <!-- Parties -->
@@ -463,6 +486,33 @@
     <string name="creator_allowance_reason">Reason</string>
     <string name="creator_allowance_amount">Amount (net)</string>
     <string name="creator_tax_basis">Net total</string>
+    <string name="layout_editor_title">Invoice layout</string>
+    <string name="layout_preview_cd">Preview of the invoice layout</string>
+    <string name="layout_presets">Style</string>
+    <string name="layout_preset_warm">Warm Editorial</string>
+    <string name="layout_preset_classic">Classic</string>
+    <string name="layout_preset_modern">Modern</string>
+    <string name="layout_preset_custom">Custom</string>
+    <string name="layout_accent">Accent colour</string>
+    <string name="layout_font">Typeface</string>
+    <string name="layout_font_editorial">Editorial</string>
+    <string name="layout_font_sans">Sans</string>
+    <string name="layout_font_serif">Serif</string>
+    <string name="layout_paper">Paper</string>
+    <string name="layout_paper_white">White</string>
+    <string name="layout_paper_ivory">Ivory</string>
+    <string name="layout_paper_cool">Cool grey</string>
+    <string name="layout_table_header">Table header</string>
+    <string name="layout_header_rule">Line</string>
+    <string name="layout_header_band">Band</string>
+    <string name="layout_color_terracotta">Terracotta</string>
+    <string name="layout_color_bordeaux">Bordeaux</string>
+    <string name="layout_color_green">Fir green</string>
+    <string name="layout_color_petrol">Petrol</string>
+    <string name="layout_color_blue">Steel blue</string>
+    <string name="layout_color_violet">Violet</string>
+    <string name="layout_color_ochre">Ochre</string>
+    <string name="layout_color_black">Black</string>
     <string name="creator_duplicate">Duplicate as draft</string>
 
     <!-- Invoice note + bookkeeping category -->
@@ -484,6 +534,13 @@
     <string name="backup_create">Create backup</string>
     <string name="backup_restore">Restore backup</string>
     <string name="backup_success">Backup saved.</string>
+    <string name="backup_options_title">Backup</string>
+    <string name="backup_save_now">Save backup…</string>
+    <string name="backup_share">Share backup (Drive, email…)</string>
+    <string name="backup_auto_setup">Set up automatic backup…</string>
+    <string name="backup_auto_disable">Turn off automatic backup</string>
+    <string name="backup_auto_enabled">Automatic backup on: %1$s</string>
+    <string name="backup_auto_disabled">Automatic backup turned off.</string>
     <string name="backup_error">Backup failed.</string>
     <string name="backup_restore_warning">This replaces all current invoices and attachments with the backup. Continue?</string>
     <string name="backup_restore_confirm">Restore</string>
@@ -493,13 +550,37 @@
     <string name="help_detail"><b>Detail view</b>\n\nThree tabs: the rendered invoice, the raw XML (with live search) and the original PDF if one is attached.\n\n<b>Open / Paid:</b> toggle whether the invoice is settled.\n\n<b>Note &amp; category:</b> tap the line above the tabs to add a bookkeeping note and a category — both appear in the CSV export and are searchable.\n\n<b>Ask AI:</b> the speech bubble opens a chat about this invoice (needs an AI provider in AI Settings).</string>
     <string name="help_dashboard"><b>Dashboard</b>\n\nOverview of your invoices for the selected period (use the filter at the top).\n\n<b>KPIs:</b> total, count, open and overdue amounts.\n<b>Charts:</b> payment status, expenses per month, a paid-vs-total trend and your top suppliers.\n<b>VAT per quarter:</b> net/VAT/gross per quarter for your VAT return.\n\nCredit notes count negatively everywhere.</string>
     <string name="help_ai"><b>AI settings</b>\n\nAdd one or more AI providers (OpenAI, Gemini, Claude, Mistral, OpenRouter, Langdock or a generic OpenAI-compatible endpoint).\n\nAdd a provider, paste your API key, load the models and pick one — then mark an entry as the default.\n\nAfterwards open any invoice and tap the speech bubble to ask about it.\n\n<b>Privacy:</b> the invoice content is sent to the provider you choose.</string>
-    <string name="help_creator_list"><b>ZUGFeRD &amp; E-Invoice Creator</b>\n\nCreate your own e-invoices as hybrid ZUGFeRD PDF/A-3 (EN 16931).\n\n<b>New invoice:</b> starts a draft.\n<b>Company profile:</b> your sender data — fill it in first.\n<b>Customers:</b> your customer master for quick reuse.\n\nDrafts can be edited; <i>generated</i> invoices are final — tap one to view, share or duplicate it as a new draft (handy for recurring invoices).</string>
-    <string name="help_creator_edit"><b>Invoice editor</b>\n\nEnter the number, dates, your customer and the line items (description, quantity, unit, unit price, VAT rate). Totals update live.\n\n<b>From customer master:</b> fills the buyer fields from a saved customer.\n\n<b>Create:</b> runs an EN 16931 check first — errors block, warnings can be skipped — then produces the hybrid ZUGFeRD PDF. A generated invoice can no longer be edited.</string>
-    <string name="help_company_profile"><b>Company profile</b>\n\nYour sender data, used on every invoice you create. EN 16931 needs at least a full address plus a VAT ID or tax number.\n\n<b>Logo:</b> optional, shown on the PDF.\n<b>Numbering:</b> auto-suggests the next number (still editable).\n<b>Payment term:</b> pre-fills the due date (issue date + N days).\n<b>Storage:</b> where generated PDFs are saved.</string>
-    <string name="help_creator_customers"><b>Customer master</b>\n\nSaved customers for your created invoices. New customers are added automatically when you generate an invoice; you can also add, edit or delete them here.\n\nIn the editor, <i>From customer master</i> fills the buyer fields with one tap.</string>
+    <string name="help_creator_list"><b>ZUGFeRD &amp; E-Invoice Creator</b>\n\nCreate your own e-invoices as hybrid ZUGFeRD PDF/A-3 (EN 16931), plus quotes.\n\n<b>New invoice (or quote):</b> starts a draft — choose invoice, credit note or quote at the top of the editor.\n<b>Company profile:</b> your sender data — fill it in first.\n<b>Customers / Articles:</b> master data for quick reuse.\n<b>Filter:</b> switch the list between invoices and quotes.\n\nDrafts can be edited; <i>generated</i> documents are final — tap one to view, share, print, record payments, or (for quotes) convert to an invoice. Invoices can also be duplicated as a new draft (handy for recurring ones).</string>
+    <string name="help_creator_edit"><b>Invoice editor</b>\n\nChoose the document type (invoice, credit note or quote), then enter the number, dates, your customer and the line items (description, quantity, unit, unit price, VAT rate). Totals update live.\n\n<b>Routing ID (Leitweg-ID):</b> for invoices to public authorities (B2G).\n<b>From customer master:</b> fills the buyer fields, including that customer\'s payment terms.\n\n<b>Create:</b> runs an EN 16931 check first — errors block, warnings can be skipped — then produces the hybrid ZUGFeRD PDF (a quote produces a plain PDF). A generated document can no longer be edited.</string>
+    <string name="help_company_profile"><b>Company profile</b>\n\nYour sender data, used on every document you create. EN 16931 needs at least a full address plus a VAT ID or tax number.\n\n<b>Logo:</b> optional, shown on the PDF.\n<b>Numbering:</b> separate auto-sequences for invoices and quotes (still editable).\n<b>Payment term:</b> pre-fills the due date (issue date + N days).\n<b>Storage:</b> where generated PDFs are saved.</string>
+    <string name="help_creator_customers"><b>Customer master</b>\n\nSaved customers for your created invoices. New customers are added automatically when you generate an invoice; you can also add, edit or delete them here.\n\nPer customer you can store a default payment term and note, pre-filled on new invoices. In the editor, <i>From customer master</i> fills the buyer fields with one tap.</string>
     <string name="help_creator_articles"><b>Articles &amp; services</b>\n\nYour catalog of recurring articles and services with unit, unit price and VAT rate. In the invoice editor, <i>From catalog</i> adds a pre-filled line item — quantity and all other fields stay editable.</string>
-    <string name="help_creator_dashboard"><b>Revenue dashboard</b>\n\nKey figures for your created invoices: revenue, open and overdue amounts, payment status, revenue per month, VAT per quarter and top customers.\n\nOnly <i>generated</i> invoices count — drafts are excluded, credit notes count negatively. Mark invoices as paid via the invoice list.</string>
+    <string name="help_creator_dashboard"><b>Revenue dashboard</b>\n\nKey figures for your created invoices: revenue, open and overdue amounts, payment status, revenue per month, VAT per quarter and top customers.\n\nOnly <i>generated</i> invoices count — drafts are excluded, credit notes count negatively. Record (partial) payments via the invoice list; open amounts reflect the outstanding remainder.</string>
     <string name="help_export"><b>Export</b>\n\nCreate a CSV (UTF-8, semicolon-separated) of your invoices for the chosen period — ready for your tax advisor or spreadsheet.\n\n<b>Bundle as ZIP:</b> additionally includes the original XML and PDF files per invoice.\n\nThe CSV includes category and note columns. Credit notes are exported with a negative amount.</string>
     <string name="help_reminders"><b>Due-date reminders</b>\n\nSwitch on a daily check that notifies you about invoices coming due.\n\n<b>Lead time:</b> how many days ahead to be reminded (0/3/7/14).\n\n<b>Check now</b> runs the check immediately. On Android 13+ the app asks for notification permission when you enable this.</string>
     <string name="help_ai_credential"><b>AI provider</b>\n\n<b>Provider:</b> pick your service (or <i>Generic</i> for any OpenAI-compatible endpoint).\n<b>API key:</b> paste your key, load the models, then pick one.\n<b>Label:</b> a name to recognise this entry.\n\nThe key is stored only on this device. When you chat about an invoice, its content is sent to this provider.</string>
+    <!-- Onboarding intro -->
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_start">Get started</string>
+    <string name="onboarding_dont_show_again">Don\'t show this again</string>
+    <string name="onboarding_welcome_title">Welcome to Zugferd &amp; Accounting</string>
+    <string name="onboarding_welcome_subtitle">Create and read e-invoices — entirely on your device.</string>
+    <string name="onboarding_language_label">Language</string>
+    <string name="onboarding_steps_title">Your invoice in 3 steps</string>
+    <string name="onboarding_step_1">Set up your profile (name, IBAN, tax number)</string>
+    <string name="onboarding_step_2">Enter the recipient and line items</string>
+    <string name="onboarding_step_3">Generate the PDF and send it by email — done.</string>
+    <string name="onboarding_ease_label">Easy to use</string>
+    <string name="onboarding_ease_1">✓  Invoices in seconds</string>
+    <string name="onboarding_ease_2">✓  Save seller &amp; buyer data</string>
+    <string name="onboarding_ease_3">✓  Automatic invoice numbering</string>
+    <string name="onboarding_privacy_title">Your data stays with you</string>
+    <string name="onboarding_privacy_body">All invoice data is stored only on your device — no cloud, no account required.</string>
+    <string name="onboarding_features_label">Powerful features</string>
+    <string name="onboarding_feature_1">✓  ZUGFeRD, XRechnung, Factur-X &amp; Peppol</string>
+    <string name="onboarding_feature_2">✓  Multiple tax rates, discounts &amp; reverse charge</string>
+    <string name="onboarding_feature_3">✓  Payment tracking, dunning &amp; revenue dashboard</string>
+    <string name="onboarding_backup_title">Important: your own backup</string>
+    <string name="onboarding_backup_body">Because nothing is stored in the cloud, your data is gone if you delete the app. Back up regularly under “Profile → Back up data”.</string>
 </resources>

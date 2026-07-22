@@ -22,5 +22,9 @@ data class CreatorCustomer(
     val country: String? = null,
     val vatId: String? = null,
     val email: String? = null,
+    /** Per-customer default payment term in days; null = fall back to the company-wide default. */
+    val paymentDays: Int? = null,
+    /** Per-customer default payment note/terms text pre-filled on new invoices for this buyer. */
+    val paymentNote: String? = null,
     val updatedAt: Long = System.currentTimeMillis()
 )

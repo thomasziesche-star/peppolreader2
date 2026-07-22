@@ -38,6 +38,9 @@ data class CompanyProfile(
     val numberPrefix: String = "RE-",
     /** Next running number; incremented when a suggested number is actually used. */
     val nextNumber: Int = 1,
+    /** Separate quote/offer (Angebot) number sequence so quotes don't consume invoice numbers. */
+    val quoteNumberPrefix: String = "AN-",
+    val nextQuoteNumber: Int = 1,
     /** Default payment term in days: new drafts suggest due date = issue date + this. 0 = off. */
     val defaultPaymentDays: Int = 14,
     /** German §19 UStG small business: all invoices are VAT-exempt (category E, 0 %). */
@@ -57,6 +60,9 @@ data class CompanyProfile(
     /** The invoice number the sequence would assign next, e.g. "RE-2026-007". */
     fun suggestedNumber(): String = numberPrefix + nextNumber.toString().padStart(3, '0')
 
+    /** The quote number the sequence would assign next, e.g. "AN-007". */
+    fun suggestedQuoteNumber(): String = quoteNumberPrefix + nextQuoteNumber.toString().padStart(3, '0')
+
     fun toJson(): JSONObject = JSONObject().apply {
         put(KEY_NAME, name)
         put(KEY_STREET, street)
@@ -75,6 +81,8 @@ data class CompanyProfile(
         put(KEY_AUTO_NUMBERING, autoNumbering)
         put(KEY_NUMBER_PREFIX, numberPrefix)
         put(KEY_NEXT_NUMBER, nextNumber)
+        put(KEY_QUOTE_NUMBER_PREFIX, quoteNumberPrefix)
+        put(KEY_NEXT_QUOTE_NUMBER, nextQuoteNumber)
         put(KEY_PAYMENT_DAYS, defaultPaymentDays)
         put(KEY_SMALL_BUSINESS, smallBusiness)
         put(KEY_EXEMPTION_TEXT, exemptionText)
@@ -101,6 +109,8 @@ data class CompanyProfile(
         private const val KEY_AUTO_NUMBERING = "autoNumbering"
         private const val KEY_NUMBER_PREFIX = "numberPrefix"
         private const val KEY_NEXT_NUMBER = "nextNumber"
+        private const val KEY_QUOTE_NUMBER_PREFIX = "quoteNumberPrefix"
+        private const val KEY_NEXT_QUOTE_NUMBER = "nextQuoteNumber"
         private const val KEY_PAYMENT_DAYS = "defaultPaymentDays"
         private const val KEY_SMALL_BUSINESS = "smallBusiness"
         private const val KEY_EXEMPTION_TEXT = "exemptionText"
@@ -123,6 +133,8 @@ data class CompanyProfile(
             autoNumbering = o.optBoolean(KEY_AUTO_NUMBERING, true),
             numberPrefix = o.optString(KEY_NUMBER_PREFIX, "RE-"),
             nextNumber = o.optInt(KEY_NEXT_NUMBER, 1),
+            quoteNumberPrefix = o.optString(KEY_QUOTE_NUMBER_PREFIX, "AN-"),
+            nextQuoteNumber = o.optInt(KEY_NEXT_QUOTE_NUMBER, 1),
             defaultPaymentDays = o.optInt(KEY_PAYMENT_DAYS, 14),
             smallBusiness = o.optBoolean(KEY_SMALL_BUSINESS, false),
             exemptionText = o.optString(KEY_EXEMPTION_TEXT)

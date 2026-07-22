@@ -2,7 +2,6 @@ package com.ziesche.peppolreader.creator.pdf
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import com.tom_roush.pdfbox.cos.COSArray
 import com.tom_roush.pdfbox.cos.COSName
 import com.tom_roush.pdfbox.pdmodel.PDDocument
@@ -15,7 +14,9 @@ import com.tom_roush.pdfbox.pdmodel.common.filespecification.PDEmbeddedFile
 import com.tom_roush.pdfbox.pdmodel.font.PDType0Font
 import com.tom_roush.pdfbox.pdmodel.graphics.color.PDOutputIntent
 import com.tom_roush.pdfbox.android.PDFBoxResourceLoader
+import com.ziesche.peppolreader.creator.model.LayoutTheme
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
+import com.ziesche.peppolreader.util.decodeSampledBitmap
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.File
@@ -43,21 +44,53 @@ class ZugferdPdfA3Writer(private val context: Context) {
 
     /**
      * Builds the hybrid PDF and returns its bytes. [xml] is the factur-x.xml produced for
-     * [invoice]; [logoPath] optionally points to the company logo image inside app storage.
+     * [invoice]; [logoPath] optionally points to the company logo image inside app storage;
+     * [theme] styles the visible page (default = shipped "Warm Editorial" look).
      */
     @JvmOverloads
-    fun write(invoice: OutgoingInvoice, xml: String, logoPath: String? = null): ByteArray {
+    fun write(
+        invoice: OutgoingInvoice,
+        xml: String,
+        logoPath: String? = null,
+        theme: LayoutTheme = LayoutTheme()
+    ): ByteArray {
         PDFBoxResourceLoader.init(context.applicationContext)
 
         PDDocument().use { doc ->
             val regular = loadFont(doc, FONT_REGULAR)
             val bold = loadFont(doc, FONT_BOLD)
             val serif = loadFont(doc, FONT_SERIF)
-            InvoiceLayoutRenderer(doc, regular, bold, serif, invoice, loadLogo(logoPath)).render()
+            InvoiceLayoutRenderer(doc, regular, bold, serif, invoice, loadLogo(logoPath), theme).render()
             addOutputIntent(doc)
             addXmpMetadata(doc, invoice)
             setDocumentInfo(doc, invoice)
             embedXml(doc, xml.toByteArray(Charsets.UTF_8))
+
+            val out = ByteArrayOutputStream()
+            doc.save(out)
+            return out.toByteArray()
+        }
+    }
+
+    /**
+     * Builds a plain (non-hybrid) PDF with only the human-readable page — no embedded XML, no
+     * PDF/A OutputIntent or Factur-X metadata. Used for quotes/offers (Angebote), which are not
+     * EN 16931 documents. Same layout pipeline as [write].
+     */
+    @JvmOverloads
+    fun writePlain(
+        invoice: OutgoingInvoice,
+        logoPath: String? = null,
+        theme: LayoutTheme = LayoutTheme()
+    ): ByteArray {
+        PDFBoxResourceLoader.init(context.applicationContext)
+
+        PDDocument().use { doc ->
+            val regular = loadFont(doc, FONT_REGULAR)
+            val bold = loadFont(doc, FONT_BOLD)
+            val serif = loadFont(doc, FONT_SERIF)
+            InvoiceLayoutRenderer(doc, regular, bold, serif, invoice, loadLogo(logoPath), theme).render()
+            setDocumentInfo(doc, invoice)
 
             val out = ByteArrayOutputStream()
             doc.save(out)
@@ -74,9 +107,9 @@ class ZugferdPdfA3Writer(private val context: Context) {
 
     private fun loadLogo(logoPath: String?): Bitmap? {
         if (logoPath.isNullOrBlank()) return null
-        val file = File(logoPath)
-        if (!file.exists()) return null
-        return runCatching { BitmapFactory.decodeFile(file.absolutePath) }.getOrNull()
+        // Decode downsampled to guard against oversized files; stored logos are already ≤1000px,
+        // so this is effectively a no-op for them while satisfying the memory-safety advisory.
+        return runCatching { decodeSampledBitmap(File(logoPath), LOGO_MAX_PX) }.getOrNull()
     }
 
     // ----- PDF/A OutputIntent --------------------------------------------------------------
@@ -94,8 +127,14 @@ class ZugferdPdfA3Writer(private val context: Context) {
 
     // ----- document info + XMP -------------------------------------------------------------
 
-    private fun docTitle(invoice: OutgoingInvoice): String =
-        (if (invoice.documentTypeCode == "381") "Gutschrift " else "Rechnung ") + invoice.invoiceNumber
+    private fun docTitle(invoice: OutgoingInvoice): String {
+        val label = when (invoice.documentTypeCode) {
+            OutgoingInvoice.DOC_TYPE_CREDIT_NOTE -> "Gutschrift "
+            OutgoingInvoice.DOC_TYPE_QUOTE -> "Angebot "
+            else -> "Rechnung "
+        }
+        return label + invoice.invoiceNumber
+    }
 
     private fun setDocumentInfo(doc: PDDocument, invoice: OutgoingInvoice) {
         val info: PDDocumentInformation = doc.documentInformation
@@ -234,5 +273,8 @@ class ZugferdPdfA3Writer(private val context: Context) {
         private const val ICC_ASSET = "creator/sRGB.icc"
         private const val EMBEDDED_NAME = "factur-x.xml"
         private const val PRODUCER = "PeppolReader Invoice Creator"
+
+        /** Longest side (px) the embedded logo is decoded to; stored logos are already ≤1000px. */
+        private const val LOGO_MAX_PX = 1000
     }
 }

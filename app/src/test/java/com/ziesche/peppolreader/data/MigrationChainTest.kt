@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.ziesche.peppolreader.creator.model.CreatorArticle
 import com.ziesche.peppolreader.creator.model.CreatorCustomer
 import com.ziesche.peppolreader.creator.model.OutgoingInvoice
+import com.ziesche.peppolreader.creator.model.OutgoingInvoicePayment
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Assert.assertEquals
@@ -133,7 +134,11 @@ class MigrationChainTest {
 
             // 6. The customer email column added in v12 defaults to null and round-trips.
             db.creatorCustomerDao().upsert(CreatorCustomer(name = "Migrated Buyer"))
-            assertNull(db.creatorCustomerDao().getAll().single().email)
+            val migratedCustomer = db.creatorCustomerDao().getAll().single()
+            assertNull(migratedCustomer.email)
+            // Per-customer payment terms added in v16 default to null.
+            assertNull(migratedCustomer.paymentDays)
+            assertNull(migratedCustomer.paymentNote)
 
             // 7. Article upsert respects the unique name index (REPLACE, no duplicate).
             db.creatorArticleDao().upsert(CreatorArticle(name = "Consulting", unitPrice = 90.0))
@@ -168,6 +173,15 @@ class MigrationChainTest {
             assertNull(dunned.exemptionReason)
             assertEquals("[]", dunned.allowancesJson)
             assertEquals(0, dunned.allowances.size)
+
+            // 10. The buyerReference (Leitweg-ID) column added in v15 defaults to null.
+            assertNull(dunned.buyerReference)
+
+            // 11. The partial-payment table added in v17 is present and usable.
+            db.outgoingInvoicePaymentDao().insert(
+                OutgoingInvoicePayment(invoiceId = outId, amount = 100.0, paidAtMs = 1L)
+            )
+            assertEquals(100.0, db.outgoingInvoicePaymentDao().sumForInvoice(outId), 0.001)
         }
         db.close()
     }

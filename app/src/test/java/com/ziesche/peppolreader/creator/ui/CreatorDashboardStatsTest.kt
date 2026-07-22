@@ -90,6 +90,25 @@ class CreatorDashboardStatsTest {
     }
 
     @Test
+    fun `partial payments reduce the outstanding amount`() {
+        // Grand total 1190; 400 recorded, not fully paid → 790 still outstanding and overdue.
+        val overdue = invoice(number = "U", dueDate = "2026-06-01").copy(id = 1)
+        val result = CreatorDashboardStats.compute(
+            listOf(overdue), todayIso = today, paidByInvoice = mapOf(1L to 400.0)
+        )
+        assertEquals(790.0, result.openAmount, 0.001)
+        assertEquals(790.0, result.overdueAmount, 0.001)
+        assertEquals(400.0, result.statusBreakdown.paid, 0.001)     // money received
+        assertEquals(790.0, result.statusBreakdown.overdue, 0.001)  // remaining, overdue
+        // The three donut slices still add up to the full gross.
+        assertEquals(
+            result.totalRevenue,
+            result.statusBreakdown.paid + result.statusBreakdown.open + result.statusBreakdown.overdue,
+            0.001
+        )
+    }
+
+    @Test
     fun `quarter grouping is derived from issue date`() {
         val q1 = invoice(number = "A", issueDate = "2026-02-01")
         val q2 = invoice(number = "B", issueDate = "2026-05-01")

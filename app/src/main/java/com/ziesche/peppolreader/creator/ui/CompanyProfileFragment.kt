@@ -1,7 +1,6 @@
 package com.ziesche.peppolreader.creator.ui
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,12 +9,14 @@ import android.view.ViewGroup
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import com.ziesche.peppolreader.R
 import com.ziesche.peppolreader.creator.data.CompanyProfileStore
 import com.ziesche.peppolreader.creator.data.PdfExporter
 import com.ziesche.peppolreader.creator.model.CompanyProfile
 import com.ziesche.peppolreader.databinding.FragmentCompanyProfileBinding
+import com.ziesche.peppolreader.util.decodeSampledBitmap
 import java.io.File
 
 /**
@@ -97,7 +98,9 @@ class CompanyProfileFragment : Fragment() {
         binding.btnPickFolder.setOnClickListener { pickFolder.launch(null) }
 
         binding.switchAutoNumber.setOnCheckedChangeListener { _, checked ->
-            binding.containerNumbering.visibility = if (checked) View.VISIBLE else View.GONE
+            val vis = if (checked) View.VISIBLE else View.GONE
+            binding.containerNumbering.visibility = vis
+            binding.containerQuoteNumbering.visibility = vis
         }
 
         binding.switchSmallBusiness.setOnCheckedChangeListener { _, checked ->
@@ -110,6 +113,10 @@ class CompanyProfileFragment : Fragment() {
         binding.btnSave.setOnClickListener {
             store.save(collect())
             Snackbar.make(binding.root, R.string.creator_saved, Snackbar.LENGTH_SHORT).show()
+        }
+
+        binding.btnLayoutEditor.setOnClickListener {
+            findNavController().navigate(R.id.action_companyProfile_to_layoutEditor)
         }
     }
 
@@ -137,9 +144,13 @@ class CompanyProfileFragment : Fragment() {
         renderStorage()
 
         switchAutoNumber.isChecked = p.autoNumbering
-        containerNumbering.visibility = if (p.autoNumbering) View.VISIBLE else View.GONE
+        val numberingVis = if (p.autoNumbering) View.VISIBLE else View.GONE
+        containerNumbering.visibility = numberingVis
+        containerQuoteNumbering.visibility = numberingVis
         inputNumberPrefix.setText(p.numberPrefix)
         inputNumberNext.setText(p.nextNumber.toString())
+        inputQuoteNumberPrefix.setText(p.quoteNumberPrefix)
+        inputQuoteNumberNext.setText(p.nextQuoteNumber.toString())
         inputPaymentDays.setText(if (p.defaultPaymentDays > 0) p.defaultPaymentDays.toString() else "")
 
         switchSmallBusiness.isChecked = p.smallBusiness
@@ -150,8 +161,10 @@ class CompanyProfileFragment : Fragment() {
     }
 
     private fun renderLogo() = with(binding) {
+        // The preview is only 96dp tall; decode downsampled so we never load the full-resolution
+        // logo just to show a thumbnail (stored logos are already capped at 1000px).
         val bitmap = logoPath.takeIf { it.isNotBlank() }
-            ?.let { BitmapFactory.decodeFile(it) }
+            ?.let { decodeSampledBitmap(File(it), LOGO_PREVIEW_MAX_PX) }
         if (bitmap != null) {
             imageLogoPreview.setImageBitmap(bitmap)
             imageLogoPreview.visibility = View.VISIBLE
@@ -196,6 +209,8 @@ class CompanyProfileFragment : Fragment() {
             autoNumbering = switchAutoNumber.isChecked,
             numberPrefix = inputNumberPrefix.text.str(),
             nextNumber = inputNumberNext.text.str().toIntOrNull()?.coerceAtLeast(1) ?: 1,
+            quoteNumberPrefix = inputQuoteNumberPrefix.text.str(),
+            nextQuoteNumber = inputQuoteNumberNext.text.str().toIntOrNull()?.coerceAtLeast(1) ?: 1,
             defaultPaymentDays = inputPaymentDays.text.str().toIntOrNull()?.coerceAtLeast(0) ?: 0,
             smallBusiness = switchSmallBusiness.isChecked,
             exemptionText = inputExemptionText.text.str()
@@ -209,3 +224,6 @@ class CompanyProfileFragment : Fragment() {
         _binding = null
     }
 }
+
+/** Longest side (px) the logo thumbnail is decoded to; the preview ImageView is only 96dp tall. */
+private const val LOGO_PREVIEW_MAX_PX = 512

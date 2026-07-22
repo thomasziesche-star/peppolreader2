@@ -98,6 +98,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/creator_doc_type_credit_note" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_type_quote"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/creator_doc_type_quote" />
         </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <!-- ===== Seller (from profile) ===== -->
@@ -246,6 +254,23 @@
                     android:inputType="textCapCharacters" />
             </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
+
+        <!-- BT-10 buyer reference / German Leitweg-ID (optional, needed for B2G invoices) -->
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/creator_buyer_reference"
+            app:helperText="@string/creator_buyer_reference_helper"
+            app:helperTextEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/input_buyer_reference"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="text" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <!-- Reverse charge (hidden when the §19 small-business profile switch is on) -->
         <com.google.android.material.checkbox.MaterialCheckBox

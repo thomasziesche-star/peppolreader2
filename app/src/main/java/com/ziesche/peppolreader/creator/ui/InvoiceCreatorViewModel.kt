@@ -7,6 +7,7 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import com.ziesche.peppolreader.R
 import com.ziesche.peppolreader.creator.data.CompanyProfileStore
+import com.ziesche.peppolreader.creator.data.LayoutThemeStore
 import com.ziesche.peppolreader.creator.data.OutgoingInvoiceRepository
 import com.ziesche.peppolreader.creator.data.PdfExporter
 import com.ziesche.peppolreader.creator.model.CompanyProfile
@@ -172,7 +173,8 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
             val xml = ZugferdXmlBuilder(withLines).build()
             val profile = profileStore.load()
             val pdfBytes = ZugferdPdfA3Writer(app).write(
-                withLines, xml, profile.logoPath.takeIf { it.isNotBlank() }
+                withLines, xml, profile.logoPath.takeIf { it.isNotBlank() },
+                LayoutThemeStore(app).load()
             )
 
             val dir = File(app.filesDir, "created_invoices").apply { mkdirs() }
@@ -202,10 +204,64 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
         }
     }
 
+    /**
+     * Generates a plain PDF quote/offer (Angebot) for [draft] — no EN 16931 XML, no PDF/A, no
+     * round-trip self-test (a quote is not an invoice). Persists the file + draft (status
+     * GENERATED), exports a copy, advances the quote number sequence and stores the buyer.
+     */
+    suspend fun generateQuote(draft: OutgoingInvoice): GenerateResult = withContext(Dispatchers.IO) {
+        if (loadedStatus == OutgoingInvoice.STATUS_GENERATED) {
+            return@withContext GenerateResult.Error(
+                getApplication<Application>().getString(R.string.creator_generated_locked)
+            )
+        }
+        runCatching {
+            val app = getApplication<Application>()
+            val withLines = draft.copy(
+                lineItemsJson = CreatorLine.listToJson(_lines.value ?: emptyList()),
+                allowancesJson = CreatorAllowanceCharge.listToJson(_allowances.value ?: emptyList())
+            )
+            val profile = profileStore.load()
+            val pdfBytes = ZugferdPdfA3Writer(app).writePlain(
+                withLines, profile.logoPath.takeIf { it.isNotBlank() }, LayoutThemeStore(app).load()
+            )
+
+            val dir = File(app.filesDir, "created_invoices").apply { mkdirs() }
+            val safeName = withLines.invoiceNumber.replace(Regex("[^A-Za-z0-9-_]"), "_")
+            val fileName = "Angebot_$safeName.pdf"
+            val file = File(dir, fileName)
+            file.writeBytes(pdfBytes)
+
+            saveDraft(
+                withLines.copy(
+                    status = OutgoingInvoice.STATUS_GENERATED,
+                    generatedXml = null,
+                    pdfPath = file.absolutePath
+                )
+            )
+            loadedStatus = OutgoingInvoice.STATUS_GENERATED
+
+            val exportedTo = PdfExporter.export(app, pdfBytes, fileName, profile)
+            advanceQuoteNumberSequence(profile, withLines.invoiceNumber)
+            rememberCustomer(withLines)
+
+            GenerateResult.Success(file, roundTripOk = false, exportedTo = exportedTo)
+        }.getOrElse { e ->
+            GenerateResult.Error(e.message ?: e.javaClass.simpleName)
+        }
+    }
+
     /** Counts the sequence up when the suggested number was actually used. */
     private fun advanceNumberSequence(profile: CompanyProfile, usedNumber: String) {
         if (profile.autoNumbering && usedNumber == profile.suggestedNumber()) {
             profileStore.save(profile.copy(nextNumber = profile.nextNumber + 1))
+        }
+    }
+
+    /** Counts the quote sequence up when the suggested quote number was actually used. */
+    private fun advanceQuoteNumberSequence(profile: CompanyProfile, usedNumber: String) {
+        if (profile.autoNumbering && usedNumber == profile.suggestedQuoteNumber()) {
+            profileStore.save(profile.copy(nextQuoteNumber = profile.nextQuoteNumber + 1))
         }
     }
 
@@ -214,7 +270,7 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
         if (invoice.buyerName.isBlank()) return
         runCatching {
             // The upsert REPLACEs the row on a name match, so master-data-only fields the
-            // invoice does not carry (email) must be copied over from the existing entry.
+            // invoice does not carry (email, payment terms) must be copied from the existing entry.
             val existing = customerDao.getAll().firstOrNull { it.name == invoice.buyerName }
             customerDao.upsert(
                 CreatorCustomer(
@@ -224,7 +280,9 @@ class InvoiceCreatorViewModel(app: Application) : AndroidViewModel(app) {
                     city = invoice.buyerCity,
                     country = invoice.buyerCountry,
                     vatId = invoice.buyerVatId,
-                    email = existing?.email
+                    email = existing?.email,
+                    paymentDays = existing?.paymentDays,
+                    paymentNote = existing?.paymentNote
                 )
             )
         }

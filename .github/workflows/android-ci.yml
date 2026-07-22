@@ -1,0 +1,50 @@
+name: Android CI
+
+# Verifies that a fresh checkout builds. Unit tests run locally (they rely on Robolectric,
+# which behaves inconsistently on hosted runners) — CI deliberately builds only.
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'release/**'
+
+# Only one run per branch/PR at a time; a newer push cancels the older, still-running one.
+concurrency:
+  group: android-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+
+      # gradle.properties pins a local Windows JDK path (org.gradle.java.home) for the dev
+      # machine; it doesn't exist on the Linux runner, so drop it here and let Gradle use the
+      # JDK from setup-java (JAVA_HOME). Only affects the checkout on the runner.
+      - name: Use runner JDK (strip local java.home)
+        run: sed -i '/^org\.gradle\.java\.home=/d' gradle.properties
+
+      - name: Assemble debug APK
+        run: ./gradlew --no-daemon assembleDebug
+
+      - name: Upload debug APK
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: ignore

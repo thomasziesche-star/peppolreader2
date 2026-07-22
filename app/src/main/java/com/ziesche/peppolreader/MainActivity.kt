@@ -16,6 +16,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -34,6 +35,8 @@ import com.ziesche.peppolreader.ui.main.LocaleSwitcher
 import com.ziesche.peppolreader.ui.main.MainDestinations
 import com.ziesche.peppolreader.ui.main.MainMenuHandler
 import com.ziesche.peppolreader.ui.main.ThemeManager
+import com.ziesche.peppolreader.ui.onboarding.OnboardingActivity
+import com.ziesche.peppolreader.util.AppPreferences
 
 /**
  * Slim host activity: toolbar/nav/bottom-nav wiring plus the notification permission.
@@ -68,7 +71,7 @@ class MainActivity : AppCompatActivity(),
         themeManager = themeManager,
         nav = { findNavController(R.id.nav_host_fragment_content_main) },
         actions = object : MainMenuHandler.Actions {
-            override fun onBackup() = backupRestore.launchCreateBackup()
+            override fun onBackup() = backupRestore.showBackupOptions()
             override fun onRestore() = backupRestore.launchOpenBackup()
         }
     )
@@ -94,6 +97,8 @@ class MainActivity : AppCompatActivity(),
         themeManager.applySavedTheme()
         LocaleSwitcher.ensureDefaultLocale(this)
 
+        maybeShowOnboarding()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -105,6 +110,15 @@ class MainActivity : AppCompatActivity(),
             view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
                 bottomMargin = (16 * resources.displayMetrics.density).toInt() + extraBottom
             }
+            insets
+        }
+
+        // Belt-and-suspenders for Android 15 edge-to-edge: the bottom nav sits outside the
+        // fitsSystemWindows CoordinatorLayout, so lift it above the gesture/navigation bar
+        // ourselves. This replaces Material's own inset listener (the bar carries no XML padding,
+        // so the raw inset is the correct padding — no double counting).
+        ViewCompat.setOnApplyWindowInsetsListener(binding.bottomNav) { view, insets ->
+            view.updatePadding(bottom = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bottom)
             insets
         }
 
@@ -152,6 +166,19 @@ class MainActivity : AppCompatActivity(),
         themeManager.applyLogoFilter(binding.logo, resources)
 
         importIntents.handle(intent)
+    }
+
+    /**
+     * Launches the intro on top of the main screen unless the user has hidden it. Guarded by a
+     * process-wide flag so a locale change (which recreates this activity) does not stack a second
+     * copy — the already-visible OnboardingActivity recreates itself in the new language instead.
+     */
+    private fun maybeShowOnboarding() {
+        if (onboardingLaunchedThisProcess) return
+        val hidden = AppPreferences.get(this).getBoolean(AppPreferences.KEY_ONBOARDING_HIDDEN, false)
+        if (hidden) return
+        onboardingLaunchedThisProcess = true
+        startActivity(Intent(this, OnboardingActivity::class.java))
     }
 
     override fun onNewIntent(intent: Intent) {
@@ -219,6 +246,13 @@ class MainActivity : AppCompatActivity(),
     }
 
     companion object {
+        /**
+         * True once the intro has been launched in this process. Survives the activity recreation
+         * triggered by an in-onboarding language change, so the intro is not stacked twice.
+         */
+        @Volatile
+        private var onboardingLaunchedThisProcess = false
+
         /** Intent extra used by [com.ziesche.peppolreader.notifications.DueDateWorker] for the deep-link tap. */
         const val EXTRA_OPEN_INVOICE_ID = ImportIntentHandler.EXTRA_OPEN_INVOICE_ID
 
